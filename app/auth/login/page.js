@@ -180,7 +180,7 @@ export default function LoginPage() {
             }}
           >
             {loading ? (
-              <CircularProgress size={26} color="inherit" />
+              <CircularProgress size={26} sx={{ color: "#3b82f6" }} />
             ) : (
               "تسجيل الدخول"
             )}

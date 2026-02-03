@@ -108,10 +108,8 @@ export default function BookingPage() {
 
     const start = new Date(dates.startDate);
     const end = new Date(dates.endDate);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (start < today) {
+    const todayStr = new Date().toISOString().split("T")[0];
+    if (dates.startDate < todayStr) {
       toast.error("لا يمكن اختيار تاريخ في الماضي");
       return;
     }
@@ -419,8 +417,8 @@ export default function BookingPage() {
                     <Grid item xs={12} sm={6}>
                       <div
                         className={`border-2 border-dashed rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center cursor-pointer relative transition-all duration-500 overflow-hidden group/upload ${idCardFile
-                            ? "border-green-500/50 bg-green-500/5 shadow-[0_0_20px_rgba(34,197,94,0.1)]"
-                            : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50"
+                          ? "border-green-500/50 bg-green-500/5 shadow-[0_0_20px_rgba(34,197,94,0.1)]"
+                          : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50"
                           }`}
                       >
                         <input
@@ -449,8 +447,8 @@ export default function BookingPage() {
                     <Grid item xs={12} sm={6}>
                       <div
                         className={`border-2 border-dashed rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center cursor-pointer relative transition-all duration-500 overflow-hidden group/upload ${licenseFile
-                            ? "border-green-500/50 bg-green-500/5 shadow-[0_0_20px_rgba(34,197,94,0.1)]"
-                            : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50"
+                          ? "border-green-500/50 bg-green-500/5 shadow-[0_0_20px_rgba(34,197,94,0.1)]"
+                          : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50"
                           }`}
                       >
                         <input

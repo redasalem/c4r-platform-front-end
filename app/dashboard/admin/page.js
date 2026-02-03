@@ -111,12 +111,11 @@ function AdminTabsContent({ user }) {
         onChange={handleChange}
         aria-label="admin dashboard tabs"
         variant="fullWidth"
-        orientation={
-          typeof window !== "undefined" && window.innerWidth < 640
-            ? "vertical"
-            : "horizontal"
-        }
+        orientation="vertical"
         sx={{
+          "& .MuiTabs-flexContainer": {
+            flexDirection: { xs: "column", sm: "row" },
+          },
           "& .MuiTab-root": {
             fontSize: { xs: "0.75rem", md: "1.1rem" },
             fontWeight: "900",
@@ -143,6 +142,7 @@ function AdminTabsContent({ user }) {
             height: { xs: "100%", sm: "4px" },
             width: { xs: "4px", sm: "auto" },
             borderRadius: "4px",
+            // Correct indicator position for RTL/Vertical
             left: { xs: 0, sm: "auto" },
             right: { xs: "auto", sm: "auto" },
             boxShadow: "0 0 15px rgba(249,115,22,0.5)",
@@ -193,7 +193,7 @@ function AdminTabsContent({ user }) {
       <TabPanel value={value} index={4}>
         <ChangePasswordSection />
       </TabPanel>
-    </div>
+    </div >
   );
 }
 
@@ -288,23 +288,21 @@ function ManageBookings() {
           >
             {/* Status Strip Mobile */}
             <div
-              className={`absolute top-0 right-0 w-1 sm:hidden h-full ${
-                booking.status === "approved"
-                  ? "bg-green-500"
-                  : booking.status === "rejected"
-                    ? "bg-red-500"
-                    : "bg-primary"
-              }`}
+              className={`absolute top-0 right-0 w-1 sm:hidden h-full ${booking.status === "approved"
+                ? "bg-green-500"
+                : booking.status === "rejected"
+                  ? "bg-red-500"
+                  : "bg-primary"
+                }`}
             />
             {/* Status Strip */}
             <div
-              className={`absolute top-0 right-0 w-2 h-full ${
-                booking.status === "approved"
-                  ? "bg-green-500"
-                  : booking.status === "rejected"
-                    ? "bg-red-500"
-                    : "bg-primary"
-              }`}
+              className={`absolute top-0 right-0 w-2 h-full ${booking.status === "approved"
+                ? "bg-green-500"
+                : booking.status === "rejected"
+                  ? "bg-red-500"
+                  : "bg-primary"
+                }`}
             />
 
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
@@ -337,8 +335,8 @@ function ManageBookings() {
                       <span className="text-[9px] sm:text-xs text-white">
                         {booking.startDate
                           ? new Date(booking.startDate).toLocaleDateString(
-                              "ar-EG",
-                            )
+                            "ar-EG",
+                          )
                           : "---"}
                       </span>
                     </div>
@@ -355,8 +353,8 @@ function ManageBookings() {
                       <span className="text-[9px] sm:text-xs text-white">
                         {booking.endDate
                           ? new Date(booking.endDate).toLocaleDateString(
-                              "ar-EG",
-                            )
+                            "ar-EG",
+                          )
                           : "---"}
                       </span>
                     </div>
@@ -1206,11 +1204,10 @@ function AddCarDialog({ open, onClose }) {
         <div className="flex flex-col gap-8 pt-2">
           {/* Image Upload Area */}
           <div
-            className={`border-2 border-dashed rounded-[2rem] p-8 transition-all cursor-pointer relative group overflow-hidden ${
-              file
-                ? "border-primary/50 bg-primary/5"
-                : "border-white/10 hover:border-primary/30 hover:bg-white/5"
-            }`}
+            className={`border-2 border-dashed rounded-[2rem] p-8 transition-all cursor-pointer relative group overflow-hidden ${file
+              ? "border-primary/50 bg-primary/5"
+              : "border-white/10 hover:border-primary/30 hover:bg-white/5"
+              }`}
           >
             <input
               type="file"
@@ -1404,12 +1401,15 @@ function ProfileSection({ user }) {
   const handleSave = async () => {
     setLoading(true);
     try {
-      await userService.updateProfile(formData);
+      // Create a payload without email
+      const { email, ...updatePayload } = formData;
+      await userService.updateProfile(updatePayload);
       toast.success("تم تحديث البيانات بنجاح");
       setIsEditing(false);
       window.location.reload();
     } catch (error) {
-      toast.error("فشل تحديث البيانات");
+      console.error("Profile update error:", error);
+      toast.error(error.response?.data?.message || "فشل تحديث البيانات");
     } finally {
       setLoading(false);
     }

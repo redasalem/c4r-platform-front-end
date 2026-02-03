@@ -114,13 +114,23 @@ export default function CarDetailsPage() {
               {car.region && (
                 <div className="absolute top-6 left-6">
                   <Chip
-                    icon={<LocationOn style={{ color: "white" }} />}
+                    icon={<LocationOn style={{ color: "white", fontSize: 18 }} />}
                     label={regionNames[car.region] || car.region}
                     sx={{
                       bgcolor: "#f97316",
                       color: "white",
-                      fontWeight: "bold",
-                      boxShadow: "0 4px 12px rgba(249, 115, 22, 0.4)",
+                      fontWeight: "900",
+                      height: "32px",
+                      px: 0.5,
+                      boxShadow: "0 4px 15px rgba(249, 115, 22, 0.5)",
+                      "& .MuiChip-label": {
+                        paddingLeft: "8px",
+                        paddingRight: "8px",
+                      },
+                      "& .MuiChip-icon": {
+                        marginRight: "4px",
+                        marginLeft: "-4px",
+                      },
                     }}
                   />
                 </div>
