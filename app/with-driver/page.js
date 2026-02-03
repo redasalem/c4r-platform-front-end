@@ -29,27 +29,33 @@ export default function WithDriverPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-20 pb-20" dir="rtl">
+    <div className="min-h-screen bg-transparent pt-28 pb-20" dir="rtl">
       <Breadcrumbs items={[{ label: "سيارات بسائق" }]} />
-      <Container maxWidth="xl" className="pt-12">
+      <Container maxWidth="xl" className="pt-12 relative z-10">
         {/* Header Section */}
-        <div className="mb-10 text-center">
-          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-600 px-4 py-1.5 rounded-full mb-4">
+        <div className="mb-16 text-center">
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-6 py-2 rounded-full mb-6 border border-primary/20 shadow-[0_0_15px_rgba(249,115,22,0.1)]">
             <Person fontSize="small" />
-            <span className="font-bold text-sm">سيارات بسائق</span>
+            <span className="font-black text-sm uppercase tracking-widest">
+              سيارات بسائق
+            </span>
           </div>
-          <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-4">
-            رحلات مريحة <span className="text-blue-500">مع سائق خاص</span>
+          <h1 className="text-2xl md:text-4xl font-black text-white mb-6 leading-tight tracking-tighter">
+            رحلات مريحة{" "}
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
+              مع سائق خاص
+            </span>
           </h1>
-          <p className="text-slate-500 max-w-2xl mx-auto font-medium">
-            استمتع برحلتك ودع القيادة لمحترفينا. خدمة راقية وسائقين مدربين.
+          <p className="text-slate-400 max-w-2xl mx-auto font-bold text-lg leading-relaxed">
+            استمتع برحلتك ودع القيادة لمحترفينا. خدمة راقية وسائقين مدربين على
+            أعلى المستويات لضمان راحتكم.
           </p>
         </div>
 
         {/* Cars Grid */}
         {cars.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-300">
-            <p className="text-slate-400 font-bold text-lg">
+          <div className="text-center py-24 bg-white/5 backdrop-blur-xl rounded-[3rem] border border-white/10 shadow-2xl">
+            <p className="text-slate-500 font-black text-xl">
               لا توجد سيارات بسائق متاحة حالياً.
             </p>
           </div>

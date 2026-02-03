@@ -41,28 +41,34 @@ export default function CityPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-20 pb-20" dir="rtl">
+    <div className="min-h-screen bg-transparent pt-28 pb-20" dir="rtl">
       <Breadcrumbs items={[{ label: cityName }]} />
-      <Container maxWidth="xl" className="pt-12">
+      <Container maxWidth="xl" className="pt-12 relative z-10">
         {/* Header Section */}
-        <div className="mb-10 text-center">
-          <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-4 py-1.5 rounded-full mb-4">
+        <div className="mb-16 text-center">
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-6 py-2 rounded-full mb-6 border border-primary/20 shadow-[0_0_15px_rgba(249,115,22,0.1)]">
             <LocationOn fontSize="small" />
-            <span className="font-bold text-sm">{cityName}</span>
+            <span className="font-black text-sm uppercase tracking-widest">
+              {cityName}
+            </span>
           </div>
-          <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-4">
-            تصفح <span className="text-orange-500">أفضل السيارات</span> المتاحة
+          <h1 className="text-2xl md:text-4xl font-black text-white mb-6 leading-tight tracking-tighter">
+            تصفح{" "}
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
+              أفضل السيارات
+            </span>{" "}
+            في {cityName}
           </h1>
-          <p className="text-slate-500 max-w-2xl mx-auto font-medium">
+          <p className="text-slate-400 max-w-2xl mx-auto font-bold text-lg leading-relaxed">
             مجموعة واسعة من السيارات التي تناسب جميع احتياجاتك في {cityName}.
-            احجز سيارتك الآن بخطوات بسيطة.
+            احجز سيارتك الآن بخطوات بسيطة واستمتع بالفخامة.
           </p>
         </div>
 
         {/* Cars Grid */}
         {cars.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-300">
-            <p className="text-slate-400 font-bold text-lg">
+          <div className="text-center py-24 bg-white/5 backdrop-blur-xl rounded-[3rem] border border-white/10 shadow-2xl">
+            <p className="text-slate-500 font-black text-xl">
               لا توجد سيارات متاحة حالياً في هذه المنطقة.
             </p>
           </div>

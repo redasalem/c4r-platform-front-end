@@ -29,28 +29,34 @@ export default function AllCarsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-20 pb-20" dir="rtl">
+    <div className="min-h-screen bg-transparent pt-28 pb-20" dir="rtl">
       <Breadcrumbs items={[{ label: "السيارات" }]} />
-      <Container maxWidth="xl" className="pt-12">
+      <Container maxWidth="xl" className="pt-12 relative z-10">
         {/* Header Section */}
-        <div className="mb-10 text-center">
-          <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-4 py-1.5 rounded-full mb-4">
+        <div className="mb-16 text-center">
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-6 py-2 rounded-full mb-6 border border-primary/20 shadow-[0_0_15px_rgba(249,115,22,0.1)]">
             <DirectionsCar fontSize="small" />
-            <span className="font-bold text-sm">سياراتنا</span>
+            <span className="font-black text-sm uppercase tracking-widest">
+              مجموعتنا
+            </span>
           </div>
-          <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-4">
-            تصفح <span className="text-orange-500">جميع السيارات</span> المتاحة
+          <h1 className="text-3xl md:text-5xl font-black text-white mb-6 leading-tight tracking-tighter">
+            تصفح{" "}
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
+              جميع السيارات
+            </span>{" "}
+            المتاحة
           </h1>
-          <p className="text-slate-500 max-w-2xl mx-auto font-medium text-lg">
+          <p className="text-slate-400 max-w-2xl mx-auto font-bold text-lg leading-relaxed">
             نقدم لك مجموعة متنوعة من السيارات الحديثة في جميع مدن المملكة. اختر
-            سيارتك المفضلة واحجزها الآن بسهولة.
+            سيارتك المفضلة واحجزها الآن بسهولة تامة.
           </p>
         </div>
 
         {/* Cars Grid */}
         {cars.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-[40px] border border-dashed border-slate-300">
-            <p className="text-slate-400 font-bold text-lg">
+          <div className="text-center py-24 bg-white/5 backdrop-blur-xl rounded-[3rem] border border-white/10 shadow-2xl">
+            <p className="text-slate-500 font-black text-xl">
               لا توجد سيارات متاحة حالياً.
             </p>
           </div>

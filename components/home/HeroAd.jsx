@@ -2,62 +2,65 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CreditCard, LocalOffer, ArrowBack } from "@mui/icons-material";
+import { LocalOffer } from "@mui/icons-material";
 
 const HeroAd = () => {
   return (
-    <div className="w-full pt-[4.5rem] md:pt-[5.5rem] bg-gray-50 pb-8">
+    <div className="w-full pt-18 md:pt-22 bg-transparent pb-8 overflow-hidden">
       {" "}
-      {/* Padding top to clear fixed navbar */}
+      {/* Container with overflow-hidden to prevent horizontal scroll */}
       <div className="container mx-auto px-4 md:px-6">
         {/* Ad Container */}
-        <div className="relative w-full h-[350px] md:h-[450px] rounded-2xl overflow-hidden shadow-2xl group">
-          {/* Background Image */}
+        <div className="relative w-full h-[500px] md:h-[650px] rounded-[3rem] overflow-hidden shadow-2xl group border border-white/5">
+          {/* Background Image - Restore Original */}
           <div className="absolute inset-0">
             <Image
-              src="/images/car-home.png"
+              src="/images/car-home.jpg"
               alt="Luxury Car Fleet"
               fill
-              className="object-cover object-center"
+              className="object-cover object-center group-hover:scale-105 transition-transform duration-10000"
               priority
             />
-            {/* Strong Dark Overlay for Contrast */}
-            <div className="absolute inset-0 bg-slate-900/50"></div>
+            {/* Dark Overlay for Contrast */}
+            <div className="absolute inset-0 bg-midnight/50 backdrop-blur-[1px]"></div>
           </div>
 
-          {/* Ad Content Overlay */}
+          {/* Ad Content Overlay - Original Structure */}
           <div
             className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 md:px-12 text-white"
             dir="rtl"
           >
-            {/* Main Headlines with Background for Clarity */}
-            <div className="bg-black/40 backdrop-blur-md p-4 md:p-6 rounded-2xl border border-white/10 mb-6 max-w-2xl">
-              <div className="mb-2 md:mb-4 inline-block bg-red-600 text-white font-black text-xs md:text-sm px-4 py-1 rounded-full shadow-lg animate-pulse">
-                <LocalOffer
-                  className="text-yellow-300 inline-block ml-1"
-                  fontSize="small"
-                />
-                <span>خصم 30% لفترة محدودة</span>
+            {/* Main Headlines with Glassmorphism for Clarity */}
+            <div className="bg-white/5 backdrop-blur-xl p-5 sm:p-8 md:p-10 rounded-3xl md:rounded-[2.5rem] border border-white/10 mb-6 md:mb-8 max-w-2xl shadow-2xl relative w-full">
+              <div className="mb-4 inline-flex items-center gap-2 bg-primary/20 text-primary font-black text-[10px] sm:text-xs md:text-sm px-4 py-1.5 rounded-full border border-primary/30 shadow-lg animate-pulse">
+                <LocalOffer className="text-accent" sx={{ fontSize: 16 }} />
+                <span className="tracking-wide">خصم حصرى 30% لفترة محدودة</span>
               </div>
 
-              <h1 className="text-2xl md:text-4xl font-black leading-tight mb-2">
-                <span className="text-orange-400">انطلق بفخامة..</span> وسهولة!
+              <h1 className="text-2xl sm:text-4xl md:text-6xl font-black leading-tight mb-4 tracking-tighter text-white">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
+                  انطلق بفخامة..
+                </span>{" "}
+                <br />
+                تستحقها اليوم
               </h1>
-              <p className="text-base md:text-lg font-medium text-gray-200">
-                سيارات حديثة وخيارات متعددة تناسب جميع احتياجاتك.
+              <p className="text-base sm:text-xl md:text-2xl font-bold text-slate-200 leading-relaxed">
+                نقدم لك تجربة استئجار سيارات فريدة تجمع بين الرفاهية المطلقة
+                والسهولة التامة.
               </p>
             </div>
 
-            {/* Distinct Region Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 w-full max-w-4xl">
+            {/* Distinct Region Cards - Optimized for Mobile (Stack on small) */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-8 w-full max-w-5xl">
               {/* Eastern Region */}
               <Link
-                href="/eastern"
-                className="group/card relative h-16 md:h-20 rounded-xl overflow-hidden shadow-lg border border-transparent hover:border-orange-500 transition-all duration-300 transform hover:-translate-y-1"
+                href="/Cars"
+                className="group/card relative h-14 sm:h-20 md:h-24 rounded-2xl overflow-hidden shadow-2xl border border-white/10 transition-all duration-300 active:scale-95"
               >
-                <div className="absolute inset-0 bg-slate-800/90 group-hover/card:bg-slate-900 transition-colors"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <h3 className="text-lg md:text-xl font-black text-orange-500 group-hover/card:text-orange-400 transition-colors">
+                <div className="absolute inset-0 bg-midnight/80 group-hover/card:bg-midnight/90 backdrop-blur-md transition-colors"></div>
+                <div className="absolute inset-x-0 bottom-0 h-1 bg-primary scale-x-0 group-hover/card:scale-x-100 transition-transform"></div>
+                <div className="absolute inset-0 flex items-center justify-center px-4">
+                  <h3 className="text-sm sm:text-lg md:text-xl font-black text-white group-hover/card:text-primary transition-colors">
                     المنطقة الشرقية
                   </h3>
                 </div>
@@ -65,12 +68,13 @@ const HeroAd = () => {
 
               {/* Riyadh */}
               <Link
-                href="/riyadh"
-                className="group/card relative h-16 md:h-20 rounded-xl overflow-hidden shadow-lg border border-transparent hover:border-orange-500 transition-all duration-300 transform hover:-translate-y-1"
+                href="/Cars"
+                className="group/card relative h-14 sm:h-20 md:h-24 rounded-2xl overflow-hidden shadow-2xl border border-white/10 transition-all duration-300 active:scale-95"
               >
-                <div className="absolute inset-0 bg-slate-800/90 group-hover/card:bg-slate-900 transition-colors"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <h3 className="text-lg md:text-xl font-black text-orange-500 group-hover/card:text-orange-400 transition-colors">
+                <div className="absolute inset-0 bg-midnight/80 group-hover/card:bg-midnight/90 backdrop-blur-md transition-colors"></div>
+                <div className="absolute inset-x-0 bottom-0 h-1 bg-primary scale-x-0 group-hover/card:scale-x-100 transition-transform"></div>
+                <div className="absolute inset-0 flex items-center justify-center px-4">
+                  <h3 className="text-sm sm:text-lg md:text-xl font-black text-white group-hover/card:text-primary transition-colors">
                     مدينة الرياض
                   </h3>
                 </div>
@@ -78,12 +82,13 @@ const HeroAd = () => {
 
               {/* Jeddah */}
               <Link
-                href="/jeddah"
-                className="group/card relative h-16 md:h-20 rounded-xl overflow-hidden shadow-lg border border-transparent hover:border-orange-500 transition-all duration-300 transform hover:-translate-y-1"
+                href="/Cars"
+                className="group/card relative h-14 sm:h-20 md:h-24 rounded-2xl overflow-hidden shadow-2xl border border-white/10 transition-all duration-300 active:scale-95"
               >
-                <div className="absolute inset-0 bg-slate-800/90 group-hover/card:bg-slate-900 transition-colors"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <h3 className="text-lg md:text-xl font-black text-orange-500 group-hover/card:text-orange-400 transition-colors">
+                <div className="absolute inset-0 bg-midnight/80 group-hover/card:bg-midnight/90 backdrop-blur-md transition-colors"></div>
+                <div className="absolute inset-x-0 bottom-0 h-1 bg-primary scale-x-0 group-hover/card:scale-x-100 transition-transform"></div>
+                <div className="absolute inset-0 flex items-center justify-center px-4">
+                  <h3 className="text-sm sm:text-lg md:text-xl font-black text-white group-hover/card:text-primary transition-colors">
                     مدينة جدة
                   </h3>
                 </div>

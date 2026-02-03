@@ -58,19 +58,21 @@ const CarCard = ({ car }) => {
       </div>
 
       {/* Content Section */}
-      <div className="p-5 flex flex-col grow">
-        <div className="flex justify-between items-start mb-3">
-          <div>
-            <h3 className="text-2xl font-black text-slate-800">{car.name}</h3>
-            <p className="text-slate-500 text-sm font-bold">
+      <div className="p-4 sm:p-5 flex flex-col grow">
+        <div className="flex justify-between items-start mb-3 gap-2">
+          <div className="min-w-0">
+            <h3 className="text-xl md:text-2xl font-black text-slate-800 truncate">
+              {car.name}
+            </h3>
+            <p className="text-slate-500 text-xs md:text-sm font-bold truncate">
               {car.brand} {car.model}
             </p>
           </div>
-          <div className="text-left">
-            <span className="text-orange-600 font-black text-3xl">
+          <div className="text-left shrink-0">
+            <span className="text-orange-600 font-black text-2xl md:text-3xl">
               {car.pricePerDay}
             </span>
-            <span className="text-slate-400 text-sm font-bold mr-1 block">
+            <span className="text-slate-400 text-[10px] md:text-sm font-bold mr-1 block">
               ريال / يوم
             </span>
           </div>
@@ -79,43 +81,49 @@ const CarCard = ({ car }) => {
         {/* Specs Grid */}
         <div className="grid grid-cols-2 gap-3 mb-6">
           <div className="flex items-center gap-2 text-slate-600">
-            <Settings style={{ fontSize: 22 }} className="text-orange-500" />
-            <span className="text-sm font-bold">أوتوماتيك</span>
+            <Settings
+              sx={{ fontSize: { xs: 18, md: 22 } }}
+              className="text-orange-500"
+            />
+            <span className="text-xs md:text-sm font-bold">أوتوماتيك</span>
           </div>
           <div className="flex items-center gap-2 text-slate-600">
             <LocalGasStation
-              style={{ fontSize: 22 }}
+              sx={{ fontSize: { xs: 18, md: 22 } }}
               className="text-orange-500"
             />
-            <span className="text-sm font-bold">بنزين</span>
+            <span className="text-xs md:text-sm font-bold">بنزين</span>
           </div>
           <div className="flex items-center gap-2 text-slate-600">
             <AirlineSeatReclineExtra
-              style={{ fontSize: 22 }}
+              sx={{ fontSize: { xs: 18, md: 22 } }}
               className="text-orange-500"
             />
-            <span className="text-sm font-bold">5 مقاعد</span>
+            <span className="text-xs md:text-sm font-bold">5 مقاعد</span>
           </div>
           <div className="flex items-center gap-2 text-slate-600">
-            <Speed style={{ fontSize: 22 }} className="text-orange-500" />
-            <span className="text-sm font-bold">كم محدود</span>
+            <Speed
+              sx={{ fontSize: { xs: 18, md: 22 } }}
+              className="text-orange-500"
+            />
+            <span className="text-xs md:text-sm font-bold">كم محدود</span>
           </div>
         </div>
 
         <div className="mt-auto flex gap-2">
           <Link
             href={`/cars/${car._id}`}
-            className="flex-1 bg-slate-900 text-white text-center py-4 rounded-2xl font-bold text-base hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
+            className="flex-1 bg-slate-100 text-slate-900 text-center py-3.5 sm:py-4 rounded-2xl font-bold text-sm sm:text-base hover:bg-slate-200 transition-all active:scale-95 flex items-center justify-center gap-2"
           >
             التفاصيل
           </Link>
           <Link
             href={`/booking/${car._id}`}
-            className="flex-1 bg-orange-500 text-white text-center py-4 rounded-2xl font-black text-base hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2 group/btn"
+            className="flex-[1.5] bg-orange-500 text-white text-center py-3.5 sm:py-4 rounded-2xl font-black text-sm sm:text-base hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 active:scale-95 flex items-center justify-center gap-2 group/btn"
           >
             احجز الآن
             <ArrowBack
-              fontSize="medium"
+              fontSize="small"
               className="transition-transform group-hover/btn:-translate-x-1"
             />
           </Link>

@@ -1,33 +1,39 @@
 import Navbar from "@/components/layout/Navbar";
+import BottomNav from "@/components/layout/BottomNav";
+import FloatingContact from "@/components/layout/FloatingContact";
 import FooterWrapper from "@/components/layout/FooterWrapper";
 import MainLayoutWrapper from "@/components/layout/MainLayoutWrapper";
 import Providers from "./providers";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Almarai } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const almarai = Almarai({
+  subsets: ["arabic"],
+  weight: ["300", "400", "700", "800"],
+  variable: "--font-almarai",
 });
 
 export const metadata = {
-  title: "C4R-Platform",
-  description: "C4R-Platform",
+  title: "C4R-Platform | تأجير سيارات في السعودية",
+  description:
+    "منصة C4R لتأجير السيارات الفاخرة والاقتصادية في المملكة العربية السعودية. حجز سريع وآمن وخدمة عملاء 24/7.",
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
+  icons: {
+    icon: "/logo1.jpg", // ← Favicon (Tab المتصفح)
+    apple: "/logo1.jpg", // ← iOS Home Screen
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${almarai.variable} font-sans antialiased`}>
         <Providers>
           <Navbar />
+          <BottomNav />
+          <FloatingContact />
           <MainLayoutWrapper>{children}</MainLayoutWrapper>
           <FooterWrapper />
         </Providers>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"; // Added hooks
@@ -37,6 +37,7 @@ import {
   Email,
   Phone,
   Settings,
+  WhatsApp,
 } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import Image from "next/image";
@@ -58,11 +59,9 @@ function TabPanel(props) {
   );
 }
 
-export default function UserDashboard() {
-  const { user } = useAuth();
+function UserDashboardContent({ user }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const queryClient = useQueryClient();
 
   // Tabs mapping: profile=0, bookings=1, password=2
   const tabParam = searchParams.get("tab");
@@ -76,13 +75,9 @@ export default function UserDashboard() {
 
   // Sync tab state with URL
   useEffect(() => {
-    if (!user) {
-      router.push("/auth/login?returnUrl=/dashboard/user");
-      return;
-    }
     const tab = searchParams.get("tab");
     setValue(getTabIndex(tab));
-  }, [searchParams, user, router]);
+  }, [searchParams]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -92,69 +87,108 @@ export default function UserDashboard() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 pb-20">
-      {/* Welcome Header */}
-      <div className="relative overflow-hidden bg-slate-900 p-10 md:p-14 rounded-[3rem] text-white shadow-2xl">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-500/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl" />
+    <div className="space-y-10">
+      {/* Premium Navigation Tabs - Optimized for Mobile */}
+      <div className="flex flex-nowrap md:flex-wrap items-center justify-start md:justify-start bg-white/5 backdrop-blur-xl p-2 md:p-2.5 rounded-[2rem] md:rounded-3xl border border-white/10 shadow-2xl w-full md:w-fit mx-auto md:mx-0 overflow-x-auto no-scrollbar gap-1 md:gap-0">
+        {[
+          {
+            id: 0,
+            label: "الحساب",
+            icon: <Person sx={{ fontSize: { xs: 18, md: 20 } }} />,
+          },
+          {
+            id: 1,
+            label: "حجوزاتي",
+            icon: <EventNote sx={{ fontSize: { xs: 18, md: 20 } }} />,
+          },
+          {
+            id: 2,
+            label: "الأمان",
+            icon: <Lock sx={{ fontSize: { xs: 18, md: 20 } }} />,
+          },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => handleChange(null, tab.id)}
+            className={`flex items-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 rounded-xl md:rounded-2xl font-black transition-all duration-500 text-xs sm:text-sm md:text-base whitespace-nowrap ${
+              value === tab.id
+                ? "bg-primary text-white shadow-[0_10px_30px_rgba(249,115,22,0.4)] -translate-y-0.5 md:-translate-y-1"
+                : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
+            }`}
+          >
+            <span className={value === tab.id ? "scale-110" : "opacity-70"}>
+              {tab.icon}
+            </span>
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
-        <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div>
-            <div className="inline-flex items-center gap-2 bg-orange-500/10 text-orange-400 px-4 py-1.5 rounded-full mb-4 border border-orange-500/20">
-              <Person fontSize="small" />
-              <span className="font-bold text-xs uppercase tracking-wider">
-                لوحة التحكم
+      {/* Dynamic Content Section */}
+      <div className="min-h-[600px] animate-in fade-in slide-in-from-bottom-6 duration-1000">
+        {value === 0 && <ProfileSection user={user} />}
+        {value === 1 && <BookingsSection />}
+        {value === 2 && <ChangePasswordSection />}
+      </div>
+    </div>
+  );
+}
+
+export default function UserDashboard() {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/auth/login?returnUrl=/dashboard/user");
+    }
+  }, [user, router]);
+
+  if (!user) return null;
+
+  return (
+    <div className="max-w-7xl mx-auto space-y-8 pb-20 pt-6 md:pt-10 px-4">
+      {/* Welcome Header */}
+      <div className="relative overflow-hidden bg-white/5 backdrop-blur-2xl p-6 sm:p-10 md:p-14 rounded-3xl sm:rounded-[3rem] md:rounded-[3.5rem] text-white shadow-2xl border border-white/10">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-80 h-80 bg-primary/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-[100px]" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-[80px]" />
+
+        <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="text-center md:text-right">
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 md:px-5 py-2 rounded-full mb-4 md:mb-6 border border-primary/20 shadow-[0_0_15px_rgba(249,115,22,0.1)]">
+              <Person fontSize="small" sx={{ fontSize: { xs: 16, md: 20 } }} />
+              <span className="font-black text-[10px] md:text-xs uppercase tracking-[0.2em]">
+                لوحة التحكم الحصرية
               </span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-black mb-3 leading-tight">
-              مرحباً بك، <span className="text-orange-500">{user?.name}</span>{" "}
-              👋
+            <h1 className="text-2xl sm:text-3xl md:text-5xl font-black mb-3 md:mb-4 leading-tight tracking-tighter">
+              مرحباً بك،{" "}
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
+                {user?.name}
+              </span>
             </h1>
-            <p className="text-slate-400 text-lg font-medium max-w-xl">
-              إدارة حسابك الشخصي، تتبع حجوزاتك، وتغيير إعدادات الأمان بكل سهولة
+            <p className="text-slate-400 text-base md:text-xl font-bold max-w-xl leading-relaxed">
+              إدارة حسابك الشخصي، تتبع حجوزاتك، وتغيير إعدادات الأمان بكل فخامة
               ومن مكان واحد.
             </p>
           </div>
           <div className="hidden md:block">
-            <div className="w-32 h-32 bg-slate-800 rounded-[2.5rem] flex items-center justify-center border border-slate-700 shadow-inner">
-              <DirectionsCar sx={{ fontSize: 60, color: "#334155" }} />
+            <div className="w-40 h-40 bg-white/5 rounded-[3rem] flex items-center justify-center border border-white/10 shadow-2xl relative group">
+              <div className="absolute inset-0 bg-primary/20 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <DirectionsCar
+                sx={{ fontSize: 80, color: "var(--primary)" }}
+                className="relative z-10"
+              />
             </div>
           </div>
         </div>
       </div>
 
       {/* Navigation & Content Area */}
-      <div className="space-y-8">
-        {/* Premium Navigation Tabs */}
-        <div className="flex flex-wrap items-center justify-center sm:justify-start bg-white p-2 rounded-[1.5rem] border border-slate-100 shadow-sm w-fit mx-auto sm:mx-0">
-          {[
-            { id: 0, label: "الملف الشخصي", icon: <Person fontSize="small" /> },
-            { id: 1, label: "حجوزاتي", icon: <EventNote fontSize="small" /> },
-            { id: 2, label: "كلمة المرور", icon: <Lock fontSize="small" /> },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => handleChange(null, tab.id)}
-              className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-black transition-all duration-500 ${
-                value === tab.id
-                  ? "bg-orange-500 text-white shadow-lg shadow-orange-500/30 -translate-y-0.5"
-                  : "text-slate-400 hover:text-slate-600 hover:bg-slate-50"
-              }`}
-            >
-              {tab.icon}
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Dynamic Content Section */}
-        <div className="min-h-[600px] animate-in fade-in slide-in-from-bottom-4 duration-700">
-          {value === 0 && <ProfileSection user={user} />}
-          {value === 1 && <BookingsSection />}
-          {value === 2 && <ChangePasswordSection />}
-        </div>
-      </div>
+      <Suspense fallback={<CircularProgress className="m-auto block" />}>
+        <UserDashboardContent user={user} />
+      </Suspense>
     </div>
   );
 }
@@ -184,31 +218,40 @@ function ProfileSection({ user }) {
 
   const inputStyle = {
     "& .MuiOutlinedInput-root": {
-      borderRadius: "1rem",
-      bgcolor: "slate.50",
+      borderRadius: "1.25rem",
+      bgcolor: "rgba(255,255,255,0.03)",
+      color: "white",
+      "& fieldset": { borderColor: "rgba(255,255,255,0.08)" },
+      "&:hover fieldset": { borderColor: "rgba(255,255,255,0.2)" },
       "&.Mui-focused fieldset": { borderColor: "#f97316" },
-      "& fieldset": { borderColor: "#f1f5f9" },
+      transition: "all 0.3s ease",
+    },
+    "& .MuiInputLabel-root": {
+      color: "rgba(255,255,255,0.4)",
+      fontWeight: "bold",
     },
     "& .MuiInputLabel-root.Mui-focused": { color: "#f97316" },
+    "& .MuiOutlinedInput-input": { fontWeight: "bold" },
   };
 
   return (
-    <div className="max-w-4xl bg-white rounded-[2rem] border border-slate-50 p-8 shadow-sm">
-      <div className="flex flex-col md:flex-row gap-8 items-start mb-8 pb-8 border-b border-slate-50">
-        <div className="w-24 h-24 bg-orange-100 rounded-3xl flex items-center justify-center shrink-0 shadow-inner">
-          <Person sx={{ fontSize: 48, color: "#f97316" }} />
+    <div className="max-w-4xl bg-white/5 backdrop-blur-xl rounded-5xl border border-white/10 p-10 shadow-2xl relative overflow-hidden group">
+      <div className="absolute top-0 left-0 w-2 h-full bg-primary/20" />
+      <div className="flex flex-col md:flex-row gap-8 items-start mb-10 pb-10 border-b border-white/5">
+        <div className="w-24 h-24 bg-primary/10 rounded-4xl flex items-center justify-center shrink-0 shadow-2xl border border-primary/20">
+          <Person sx={{ fontSize: 54, color: "var(--primary)" }} />
         </div>
         <div>
-          <h3 className="text-2xl font-black text-slate-800 mb-1">
+          <h3 className="text-3xl font-black text-white mb-2 leading-tight">
             إعدادات الحساب
           </h3>
-          <p className="text-slate-500 font-medium">
-            تأكد من بقاء بياناتك الشخصية محدثة لضمان تجربة حجز سلسة.
+          <p className="text-slate-400 font-bold text-lg">
+            تأكد من بقاء بياناتك الشخصية محدثة لضمان تجربة حجز سلسة واحترافية.
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
         <TextField
           label="الاسم الكامل"
           fullWidth
@@ -219,7 +262,7 @@ function ProfileSection({ user }) {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <Person className="text-slate-400" />
+                <Person className="text-primary" />
               </InputAdornment>
             ),
           }}
@@ -231,15 +274,22 @@ function ProfileSection({ user }) {
           value={formData.email}
           disabled={true}
           variant="outlined"
-          helperText="لا يمكن تغيير البريد الإلكتروني"
+          helperText="لا يمكن تغيير البريد الإلكتروني لدواعي الأمان"
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <Email className="text-slate-400" />
+                <Email className="text-primary" />
               </InputAdornment>
             ),
           }}
-          sx={inputStyle}
+          sx={{
+            ...inputStyle,
+            "& .MuiFormHelperText-root": {
+              color: "rgba(255,255,255,0.3)",
+              fontWeight: "bold",
+              textAlign: "right",
+            },
+          }}
         />
         <TextField
           label="رقم الهاتف"
@@ -253,7 +303,7 @@ function ProfileSection({ user }) {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <Phone className="text-slate-400" />
+                <Phone className="text-primary" />
               </InputAdornment>
             ),
           }}
@@ -261,7 +311,7 @@ function ProfileSection({ user }) {
         />
       </div>
 
-      <div className="mt-10 flex flex-wrap justify-end gap-5">
+      <div className="mt-12 flex flex-wrap justify-end gap-6">
         {isEditing ? (
           <>
             <Button
@@ -269,32 +319,33 @@ function ProfileSection({ user }) {
               onClick={handleSave}
               disabled={loading}
               sx={{
-                p: 1.5,
-                px: 6,
-                borderRadius: "1rem",
+                p: 2,
+                px: 8,
+                borderRadius: "1.25rem",
                 fontWeight: "black",
-                bgcolor: "#f97316",
-                "&:hover": { bgcolor: "#ea580c" },
-                boxShadow: "0 10px 15px -3px rgba(249, 115, 22, 0.2)",
+                bgcolor: "var(--primary)",
+                "&:hover": { bgcolor: "var(--primary-hover)" },
+                boxShadow: "0 15px 25px -5px rgba(249, 115, 22, 0.3)",
               }}
             >
               {loading ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (
-                "حفظ التغييرات"
+                "حفظ التغييرات الجديدة"
               )}
             </Button>
             <Button
               variant="text"
               onClick={() => setIsEditing(false)}
               sx={{
-                borderRadius: "1rem",
-                fontWeight: "bold",
-                color: "#94a3b8",
-                px: 4,
+                borderRadius: "1.25rem",
+                fontWeight: "black",
+                color: "rgba(255,255,255,0.4)",
+                "&:hover": { color: "white", bgcolor: "white/5" },
+                px: 6,
               }}
             >
-              إلغاء
+              تراجع
             </Button>
           </>
         ) : (
@@ -303,16 +354,19 @@ function ProfileSection({ user }) {
             onClick={() => setIsEditing(true)}
             startIcon={<Settings fontSize="small" sx={{ ml: 1 }} />}
             sx={{
-              p: 1.5,
-              px: 6,
-              borderRadius: "1rem",
+              p: 2,
+              px: 8,
+              borderRadius: "1.25rem",
               fontWeight: "black",
-              bgcolor: "#0f172a",
-              "&:hover": { bgcolor: "#1e293b" },
-              boxShadow: "0 10px 15px -3px rgba(15, 23, 42, 0.2)",
+              bgcolor: "white/10",
+              color: "white",
+              "&:hover": { bgcolor: "white/20" },
+              backdropFilter: "blur(10px)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              boxShadow: "0 20px 40px -10px rgba(0,0,0,0.4)",
             }}
           >
-            تعديل الملف الشخصي
+            تعديل البيانات الشخصية
           </Button>
         )}
       </div>
@@ -341,6 +395,7 @@ function BookingsSection() {
       setRating(5);
       // Optional: invalidate checked bookings if we tracked reviewed status
       queryClient.invalidateQueries(["myBookings"]);
+      queryClient.invalidateQueries(["recentReviews"]); // Sync home page
     },
     onError: (err) => {
       toast.error(err.response?.data?.message || "فشل إضافة التقييم");
@@ -369,165 +424,298 @@ function BookingsSection() {
 
   if (bookings.length === 0) {
     return (
-      <div className="text-center py-10 text-slate-500">
-        <EventNote sx={{ fontSize: 60, color: "#e2e8f0", mb: 2 }} />
-        <p>لا توجد حجوزات حالياً</p>
-        <Button variant="text" href="/cars" className="mt-4">
-          تصفح السيارات
+      <div className="text-center py-24 bg-white/5 backdrop-blur-xl rounded-[3rem] border border-white/10 shadow-2xl">
+        <EventNote
+          sx={{ fontSize: 100, color: "rgba(255,255,255,0.05)", mb: 4 }}
+        />
+        <p className="text-slate-400 font-black text-2xl">
+          لا توجد حجوزات في سجلك حالياً
+        </p>
+        <Button
+          variant="contained"
+          href="/cars"
+          sx={{
+            mt: 4,
+            borderRadius: "1.25rem",
+            px: 6,
+            py: 1.5,
+            fontWeight: "black",
+            bgcolor: "var(--primary)",
+            "&:hover": { bgcolor: "var(--primary-hover)" },
+          }}
+        >
+          تصفح مجموعة السيارات
         </Button>
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6">
-      {bookings.map((booking) => (
-        <div
-          key={booking._id}
-          className="bg-white border border-slate-100 rounded-[2rem] p-6 flex flex-col lg:flex-row gap-6 hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 group"
-        >
-          {/* Car Image Preview */}
-          <div className="relative w-full lg:w-48 h-32 rounded-2xl overflow-hidden bg-slate-100 shrink-0">
-            {booking.car?.images?.[0] ? (
-              <Image
-                src={booking.car.images[0]}
-                alt={booking.car.name}
-                fill
-                className="object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <DirectionsCar className="text-slate-300" fontSize="large" />
-              </div>
-            )}
-            <div className="absolute top-2 right-2">
-              <Chip
-                label={
-                  booking.status === "approved"
-                    ? "مؤكد"
-                    : booking.status === "rejected"
-                      ? "مرفوض"
-                      : "قيد الانتظار"
-                }
-                size="small"
-                sx={{
-                  fontWeight: "900",
-                  height: 24,
-                  fontSize: "0.7rem",
-                  backdropFilter: "blur(4px)",
-                  bgcolor:
-                    booking.status === "approved"
-                      ? "rgba(34, 197, 94, 0.9)"
-                      : booking.status === "rejected"
-                        ? "rgba(239, 68, 68, 0.9)"
-                        : "rgba(249, 115, 22, 0.9)",
-                  color: "white",
-                  border: "none",
-                }}
-              />
-            </div>
-          </div>
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
+        {bookings.map((booking) => (
+          <div
+            key={booking._id}
+            className="group relative bg-white/5 backdrop-blur-3xl rounded-3xl md:rounded-[3rem] border border-white/10 overflow-hidden shadow-2xl hover:bg-white/10 transition-all duration-700 flex flex-col h-full"
+          >
+            {/* Status Glow Background */}
+            <div
+              className={`absolute top-0 right-0 w-32 h-32 blur-[60px] opacity-20 -translate-y-1/2 translate-x-1/2 rounded-full ${
+                booking.status === "approved"
+                  ? "bg-green-500"
+                  : booking.status === "rejected"
+                    ? "bg-red-500"
+                    : "bg-primary"
+              }`}
+            />
 
-          {/* Booking Info */}
-          <div className="flex-1 flex flex-col justify-between">
-            <div>
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-black text-xl text-slate-800">
+            {/* Header Info & Image */}
+            <div className="relative h-40 md:h-48 overflow-hidden">
+              {booking.car?.images?.[0] ? (
+                <Image
+                  src={booking.car.images[0]}
+                  alt={booking.car.name}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-1000"
+                />
+              ) : (
+                <div className="flex items-center justify-center h-full bg-slate-900 border-b border-white/5">
+                  <DirectionsCar
+                    className="text-white/10"
+                    sx={{ fontSize: { xs: 40, md: 60 } }}
+                  />
+                </div>
+              )}
+              <div className="absolute inset-0 bg-linear-to-t from-midnight via-midnight/50 to-transparent opacity-60" />
+
+              <div className="absolute top-3 md:top-4 left-3 md:left-4 z-20">
+                <div className="flex flex-col items-end gap-1.5 md:gap-2">
+                  <span
+                    className={`px-3 md:px-4 py-1.5 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest shadow-2xl backdrop-blur-xl border border-white/10 ${
+                      booking.status === "approved"
+                        ? "bg-green-500/80 text-white"
+                        : booking.status === "rejected"
+                          ? "bg-red-500/80 text-white"
+                          : "bg-primary/80 text-white"
+                    }`}
+                  >
+                    {booking.status === "approved"
+                      ? "مؤكد"
+                      : booking.status === "rejected"
+                        ? "مرفوض"
+                        : "قيد الانتظار"}
+                  </span>
+                  <span className="bg-white/10 backdrop-blur-md px-2 md:px-3 py-1 rounded-lg text-[8px] md:text-[9px] font-bold text-white/60 border border-white/5">
+                    #{booking._id.slice(-6).toUpperCase()}
+                  </span>
+                </div>
+              </div>
+
+              <div className="absolute bottom-3 md:bottom-4 right-5 md:right-6 left-5 md:left-6 z-20">
+                <h3 className="text-lg md:text-xl font-black text-white tracking-tight leading-none group-hover:text-primary transition-colors truncate">
                   {booking.car?.name || "سيارة غير محددة"}
                 </h3>
-                <div className="text-left">
-                  <span className="text-orange-600 font-black text-xl block">
-                    {booking.totalPrice} ريال
-                  </span>
+                <p className="text-[9px] md:text-[10px] text-slate-400 font-bold mt-1">
+                  تم الحجز في{" "}
+                  {new Date(booking.createdAt).toLocaleDateString("ar-EG")}
+                </p>
+              </div>
+            </div>
+
+            {/* Details Section */}
+            <div className="p-4 sm:p-5 md:p-6 flex-1 flex flex-col">
+              <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-4 sm:mb-6">
+                <div className="bg-white/5 p-2 sm:p-3 rounded-xl sm:rounded-2xl border border-white/5 group-hover:border-primary/20 transition-all">
+                  <p className="text-[8px] sm:text-[10px] text-slate-500 font-black mb-1">
+                    تاريخ الاستلام
+                  </p>
+                  <div className="flex items-center gap-1.5 md:gap-2">
+                    <CalendarMonth
+                      className="text-primary"
+                      sx={{ fontSize: { xs: 12, sm: 16 } }}
+                    />
+                    <span className="text-[10px] sm:text-xs font-black text-white">
+                      {new Date(booking.startDate).toLocaleDateString("ar-EG")}
+                    </span>
+                  </div>
+                </div>
+                <div className="bg-white/5 p-2 sm:p-3 rounded-xl sm:rounded-2xl border border-white/5 group-hover:border-primary/20 transition-all">
+                  <p className="text-[8px] sm:text-[10px] text-slate-500 font-black mb-1">
+                    تاريخ التسليم
+                  </p>
+                  <div className="flex items-center gap-1.5 md:gap-2">
+                    <CalendarMonth
+                      className="text-primary"
+                      sx={{ fontSize: { xs: 12, sm: 16 } }}
+                    />
+                    <span className="text-[10px] sm:text-xs font-black text-white">
+                      {new Date(booking.endDate).toLocaleDateString("ar-EG")}
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="flex items-center gap-2 text-slate-600 bg-slate-50 p-2 rounded-xl">
-                  <CalendarMonth className="text-orange-500" fontSize="small" />
-                  <span className="text-xs font-bold">
-                    من {new Date(booking.startDate).toLocaleDateString("ar-EG")}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-slate-600 bg-slate-50 p-2 rounded-xl">
-                  <CalendarMonth className="text-orange-500" fontSize="small" />
-                  <span className="text-xs font-bold">
-                    إلى {new Date(booking.endDate).toLocaleDateString("ar-EG")}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-slate-600 bg-slate-50 p-2 rounded-xl">
-                  <Speed className="text-orange-500" fontSize="small" />
-                  <span className="text-xs font-bold">
+              <div className="space-y-3 mb-4 sm:mb-8">
+                <div className="flex justify-between items-center px-1 md:px-2">
+                  <span className="text-[9px] sm:text-xs text-slate-500 font-bold">
                     المدة: {booking.numberOfDays} أيام
                   </span>
+                  <span className="text-[9px] sm:text-xs text-slate-500 font-bold">
+                    المجموع:{" "}
+                    <span className="text-primary font-black">
+                      {booking.totalPrice} ريال
+                    </span>
+                  </span>
                 </div>
-                <div className="flex items-center gap-2 text-slate-600 bg-slate-50 p-2 rounded-xl">
-                  <Payments className="text-orange-500" fontSize="small" />
-                  <span className="text-xs font-bold">الدفع: كاش/تحويل</span>
+
+                {/* Document Previews & Contact */}
+                <div className="pt-3 md:pt-4 border-t border-white/5 flex items-center justify-between gap-3 md:gap-4">
+                  <div className="flex gap-1.5 md:gap-2">
+                    {booking.idCard && (
+                      <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg overflow-hidden border border-white/10 relative group/doc">
+                        <Image
+                          src={booking.idCard}
+                          alt="ID"
+                          fill
+                          className="object-cover opacity-60 group-hover/doc:opacity-100"
+                        />
+                        <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/doc:opacity-100 transition-opacity" />
+                      </div>
+                    )}
+                    {booking.license && (
+                      <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg overflow-hidden border border-white/10 relative group/doc">
+                        <Image
+                          src={booking.license}
+                          alt="License"
+                          fill
+                          className="object-cover opacity-60 group-hover/doc:opacity-100"
+                        />
+                        <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/doc:opacity-100 transition-opacity" />
+                      </div>
+                    )}
+                  </div>
+
+                  {booking.phoneNumber && (
+                    <Button
+                      href={`https://wa.me/${booking.phoneNumber.replace("+", "")}`}
+                      target="_blank"
+                      size="small"
+                      startIcon={
+                        <WhatsApp
+                          className="text-green-500"
+                          sx={{
+                            ml: { xs: 0, md: 1 },
+                            fontSize: { xs: 14, md: 16 },
+                          }}
+                        />
+                      }
+                      sx={{
+                        borderRadius: "1rem",
+                        bgcolor: "rgba(34, 197, 94, 0.1)",
+                        color: "#22c55e",
+                        fontSize: { xs: "0.6rem", md: "0.7rem" },
+                        py: { xs: 0.5, md: 1 },
+                        px: { xs: 1, sm: 2 },
+                        minWidth: "auto",
+                        fontWeight: "black",
+                        border: "1px solid rgba(34, 197, 94, 0.2)",
+                        "&:hover": {
+                          bgcolor: "rgba(34, 197, 94, 0.2)",
+                          border: "1px solid rgba(34, 197, 94, 0.5)",
+                        },
+                      }}
+                    >
+                      واتساب
+                    </Button>
+                  )}
                 </div>
               </div>
-            </div>
 
-            <div className="mt-6 flex flex-col sm:flex-row gap-4">
-              {booking.status === "approved" && (
+              <div className="mt-auto grid grid-cols-2 gap-2 sm:gap-3 pt-4 border-t border-white/5">
+                {booking.status === "approved" ? (
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={() => handleOpenReview(booking)}
+                    sx={{
+                      borderRadius: "1rem sm:1.25rem",
+                      fontWeight: "black",
+                      fontSize: { xs: "0.7rem", sm: "0.8rem" },
+                      bgcolor: "var(--primary)",
+                      "&:hover": { bgcolor: "var(--primary-hover)" },
+                      boxShadow: "0 10px 20px -5px rgba(249, 115, 22, 0.3)",
+                    }}
+                  >
+                    قيم التجربة
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    disabled
+                    sx={{
+                      borderRadius: "1rem sm:1.25rem",
+                      fontWeight: "black",
+                      fontSize: { xs: "0.7rem", sm: "0.8rem" },
+                      borderColor: "rgba(255,255,255,0.05)",
+                      color: "rgba(255,255,255,0.15)",
+                    }}
+                  >
+                    لا يمكن التقييم
+                  </Button>
+                )}
                 <Button
-                  fullWidth
-                  variant="contained"
-                  startIcon={<Star sx={{ ml: 1 }} />}
-                  onClick={() => handleOpenReview(booking)}
+                  variant="outlined"
+                  size="small"
+                  href={`/cars/${booking.car?._id}`}
                   sx={{
-                    borderRadius: "1.25rem",
+                    borderRadius: "1rem sm:1.25rem",
                     fontWeight: "black",
-                    bgcolor: "#f97316",
-                    color: "white",
-                    "&:hover": { bgcolor: "#ea580c" },
-                    boxShadow: "0 8px 16px -4px rgba(249, 115, 22, 0.3)",
-                    textTransform: "none",
-                    py: 1.5,
+                    fontSize: { xs: "0.7rem", sm: "0.8rem" },
+                    borderColor: "rgba(255,255,255,0.1)",
+                    color: "rgba(255,255,255,0.6)",
+                    "&:hover": {
+                      borderColor: "rgba(255,255,255,0.3)",
+                      bgcolor: "rgba(255,255,255,0.05)",
+                    },
                   }}
                 >
-                  قيم تجربتك
+                  التفاصيل
                 </Button>
-              )}
-              <Button
-                fullWidth
-                variant="outlined"
-                href={`/cars/${booking.car?._id}`}
-                sx={{
-                  borderRadius: "1.25rem",
-                  fontWeight: "black",
-                  borderColor: "#e2e8f0",
-                  color: "#475569",
-                  textTransform: "none",
-                  py: 1.5,
-                  borderWidth: "2px",
-                  "&:hover": {
-                    borderColor: "#cbd5e1",
-                    bgcolor: "#f8fafc",
-                    borderWidth: "2px",
-                  },
-                }}
-              >
-                تفاصيل السيارة
-              </Button>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
-
+        ))}
+      </div>
       {/* Review Dialog */}
+      {/* Review Dialog - Optimized for Mobile */}
       <Dialog
         open={reviewOpen}
         onClose={() => setReviewOpen(false)}
         dir="rtl"
-        PaperProps={{ sx: { borderRadius: 3, padding: 1, minWidth: 350 } }}
+        fullWidth
+        maxWidth="xs"
+        PaperProps={{
+          sx: {
+            borderRadius: { xs: "2rem", md: "2.5rem" },
+            padding: { xs: 1, md: 2 },
+            bgcolor: "rgba(15, 23, 42, 0.98)",
+            backdropFilter: "blur(20px)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            color: "white",
+            margin: { xs: 2, md: 4 },
+          },
+        }}
       >
-        <DialogTitle className="font-bold text-center">
-          كيف كانت تجربتك؟
+        <DialogTitle className="font-black text-2xl md:text-3xl text-center mb-1 md:mb-2">
+          كيف كانت تجربتك؟ ✨
         </DialogTitle>
-        <DialogContent className="flex flex-col items-center space-y-4 pt-4">
-          <Typography variant="body2" className="text-slate-500">
-            قيم تجربتك مع {selectedBooking?.car?.name}
+        <DialogContent className="flex flex-col items-center space-y-4 md:space-y-6 pt-4 md:pt-6">
+          <Typography
+            variant="body2"
+            className="text-slate-400 font-bold text-center mb-2"
+          >
+            قيم تجربتك الفاخرة مع {selectedBooking?.car?.name}
           </Typography>
 
           <Rating
@@ -538,23 +726,39 @@ function BookingsSection() {
             }}
             size="large"
             precision={1}
+            dir="rtl"
+            sx={{
+              fontSize: { xs: "2.5rem", md: "3rem" },
+              "& .MuiRating-iconFilled": { color: "#f97316" },
+              "& .MuiRating-iconEmpty": { color: "rgba(255,255,255,0.1)" },
+            }}
           />
 
           <TextField
-            placeholder="اكتب تعليقك هنا..."
+            placeholder="اكتب تعليقك هنا بكل صراحة..."
             multiline
-            rows={3}
+            rows={4}
             fullWidth
             variant="outlined"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: { xs: 3, md: 4 },
+                bgcolor: "rgba(255,255,255,0.03)",
+                color: "white",
+                fontSize: { xs: "0.85rem", md: "1rem" },
+                "& fieldset": { borderColor: "rgba(255,255,255,0.1)" },
+                "&:hover fieldset": { borderColor: "rgba(255,255,255,0.2)" },
+              },
+            }}
           />
         </DialogContent>
-        <DialogActions className="justify-center pb-4">
+        <DialogActions className="flex-col sm:flex-row justify-center gap-2 sm:gap-4 pb-8 pt-4 px-6">
           <Button
             onClick={() => setReviewOpen(false)}
-            className="text-slate-500 font-bold"
+            className="text-slate-500 font-black px-8"
+            sx={{ width: { xs: "100%", sm: "auto" } }}
           >
             إلغاء
           </Button>
@@ -563,18 +767,23 @@ function BookingsSection() {
             onClick={handleSubmitReview}
             disabled={createReviewMutation.isPending}
             sx={{
-              fontWeight: "bold",
-              borderRadius: 2,
-              px: 4,
-              backgroundColor: "#f97316",
-              "&:hover": { backgroundColor: "#ea580c" },
+              fontWeight: "black",
+              borderRadius: "1.25rem",
+              px: { xs: 4, md: 8 },
+              py: 1.5,
+              width: { xs: "100%", sm: "auto" },
+              backgroundColor: "var(--primary)",
+              "&:hover": { backgroundColor: "var(--primary-hover)" },
+              boxShadow: "0 10px 20px -5px rgba(249, 115, 22, 0.3)",
             }}
           >
-            {createReviewMutation.isPending ? "جاري الارسال..." : "نشر التقييم"}
+            {createReviewMutation.isPending
+              ? "جاري النشر..."
+              : "نشر التقييم الفاخر"}
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }
 
@@ -612,31 +821,39 @@ function ChangePasswordSection() {
 
   const inputStyle = {
     "& .MuiOutlinedInput-root": {
-      borderRadius: "1rem",
-      bgcolor: "slate.50",
+      borderRadius: "1.25rem",
+      bgcolor: "rgba(255,255,255,0.03)",
+      color: "white",
+      "& fieldset": { borderColor: "rgba(255,255,255,0.08)" },
+      "&:hover fieldset": { borderColor: "rgba(255,255,255,0.2)" },
       "&.Mui-focused fieldset": { borderColor: "#f97316" },
-      "& fieldset": { borderColor: "#f1f5f9" },
+      transition: "all 0.3s ease",
+    },
+    "& .MuiInputLabel-root": {
+      color: "rgba(255,255,255,0.4)",
+      fontWeight: "bold",
     },
     "& .MuiInputLabel-root.Mui-focused": { color: "#f97316" },
   };
 
   return (
-    <div className="max-w-4xl bg-white rounded-[2rem] border border-slate-50 p-8 shadow-sm">
-      <div className="flex flex-col md:flex-row gap-8 items-start mb-8 pb-8 border-b border-slate-50">
-        <div className="w-24 h-24 bg-orange-100 rounded-3xl flex items-center justify-center shrink-0 shadow-inner">
-          <Lock sx={{ fontSize: 48, color: "#f97316" }} />
+    <div className="max-w-4xl bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 p-10 shadow-2xl relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-2 h-full bg-primary/20" />
+      <div className="flex flex-col md:flex-row gap-8 items-start mb-10 pb-10 border-b border-white/5">
+        <div className="w-24 h-24 bg-primary/10 rounded-4xl flex items-center justify-center shrink-0 shadow-2xl border border-primary/20">
+          <Lock sx={{ fontSize: 54, color: "var(--primary)" }} />
         </div>
         <div>
-          <h3 className="text-2xl font-black text-slate-800 mb-1">
+          <h3 className="text-3xl font-black text-white mb-2 leading-tight">
             تغيير كلمة المرور
           </h3>
-          <p className="text-slate-500 font-medium">
-            ننصح باستخدام كلمة مرور قوية تحتوي على حروف وأرقام لضمان أمان حسابك.
+          <p className="text-slate-400 font-bold text-lg">
+            ننصح باستخدام كلمة مرور قوية ومعقدة لضمان أقصى درجات الأمان لحسابك.
           </p>
         </div>
       </div>
 
-      <div className="max-w-md space-y-6">
+      <div className="max-w-md flex flex-col gap-12 mt-6">
         <TextField
           label="كلمة المرور الحالية"
           type={showCurrentPassword ? "text" : "password"}
@@ -649,7 +866,7 @@ function ChangePasswordSection() {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <Lock className="text-slate-400" />
+                <Lock className="text-primary" />
               </InputAdornment>
             ),
             endAdornment: (
@@ -657,6 +874,14 @@ function ChangePasswordSection() {
                 <IconButton
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                   edge="end"
+                  sx={{
+                    color: "white !important",
+                    opacity: 0.7,
+                    "&:hover": {
+                      opacity: 1,
+                      color: "var(--primary) !important",
+                    },
+                  }}
                 >
                   {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
@@ -677,7 +902,7 @@ function ChangePasswordSection() {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <Lock className="text-slate-400" />
+                <Lock className="text-primary" />
               </InputAdornment>
             ),
             endAdornment: (
@@ -685,6 +910,14 @@ function ChangePasswordSection() {
                 <IconButton
                   onClick={() => setShowNewPassword(!showNewPassword)}
                   edge="end"
+                  sx={{
+                    color: "white !important",
+                    opacity: 0.7,
+                    "&:hover": {
+                      opacity: 1,
+                      color: "var(--primary) !important",
+                    },
+                  }}
                 >
                   {showNewPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
@@ -694,26 +927,27 @@ function ChangePasswordSection() {
           sx={inputStyle}
         />
 
-        <div className="mt-8">
+        <div className="mt-12">
           <Button
             variant="contained"
             fullWidth
             onClick={handleSubmit}
             disabled={loading}
             sx={{
-              p: 2,
-              borderRadius: "1.25rem",
+              p: 2.5,
+              borderRadius: "1.5rem",
               fontWeight: "black",
-              bgcolor: "#f97316",
-              "&:hover": { bgcolor: "#ea580c" },
-              fontSize: "1.1rem",
-              boxShadow: "0 12px 20px -5px rgba(249, 115, 22, 0.4)",
+              bgcolor: "var(--primary)",
+              "&:hover": { bgcolor: "var(--primary-hover)" },
+              fontSize: "1.2rem",
+              boxShadow: "0 20px 40px -10px rgba(249, 115, 22, 0.4)",
+              letterSpacing: "-0.02em",
             }}
           >
             {loading ? (
-              <CircularProgress size={24} color="inherit" />
+              <CircularProgress size={26} color="inherit" />
             ) : (
-              "تحديث إعدادات الأمان"
+              "تحديث إعدادات الأمان السرية"
             )}
           </Button>
         </div>

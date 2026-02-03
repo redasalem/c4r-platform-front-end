@@ -6,7 +6,7 @@ import ReviewMarquee from "@/components/home/ReviewMarquee";
 
 export default function Home() {
   return (
-    <main className="bg-gray-50 min-h-screen pb-24">
+    <main className="min-h-screen pb-24">
       <HeroAd />
       <Departments />
       <ReviewMarquee />

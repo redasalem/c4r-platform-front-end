@@ -50,23 +50,24 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
-      <div className="p-8 md:p-10">
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-block mb-4">
+    <div className="bg-white/5 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/10">
+      <div className="p-8 md:p-12">
+        <div className="text-center mb-10">
+          <Link href="/" className="inline-block mb-6 relative group">
+            <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <Image
               src="/images/logo.jpg"
               alt="C4R Logo"
-              width={100}
-              height={40}
-              className="h-10 w-auto mx-auto object-contain"
+              width={120}
+              height={50}
+              className="h-12 w-auto mx-auto object-contain relative z-10 rounded-lg"
             />
           </Link>
-          <h1 className="text-2xl font-black text-slate-800">
+          <h1 className="text-3xl font-black text-white tracking-tight">
             إنشاء حساب جديد
           </h1>
-          <p className="text-slate-500 mt-2 text-sm">
-            انضم إلينا واستمتع بتجربة تأجير مميزة
+          <p className="text-slate-400 mt-2 text-sm font-bold">
+            انضم إلينا واستمتع بتجربة تأجير مميزة وفخمة
           </p>
         </div>
 
@@ -84,18 +85,24 @@ export default function RegisterPage() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Person className="text-slate-400" />
+                    <Person className="text-primary" />
                   </InputAdornment>
                 ),
                 className:
-                  "rounded-xl font-medium bg-slate-50 hover:bg-white transition-colors",
+                  "rounded-2xl font-bold bg-white/5 text-white hover:bg-white/10 transition-all duration-300",
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: "12px",
+                  borderRadius: "16px",
+                  "& fieldset": { borderColor: "rgba(255,255,255,0.1)" },
                   "&.Mui-focused fieldset": { borderColor: "#f97316" },
                 },
+                "& .MuiInputLabel-root": {
+                  color: "rgba(255,255,255,0.5)",
+                  fontWeight: "bold",
+                },
                 "& .MuiInputLabel-root.Mui-focused": { color: "#f97316" },
+                "& .MuiInputBase-input": { color: "white" },
               }}
             />
           </div>
@@ -114,18 +121,24 @@ export default function RegisterPage() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Email className="text-slate-400" />
+                    <Email className="text-primary" />
                   </InputAdornment>
                 ),
                 className:
-                  "rounded-xl font-medium bg-slate-50 hover:bg-white transition-colors",
+                  "rounded-2xl font-bold bg-white/5 text-white hover:bg-white/10 transition-all duration-300",
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: "12px",
+                  borderRadius: "16px",
+                  "& fieldset": { borderColor: "rgba(255,255,255,0.1)" },
                   "&.Mui-focused fieldset": { borderColor: "#f97316" },
                 },
+                "& .MuiInputLabel-root": {
+                  color: "rgba(255,255,255,0.5)",
+                  fontWeight: "bold",
+                },
                 "& .MuiInputLabel-root.Mui-focused": { color: "#f97316" },
+                "& .MuiInputBase-input": { color: "white" },
               }}
             />
           </div>
@@ -144,7 +157,7 @@ export default function RegisterPage() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Lock className="text-slate-400" />
+                    <Lock className="text-primary" />
                   </InputAdornment>
                 ),
                 endAdornment: (
@@ -152,20 +165,27 @@ export default function RegisterPage() {
                     <IconButton
                       onClick={() => setShowPassword(!showPassword)}
                       edge="end"
+                      sx={{ color: "white" }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),
                 className:
-                  "rounded-xl font-medium bg-slate-50 hover:bg-white transition-colors",
+                  "rounded-2xl font-bold bg-white/5 text-white hover:bg-white/10 transition-all duration-300",
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: "12px",
+                  borderRadius: "16px",
+                  "& fieldset": { borderColor: "rgba(255,255,255,0.1)" },
                   "&.Mui-focused fieldset": { borderColor: "#f97316" },
                 },
+                "& .MuiInputLabel-root": {
+                  color: "rgba(255,255,255,0.5)",
+                  fontWeight: "bold",
+                },
                 "& .MuiInputLabel-root.Mui-focused": { color: "#f97316" },
+                "& .MuiInputBase-input": { color: "white" },
               }}
             />
           </div>
@@ -184,7 +204,7 @@ export default function RegisterPage() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Lock className="text-slate-400" />
+                    <Lock className="text-primary" />
                   </InputAdornment>
                 ),
                 endAdornment: (
@@ -192,20 +212,27 @@ export default function RegisterPage() {
                     <IconButton
                       onClick={() => setShowPassword(!showPassword)}
                       edge="end"
+                      sx={{ color: "white" }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),
                 className:
-                  "rounded-xl font-medium bg-slate-50 hover:bg-white transition-colors",
+                  "rounded-2xl font-bold bg-white/5 text-white hover:bg-white/10 transition-all duration-300",
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: "12px",
+                  borderRadius: "16px",
+                  "& fieldset": { borderColor: "rgba(255,255,255,0.1)" },
                   "&.Mui-focused fieldset": { borderColor: "#f97316" },
                 },
+                "& .MuiInputLabel-root": {
+                  color: "rgba(255,255,255,0.5)",
+                  fontWeight: "bold",
+                },
                 "& .MuiInputLabel-root.Mui-focused": { color: "#f97316" },
+                "& .MuiInputBase-input": { color: "white" },
               }}
             />
           </div>
@@ -215,39 +242,39 @@ export default function RegisterPage() {
             fullWidth
             variant="contained"
             disabled={loading}
-            className="bg-linear-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-orange-500/30 transition-all duration-300 transform hover:-translate-y-1"
+            className="bg-primary hover:bg-primary-hover text-white font-black py-4 rounded-2xl shadow-xl shadow-primary/20 transition-all duration-300 transform hover:-translate-y-1 active:scale-95"
             sx={{
-              borderRadius: "12px",
-              padding: "12px",
-              fontSize: "1rem",
+              borderRadius: "16px",
+              padding: "14px",
+              fontSize: "1.1rem",
               textTransform: "none",
-              backgroundColor: "#f97316",
-              "&:hover": { backgroundColor: "#ea580c" },
+              backgroundColor: "var(--primary)",
+              "&:hover": { backgroundColor: "var(--primary-hover)" },
             }}
           >
             {loading ? (
-              <CircularProgress size={24} color="inherit" />
+              <CircularProgress size={26} color="inherit" />
             ) : (
               "إنشاء الحساب"
             )}
           </Button>
         </form>
 
-        <div className="mt-8 text-center space-y-4">
-          <p className="text-slate-500 text-sm">
+        <div className="mt-10 text-center space-y-6">
+          <p className="text-slate-400 text-sm font-bold">
             لديك حساب بالفعل؟{" "}
             <Link
               href="/auth/login"
-              className="text-orange-500 hover:text-orange-600 font-bold transition-colors"
+              className="text-primary hover:text-accent font-black transition-colors"
             >
               سجل دخولك
             </Link>
           </p>
 
-          <div className="pt-2 border-t border-slate-50">
+          <div className="pt-6 border-t border-white/5">
             <Link
               href="/"
-              className="text-slate-400 hover:text-slate-600 text-sm font-medium transition-colors"
+              className="text-slate-500 hover:text-slate-300 text-xs font-black uppercase tracking-widest transition-colors"
             >
               العودة للصفحة الرئيسية
             </Link>

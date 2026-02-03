@@ -9,29 +9,51 @@ import { toast } from "react-toastify";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    // Check for cached user on initial load
+    if (typeof window !== "undefined") {
+      const cachedUser = localStorage.getItem("c4r_user");
+      return cachedUser ? JSON.parse(cachedUser) : null;
+    }
+    return null;
+  });
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Load user from token on mount
+  // Load user from token on mount to verify session
   useEffect(() => {
     const checkAuth = async () => {
+      if (typeof window === "undefined") return;
+
       const token = Cookies.get("token");
       if (token) {
         try {
           const profile = await userService.getProfile();
           if (profile.success) {
             setUser(profile.data);
+            localStorage.setItem("c4r_user", JSON.stringify(profile.data));
           } else {
             // Token might be invalid
             Cookies.remove("token");
+            localStorage.removeItem("c4r_user");
             setUser(null);
           }
         } catch (error) {
           console.error("Auth check failed:", error);
-          Cookies.remove("token");
-          setUser(null);
+          // Only clear if it's a 401/403 error, otherwise maybe network issue
+          if (
+            error.response?.status === 401 ||
+            error.response?.status === 403
+          ) {
+            Cookies.remove("token");
+            localStorage.removeItem("c4r_user");
+            setUser(null);
+          }
         }
+      } else {
+        // No token, ensure local state is clear
+        localStorage.removeItem("c4r_user");
+        setUser(null);
       }
       setLoading(false);
     };
@@ -46,6 +68,7 @@ export const AuthProvider = ({ children }) => {
         const { token, user } = data.data;
         Cookies.set("token", token, { expires: 7 }); // Store token for 7 days
         setUser(user);
+        localStorage.setItem("c4r_user", JSON.stringify(user));
         toast.success("تم تسجيل الدخول بنجاح");
 
         // Handle redirection
@@ -90,6 +113,7 @@ export const AuthProvider = ({ children }) => {
       console.error("Logout error:", error);
     } finally {
       Cookies.remove("token");
+      localStorage.removeItem("c4r_user");
       setUser(null);
       router.push("/");
       toast.success("تم تسجيل الخروج بنجاح");

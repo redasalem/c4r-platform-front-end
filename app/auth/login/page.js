@@ -36,23 +36,24 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
-      <div className="p-8 md:p-10">
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-block mb-4">
+    <div className="bg-white/5 backdrop-blur-2xl rounded-3xl md:rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/10">
+      <div className="p-6 sm:p-8 md:p-12">
+        <div className="text-center mb-8 md:mb-10">
+          <Link href="/" className="inline-block mb-4 md:mb-6 relative group">
+            <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <Image
               src="/images/logo.jpg"
               alt="C4R Logo"
               width={100}
               height={40}
-              className="h-10 w-auto mx-auto object-contain"
+              className="h-10 md:h-12 w-auto mx-auto object-contain relative z-10 rounded-lg"
             />
           </Link>
-          <h1 className="text-2xl font-black text-slate-800">
+          <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
             مرحباً بك مجدداً
           </h1>
-          <p className="text-slate-500 mt-2 text-sm">
-            سجل دخولك لإدارة حجوزاتك
+          <p className="text-slate-400 mt-2 text-[13px] md:text-sm font-bold">
+            سجل دخولك لإدارة حجوزاتك بفخامة
           </p>
         </div>
 
@@ -71,21 +72,29 @@ export default function LoginPage() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Email className="text-slate-400" />
+                    <Email className="text-primary" />
                   </InputAdornment>
                 ),
                 className:
-                  "rounded-xl font-medium bg-slate-50 hover:bg-white transition-colors",
+                  "rounded-2xl font-bold bg-white/5 text-white hover:bg-white/10 transition-all duration-300",
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: "12px",
+                  borderRadius: "16px",
+                  "& fieldset": { borderColor: "rgba(255,255,255,0.1)" },
                   "&.Mui-focused fieldset": {
-                    borderColor: "#f97316", // Orange-500
+                    borderColor: "#f97316",
                   },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "rgba(255,255,255,0.5)",
+                  fontWeight: "bold",
                 },
                 "& .MuiInputLabel-root.Mui-focused": {
                   color: "#f97316",
+                },
+                "& .MuiInputBase-input": {
+                  color: "white",
                 },
               }}
             />
@@ -105,7 +114,7 @@ export default function LoginPage() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Lock className="text-slate-400" />
+                    <Lock className="text-primary" />
                   </InputAdornment>
                 ),
                 endAdornment: (
@@ -113,23 +122,32 @@ export default function LoginPage() {
                     <IconButton
                       onClick={() => setShowPassword(!showPassword)}
                       edge="end"
+                      sx={{ color: "white" }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),
                 className:
-                  "rounded-xl font-medium bg-slate-50 hover:bg-white transition-colors",
+                  "rounded-2xl font-bold bg-white/5 text-white hover:bg-white/10 transition-all duration-300",
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: "12px",
+                  borderRadius: "16px",
+                  "& fieldset": { borderColor: "rgba(255,255,255,0.1)" },
                   "&.Mui-focused fieldset": {
                     borderColor: "#f97316",
                   },
                 },
+                "& .MuiInputLabel-root": {
+                  color: "rgba(255,255,255,0.5)",
+                  fontWeight: "bold",
+                },
                 "& .MuiInputLabel-root.Mui-focused": {
                   color: "#f97316",
+                },
+                "& .MuiInputBase-input": {
+                  color: "white",
                 },
               }}
             />
@@ -138,7 +156,7 @@ export default function LoginPage() {
           <div className="flex items-center justify-between text-sm">
             <Link
               href="/auth/forgot-password"
-              className="text-orange-500 hover:text-orange-600 font-medium transition-colors"
+              className="text-primary hover:text-accent font-bold transition-colors"
             >
               نسيت كلمة المرور؟
             </Link>
@@ -149,41 +167,41 @@ export default function LoginPage() {
             fullWidth
             variant="contained"
             disabled={loading}
-            className="bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-orange-500/30 transition-all duration-300 transform hover:-translate-y-1"
+            className="bg-primary hover:bg-primary-hover text-white font-black py-3.5 md:py-4 rounded-2xl shadow-xl shadow-primary/20 transition-all duration-300 transform hover:-translate-y-1 active:scale-95"
             sx={{
-              borderRadius: "12px",
-              padding: "12px",
-              fontSize: "1rem",
+              borderRadius: "16px",
+              padding: { xs: "12px", md: "14px" },
+              fontSize: { xs: "1rem", md: "1.1rem" },
               textTransform: "none",
-              backgroundColor: "#f97316", // Fallback
+              backgroundColor: "var(--primary)",
               "&:hover": {
-                backgroundColor: "#ea580c",
+                backgroundColor: "var(--primary-hover)",
               },
             }}
           >
             {loading ? (
-              <CircularProgress size={24} color="inherit" />
+              <CircularProgress size={26} color="inherit" />
             ) : (
               "تسجيل الدخول"
             )}
           </Button>
         </form>
 
-        <div className="mt-8 text-center space-y-4">
-          <p className="text-slate-500 text-sm">
+        <div className="mt-10 text-center space-y-6">
+          <p className="text-slate-400 text-sm font-bold">
             ليس لديك حساب؟{" "}
             <Link
               href="/auth/register"
-              className="text-orange-500 hover:text-orange-600 font-bold transition-colors"
+              className="text-primary hover:text-accent font-black transition-colors"
             >
               أنشئ حساب جديد
             </Link>
           </p>
 
-          <div className="pt-2 border-t border-slate-50">
+          <div className="pt-6 border-t border-white/5">
             <Link
               href="/"
-              className="text-slate-400 hover:text-slate-600 text-sm font-medium transition-colors"
+              className="text-slate-500 hover:text-slate-300 text-xs font-black uppercase tracking-widest transition-colors"
             >
               العودة للصفحة الرئيسية
             </Link>
