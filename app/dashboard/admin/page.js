@@ -105,44 +105,77 @@ function AdminTabsContent({ user }) {
   };
 
   return (
-    <div className="bg-white/5 backdrop-blur-xl p-4 sm:p-6 md:p-8 lg:p-10 rounded-2xl sm:rounded-3xl md:rounded-[3rem] border border-white/10 shadow-2xl min-h-[500px] md:min-h-[600px]">
+    <div className="bg-white/5 backdrop-blur-xl p-3 sm:p-6 md:p-8 lg:p-10 rounded-xl sm:rounded-2xl md:rounded-3xl lg:rounded-[3rem] border border-white/10 shadow-2xl min-h-[400px] md:min-h-[600px]">
       <Tabs
         value={value}
         onChange={handleChange}
         aria-label="admin dashboard tabs"
-        variant="scrollable"
-        scrollButtons="auto"
-        allowScrollButtonsMobile
+        variant="fullWidth"
+        orientation={
+          typeof window !== "undefined" && window.innerWidth < 640
+            ? "vertical"
+            : "horizontal"
+        }
         sx={{
           "& .MuiTab-root": {
-            fontSize: { xs: "0.85rem", md: "1.1rem" },
+            fontSize: { xs: "0.75rem", md: "1.1rem" },
             fontWeight: "900",
             fontFamily: "inherit",
             color: "rgba(255,255,255,0.4)",
-            minHeight: { xs: "56px", md: "70px" },
+            minHeight: { xs: "48px", md: "70px" },
             px: { xs: 2, md: 4 },
             transition: "all 0.3s ease",
+            alignItems: { xs: "flex-start", sm: "center" },
+            textAlign: "right",
+            justifyContent: "flex-start",
+            borderBottom: {
+              xs: "1px solid rgba(255,255,255,0.05)",
+              sm: "none",
+            },
             "&:hover": { color: "white" },
           },
           "& .Mui-selected": {
             color: "#f97316 !important",
-            scale: "1.02",
+            bgcolor: { xs: "rgba(249,115,22,0.05)", sm: "transparent" },
           },
           "& .MuiTabs-indicator": {
             backgroundColor: "#f97316",
-            height: "4px",
+            height: { xs: "100%", sm: "4px" },
+            width: { xs: "4px", sm: "auto" },
             borderRadius: "4px",
+            left: { xs: 0, sm: "auto" },
+            right: { xs: "auto", sm: "auto" },
             boxShadow: "0 0 15px rgba(249,115,22,0.5)",
           },
-          borderBottom: "1px solid rgba(255,255,255,0.05)",
-          mb: { xs: 2.5, md: 4 },
+          borderBottom: { xs: "none", sm: "1px solid rgba(255,255,255,0.05)" },
+          mb: { xs: 1, md: 4 },
         }}
       >
-        <Tab icon={<EventNote />} iconPosition="start" label="الحجوزات" />
-        <Tab icon={<DirectionsCar />} iconPosition="start" label="السيارات" />
-        <Tab icon={<Star />} iconPosition="start" label="التعليقات" />
-        <Tab icon={<Person />} iconPosition="start" label="حسابي" />
-        <Tab icon={<Lock />} iconPosition="start" label="الأمان" />
+        <Tab
+          icon={<EventNote sx={{ fontSize: { xs: 18, sm: 24 } }} />}
+          iconPosition="start"
+          label="الحجوزات"
+        />
+        <Tab
+          icon={<DirectionsCar sx={{ fontSize: { xs: 18, sm: 24 } }} />}
+          iconPosition="start"
+          label="السيارات"
+        />
+        <Tab
+          icon={<Star sx={{ fontSize: { xs: 18, sm: 24 } }} />}
+          iconPosition="start"
+          label="التعليقات"
+        />
+        <Tab
+          icon={<Person sx={{ fontSize: { xs: 18, sm: 24 } }} />}
+          iconPosition="start"
+          label="حسابي"
+        />
+        <Tab
+          icon={<Lock sx={{ fontSize: { xs: 18, sm: 24 } }} />}
+          iconPosition="start"
+          label="الأمان"
+        />
       </Tabs>
 
       <TabPanel value={value} index={0}>
@@ -168,16 +201,16 @@ export default function AdminDashboard() {
   const { user } = useAuth();
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white/5 backdrop-blur-2xl p-4 sm:p-6 md:p-10 rounded-2xl sm:rounded-3xl md:rounded-[3rem] border border-white/10 relative overflow-hidden group shadow-2xl">
+    <div className="space-y-4 md:space-y-6">
+      <div className="bg-white/5 backdrop-blur-2xl p-3 sm:p-6 md:p-10 rounded-xl sm:rounded-2xl md:rounded-[3rem] border border-white/10 relative overflow-hidden group shadow-2xl">
         <div className="absolute top-0 right-0 w-40 h-40 bg-primary/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 tracking-tighter">
+        <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-1 md:mb-2 tracking-tighter">
           لوحة{" "}
           <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
             الإدارة
           </span>
         </h1>
-        <p className="text-slate-400 font-bold text-base sm:text-lg">
+        <p className="text-slate-400 font-bold text-xs sm:text-base lg:text-lg">
           أهلاً {user?.name}، مرحباً بك في مركز التحكم الفاخر
         </p>
       </div>
@@ -251,8 +284,18 @@ function ManageBookings() {
         {bookings.map((booking) => (
           <div
             key={booking._id}
-            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 lg:p-10 shadow-2xl hover:bg-white/10 transition-all duration-500 relative overflow-hidden group"
+            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl sm:rounded-3xl p-3 sm:p-8 lg:p-10 shadow-2xl hover:bg-white/10 transition-all duration-500 relative overflow-hidden group"
           >
+            {/* Status Strip Mobile */}
+            <div
+              className={`absolute top-0 right-0 w-1 sm:hidden h-full ${
+                booking.status === "approved"
+                  ? "bg-green-500"
+                  : booking.status === "rejected"
+                    ? "bg-red-500"
+                    : "bg-primary"
+              }`}
+            />
             {/* Status Strip */}
             <div
               className={`absolute top-0 right-0 w-2 h-full ${
@@ -260,55 +303,71 @@ function ManageBookings() {
                   ? "bg-green-500"
                   : booking.status === "rejected"
                     ? "bg-red-500"
-                    : "bg-orange-400"
+                    : "bg-primary"
               }`}
             />
 
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
               {/* Car Info Column */}
               <div className="lg:w-1/3 border-b lg:border-b-0 lg:border-l border-white/5 pb-4 sm:pb-6 lg:pb-0 lg:pl-8">
-                <div className="flex items-center gap-3 sm:gap-5 mb-4 sm:mb-6">
-                  <div className="bg-primary/10 p-4 rounded-2xl text-primary shadow-2xl border border-primary/20">
-                    <DirectionsCar sx={{ fontSize: 32 }} />
+                <div className="flex items-center gap-2 sm:gap-5 mb-3 sm:mb-6">
+                  <div className="hidden sm:flex bg-primary/10 p-2 sm:p-4 rounded-xl sm:rounded-2xl text-primary shadow-2xl border border-primary/20">
+                    <DirectionsCar sx={{ fontSize: { xs: 20, sm: 32 } }} />
                   </div>
                   <div>
-                    <h3 className="font-black text-2xl text-white tracking-tight">
+                    <h3 className="font-black text-base sm:text-2xl text-white tracking-tight">
                       {booking.car?.name || "سيارة غير محددة"}
                     </h3>
-                    <p className="text-sm text-slate-400 font-black uppercase tracking-widest mt-1">
+                    <p className="text-[9px] sm:text-sm text-slate-400 font-black uppercase tracking-widest mt-0.5 sm:mt-1">
                       إصدار {booking.car?.year || "2024"}
                     </p>
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-500 font-bold">
-                      بداية الحجز:
-                    </span>
-                    <span className="font-black text-white">
-                      {booking.startDate
-                        ? new Date(booking.startDate).toLocaleDateString(
-                            "ar-EG",
-                          )
-                        : "---"}
-                    </span>
+                  <div className="flex items-center gap-1.5 sm:gap-3 bg-white/5 p-1.5 sm:p-3 rounded-lg sm:rounded-xl border border-white/5">
+                    <EventNote
+                      className="text-primary"
+                      sx={{ fontSize: { xs: 12, sm: 20 } }}
+                    />
+                    <div className="flex flex-row sm:flex-col gap-2 sm:gap-0 font-bold">
+                      <span className="text-[8px] sm:text-[10px] text-slate-500 uppercase">
+                        بدأ:
+                      </span>
+                      <span className="text-[9px] sm:text-xs text-white">
+                        {booking.startDate
+                          ? new Date(booking.startDate).toLocaleDateString(
+                              "ar-EG",
+                            )
+                          : "---"}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-500">نهاية الحجز:</span>
-                    <span className="font-bold text-white">
-                      {booking.endDate
-                        ? new Date(booking.endDate).toLocaleDateString("ar-EG")
-                        : "---"}
-                    </span>
+                  <div className="flex items-center gap-1.5 sm:gap-3 bg-white/5 p-1.5 sm:p-3 rounded-lg sm:rounded-xl border border-white/5">
+                    <EventNote
+                      className="text-primary"
+                      sx={{ fontSize: { xs: 12, sm: 20 } }}
+                    />
+                    <div className="flex flex-row sm:flex-col gap-2 sm:gap-0 font-bold">
+                      <span className="text-[8px] sm:text-[10px] text-slate-500 uppercase">
+                        نهاية:
+                      </span>
+                      <span className="text-[9px] sm:text-xs text-white">
+                        {booking.endDate
+                          ? new Date(booking.endDate).toLocaleDateString(
+                              "ar-EG",
+                            )
+                          : "---"}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex justify-between items-center text-sm pt-4 border-t border-white/5">
-                    <span className="text-slate-500 font-bold">
-                      التكلفة الإجمالية:
+                  <div className="flex justify-between items-center text-xs sm:text-sm pt-2 sm:pt-4 border-t border-white/5">
+                    <span className="text-slate-500 font-bold text-[9px] sm:text-sm">
+                      التكلفة:
                     </span>
-                    <span className="font-black text-primary text-2xl tracking-tighter">
+                    <span className="font-black text-primary text-base sm:text-2xl tracking-tighter">
                       {booking.totalPrice}{" "}
-                      <span className="text-xs font-bold text-slate-500">
+                      <span className="text-[8px] sm:text-xs font-bold text-slate-500">
                         ريال
                       </span>
                     </span>
@@ -318,34 +377,36 @@ function ManageBookings() {
 
               {/* Client Info Column */}
               <div className="lg:w-1/3 border-b lg:border-b-0 lg:border-l border-white/5 pb-4 sm:pb-6 lg:pb-0 lg:pl-8">
-                <h4 className="text-[10px] font-black text-slate-500 uppercase mb-6 tracking-[0.3em]">
-                  بيانات العميل الحصرية
+                <h4 className="text-[7px] sm:text-[10px] font-black text-slate-500 uppercase mb-2 sm:mb-6 tracking-[0.3em]">
+                  بيانات العميل
                 </h4>
-                <div className="space-y-6">
-                  <div className="flex items-center gap-4">
+                <div className="space-y-3 sm:space-y-6">
+                  <div className="flex items-center gap-2 sm:gap-4">
                     <Avatar
                       sx={{
                         bgcolor: "rgba(255,255,255,0.05)",
                         color: "var(--primary)",
-                        width: 44,
-                        height: 44,
-                        fontSize: "1.1rem",
+                        width: { xs: 24, sm: 44 },
+                        height: { xs: 24, sm: 44 },
+                        fontSize: { xs: "0.6rem", sm: "1.1rem" },
                         fontWeight: "900",
                         border: "1px solid rgba(255,255,255,0.1)",
-                        boxShadow: "0 10px 20px rgba(0,0,0,0.2)",
                       }}
                     >
                       {booking.user?.name?.charAt(0)}
                     </Avatar>
-                    <span className="font-black text-white text-lg">
+                    <span className="font-black text-white text-xs sm:text-lg">
                       {booking.user?.name}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 text-slate-300 font-bold">
-                      <Phone fontSize="small" className="text-primary/70" />
-                      <span>{booking.phoneNumber}</span>
-                    </div>
+                  <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-lg text-white/80 font-bold bg-white/5 p-1.5 sm:p-2.5 rounded-lg border border-white/5">
+                    <Phone
+                      className="text-primary"
+                      sx={{ fontSize: { xs: 12, sm: 20 } }}
+                    />
+                    <span className="text-[9px] sm:text-base">
+                      {booking.phoneNumber}
+                    </span>
                     <IconButton
                       size="small"
                       component="a"
@@ -356,14 +417,22 @@ function ManageBookings() {
                         bgcolor: "rgba(34, 197, 94, 0.1)",
                         "&:hover": { bgcolor: "rgba(34, 197, 94, 0.2)" },
                         border: "1px solid rgba(34, 197, 94, 0.2)",
+                        ml: "auto",
+                        width: { xs: 24, sm: 32 },
+                        height: { xs: 24, sm: 32 },
                       }}
                     >
-                      <WhatsApp fontSize="small" />
+                      <WhatsApp sx={{ fontSize: { xs: 12, sm: 18 } }} />
                     </IconButton>
                   </div>
-                  <div className="flex items-center gap-3 text-slate-400 font-bold">
-                    <Speed fontSize="small" className="text-primary/70" />
-                    <span>{booking.kmPerDay} كم / يوم</span>
+                  <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-lg text-white/80 font-bold bg-white/5 p-1.5 sm:p-2.5 rounded-lg border border-white/5">
+                    <Speed
+                      className="text-primary"
+                      sx={{ fontSize: { xs: 12, sm: 20 } }}
+                    />
+                    <span className="text-[9px] sm:text-base">
+                      {booking.kmPerDay} كم / يوم
+                    </span>
                   </div>
                 </div>
               </div>
@@ -421,9 +490,11 @@ function ManageBookings() {
                       bgcolor: "rgba(220, 38, 38, 0.1)",
                       border: "1px solid rgba(220, 38, 38, 0.2)",
                       "&:hover": { bgcolor: "rgba(220, 38, 38, 0.2)" },
+                      width: { xs: 28, sm: 40 },
+                      height: { xs: 28, sm: 40 },
                     }}
                   >
-                    <Delete fontSize="small" />
+                    <Delete sx={{ fontSize: { xs: 14, sm: 20 } }} />
                   </IconButton>
                 </div>
 
@@ -432,25 +503,25 @@ function ManageBookings() {
                     href={booking.idCardImage}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-white/5 text-white rounded-2xl text-xs font-black hover:bg-white/10 transition-all border border-white/10 group/btn"
+                    className="flex-1 flex items-center justify-center gap-1 sm:gap-2 py-1.5 sm:py-3.5 bg-white/5 text-white rounded-lg sm:rounded-2xl text-[8px] sm:text-xs font-black hover:bg-white/10 transition-all border border-white/10 group/btn"
                   >
                     <DescIcon
-                      fontSize="small"
+                      sx={{ fontSize: { xs: 10, sm: 18 } }}
                       className="text-primary/70 group-hover/btn:text-primary transition-colors"
                     />
-                    معاينة الهوية
+                    الهوية
                   </a>
                   <a
                     href={booking.licenseImage}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-white/5 text-white rounded-2xl text-xs font-black hover:bg-white/10 transition-all border border-white/10 group/btn"
+                    className="flex-1 flex items-center justify-center gap-1 sm:gap-2 py-1.5 sm:py-3.5 bg-white/5 text-white rounded-lg sm:rounded-2xl text-[8px] sm:text-xs font-black hover:bg-white/10 transition-all border border-white/10 group/btn"
                   >
                     <DescIcon
-                      fontSize="small"
+                      sx={{ fontSize: { xs: 10, sm: 18 } }}
                       className="text-primary/70 group-hover/btn:text-primary transition-colors"
                     />
-                    معاينة الرخصة
+                    الرخصة
                   </a>
                 </div>
 
@@ -493,7 +564,7 @@ function ManageBookings() {
                       </Button>
                     </>
                   ) : (
-                    <div className="w-full text-center py-3.5 bg-white/5 text-slate-500 rounded-2xl text-sm font-black border border-white/5 italic">
+                    <div className="w-full text-center py-2.5 sm:py-3.5 bg-white/5 text-slate-500 rounded-xl sm:rounded-2xl text-[10px] sm:text-sm font-black border border-white/5 italic">
                       تم اتخاذ الإجراء النهائي
                     </div>
                   )}
@@ -593,13 +664,13 @@ function ManageCars() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row justify-between items-center bg-white/5 backdrop-blur-xl p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-white/10 shadow-2xl gap-4 sm:gap-6">
+      <div className="flex flex-col md:flex-row justify-between items-center bg-white/5 backdrop-blur-xl p-3 sm:p-8 rounded-xl sm:rounded-3xl border border-white/10 shadow-2xl gap-3 sm:gap-6">
         <div className="text-center md:text-right">
-          <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-            مجموعة السيارات الفاخرة
+          <h2 className="text-lg sm:text-2xl font-black text-white tracking-tight">
+            مجموعة السيارات
           </h2>
-          <p className="text-[10px] sm:text-sm text-slate-400 mt-2 font-bold uppercase tracking-widest">
-            إدارة المركبات المتاحة ({cars.length} سيارة)
+          <p className="text-[8px] sm:text-sm text-slate-400 mt-0.5 sm:mt-2 font-bold uppercase tracking-widest">
+            ({cars.length} مركبة)
           </p>
         </div>
 
@@ -611,12 +682,12 @@ function ManageCars() {
           sx={{
             backgroundColor: "var(--primary)",
             "&:hover": { backgroundColor: "var(--primary-hover)" },
-            borderRadius: "1.25rem",
+            borderRadius: "0.75rem sm:1.25rem",
             fontWeight: "900",
-            px: { xs: 3, md: 4 },
-            py: 1.5,
-            fontSize: { xs: "0.85rem", md: "1rem" },
-            boxShadow: "0 15px 30px rgba(249, 115, 22, 0.3)",
+            px: { xs: 2.5, md: 4 },
+            py: { xs: 1, md: 1.5 },
+            fontSize: { xs: "0.75rem", md: "1rem" },
+            boxShadow: "0 10px 20px rgba(249, 115, 22, 0.2)",
             width: { xs: "100%", md: "auto" },
           }}
         >
@@ -652,8 +723,8 @@ function ManageCars() {
                 {car.image || car.imageUrl ? (
                   <Image
                     src={car.image || car.imageUrl}
-                    alt={car.name}
                     fill
+                    alt={car.name}
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 ) : (
@@ -661,53 +732,47 @@ function ManageCars() {
                     <DirectionsCar fontSize="large" />
                   </div>
                 )}
-                <div className="absolute top-3 left-3">
+                <div className="absolute top-1.5 sm:top-4 left-1.5 sm:left-4 z-20 flex flex-col gap-1">
                   <Chip
-                    label={`${car.pricePerDay} ريال`}
-                    color="warning"
-                    size="small"
-                    sx={{ fontWeight: "bold" }}
-                  />
-                </div>
-              </div>
-
-              <div className="p-5">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <h3 className="font-black text-xl text-white line-clamp-1 mb-1 tracking-tight">
-                      {car.name}
-                    </h3>
-                    <p className="text-xs text-slate-400 font-black uppercase tracking-widest">
-                      {car.year} •{" "}
-                      <span className="text-primary/70">
-                        {car.region === "eastern"
-                          ? "الشرقية"
-                          : car.region === "jeddah"
-                            ? "جدة"
-                            : "الرياض"}
-                      </span>
-                    </p>
-                  </div>
-                  <Chip
-                    label={
-                      car.category === "with_driver"
-                        ? "بسائق"
-                        : car.category === "corporate"
-                          ? "شركات"
-                          : "إيجار"
-                    }
+                    label={car.pricePerDay + " ريال / يوم"}
                     size="small"
                     sx={{
-                      fontWeight: "900",
-                      fontSize: "0.7rem",
-                      borderRadius: "8px",
-                      backgroundColor: "rgba(255,255,255,0.05)",
+                      bgcolor: "rgba(0,0,0,0.6)",
+                      backdropFilter: "blur(10px)",
                       color: "white",
+                      fontWeight: "900",
+                      fontSize: { xs: "0.6rem", sm: "0.75rem" },
+                      height: { xs: 20, sm: 24 },
                       border: "1px solid rgba(255,255,255,0.1)",
                     }}
                   />
                 </div>
+              </div>
 
+              {/* Car Details Info */}
+              <div className="p-2 sm:p-5">
+                <div className="flex justify-between items-start mb-2 sm:mb-4">
+                  <div>
+                    <h4 className="text-sm sm:text-xl font-black text-white group-hover:text-primary transition-colors truncate max-w-[120px] sm:max-w-none">
+                      {car.name}
+                    </h4>
+                  </div>
+                  <div className="flex gap-1">
+                    <IconButton
+                      size="small"
+                      color="error"
+                      onClick={() => setDeleteId(car._id)}
+                      sx={{
+                        bgcolor: "rgba(220, 38, 38, 0.1)",
+                        width: { xs: 24, sm: 32 },
+                        height: { xs: 24, sm: 32 },
+                        "&:hover": { bgcolor: "rgba(220, 38, 38, 0.2)" },
+                      }}
+                    >
+                      <Delete sx={{ fontSize: { xs: 12, sm: 16 } }} />
+                    </IconButton>
+                  </div>
+                </div>
                 <div className="flex gap-3 mt-6 pt-5 border-t border-white/5">
                   <Button
                     fullWidth
@@ -846,7 +911,7 @@ function ManageReviews() {
         {reviews.map((review) => (
           <div
             key={review._id}
-            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-[2.5rem] p-5 sm:p-8 md:p-10 shadow-2xl hover:bg-white/10 transition-all duration-500 group relative overflow-hidden"
+            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl md:rounded-[2.5rem] p-3 sm:p-8 md:p-10 shadow-2xl hover:bg-white/10 transition-all duration-500 group relative overflow-hidden"
           >
             {/* Decorative element */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -855,24 +920,23 @@ function ManageReviews() {
               <div className="flex items-center gap-4 sm:gap-5">
                 <Avatar
                   sx={{
-                    width: { xs: 50, sm: 64 },
-                    height: { xs: 50, sm: 64 },
-                    bgcolor: "rgba(255,255,255,0.05)",
-                    color: "var(--primary)",
+                    width: { xs: 40, sm: 80 },
+                    height: { xs: 40, sm: 80 },
+                    border: "2px solid rgba(249,115,22,0.3)",
+                    boxShadow: "0 15px 30px rgba(0,0,0,0.3)",
+                    fontSize: { xs: "1rem", sm: "2rem" },
                     fontWeight: "900",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    boxShadow: "0 10px 20px rgba(0,0,0,0.2)",
-                    fontSize: { xs: "1.1rem", sm: "1.4rem" },
+                    bgcolor: "rgba(255,255,255,0.05)",
                   }}
                 >
                   {review.user?.name?.charAt(0)}
                 </Avatar>
-                <div className="min-w-0">
-                  <h4 className="font-black text-white text-lg md:text-xl tracking-tight mb-0.5 truncate">
+                <div className="text-center sm:text-right">
+                  <h4 className="text-base sm:text-2xl font-black text-white mb-0.5 sm:mb-1">
                     {review.user?.name}
                   </h4>
-                  <p className="text-[10px] md:text-xs text-slate-500 font-black uppercase tracking-widest truncate">
-                    {review.user?.email}
+                  <p className="text-[8px] sm:text-xs text-slate-500 font-black uppercase tracking-widest">
+                    {review.car?.name}
                   </p>
                 </div>
               </div>
@@ -1374,7 +1438,12 @@ function ProfileSection({ user }) {
       <div className="absolute top-0 left-0 w-2 h-full bg-primary/20" />
       <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 items-start mb-6 sm:mb-8 md:mb-10 pb-6 sm:pb-8 md:pb-10 border-b border-white/5">
         <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-primary/10 rounded-xl sm:rounded-2xl md:rounded-[2rem] flex items-center justify-center shrink-0 shadow-2xl border border-primary/20">
-          <Person sx={{ fontSize: { xs: 36, sm: 44, md: 54 }, color: "var(--primary)" }} />
+          <Person
+            sx={{
+              fontSize: { xs: 36, sm: 44, md: 54 },
+              color: "var(--primary)",
+            }}
+          />
         </div>
         <div>
           <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1 sm:mb-2 leading-tight">
@@ -1563,7 +1632,12 @@ function ChangePasswordSection() {
       <div className="absolute top-0 left-0 w-2 h-full bg-primary/20" />
       <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 items-start mb-6 sm:mb-8 md:mb-10 pb-6 sm:pb-8 md:pb-10 border-b border-white/5">
         <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-primary/10 rounded-xl sm:rounded-2xl md:rounded-[2rem] flex items-center justify-center shrink-0 shadow-2xl border border-primary/20">
-          <Lock sx={{ fontSize: { xs: 36, sm: 44, md: 54 }, color: "var(--primary)" }} />
+          <Lock
+            sx={{
+              fontSize: { xs: 36, sm: 44, md: 54 },
+              color: "var(--primary)",
+            }}
+          />
         </div>
         <div>
           <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1 sm:mb-2 leading-tight">

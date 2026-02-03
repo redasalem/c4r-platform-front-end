@@ -89,31 +89,32 @@ function UserDashboardContent({ user }) {
   return (
     <div className="space-y-10">
       {/* Premium Navigation Tabs - Optimized for Mobile */}
-      <div className="flex flex-nowrap md:flex-wrap items-center justify-start md:justify-start bg-white/5 backdrop-blur-xl p-2 md:p-2.5 rounded-[2rem] md:rounded-3xl border border-white/10 shadow-2xl w-full md:w-fit mx-auto md:mx-0 overflow-x-auto no-scrollbar gap-1 md:gap-0">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-start bg-white/5 backdrop-blur-xl p-1.5 sm:p-2.5 rounded-xl sm:rounded-3xl border border-white/10 shadow-2xl w-full sm:w-fit mx-auto sm:mx-0 gap-1 sm:gap-0">
         {[
           {
             id: 0,
-            label: "الحساب",
-            icon: <Person sx={{ fontSize: { xs: 18, md: 20 } }} />,
+            label: "الحساب الشخصي",
+            icon: <Person sx={{ fontSize: { xs: 16, sm: 20 } }} />,
           },
           {
             id: 1,
-            label: "حجوزاتي",
-            icon: <EventNote sx={{ fontSize: { xs: 18, md: 20 } }} />,
+            label: "سجل الحجوزات",
+            icon: <EventNote sx={{ fontSize: { xs: 16, sm: 20 } }} />,
           },
           {
             id: 2,
-            label: "الأمان",
-            icon: <Lock sx={{ fontSize: { xs: 18, md: 20 } }} />,
+            label: "إعدادات الأمان",
+            icon: <Lock sx={{ fontSize: { xs: 16, sm: 20 } }} />,
           },
         ].map((tab) => (
           <button
             key={tab.id}
             onClick={() => handleChange(null, tab.id)}
-            className={`flex items-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 rounded-xl md:rounded-2xl font-black transition-all duration-500 text-xs sm:text-sm md:text-base whitespace-nowrap ${value === tab.id
-                ? "bg-primary text-white shadow-[0_10px_30px_rgba(249,115,22,0.4)] -translate-y-0.5 md:-translate-y-1"
+            className={`flex items-center gap-2 sm:gap-3 px-4 sm:px-8 py-2.5 sm:py-4 rounded-lg sm:rounded-2xl font-black transition-all duration-500 text-[11px] sm:text-base whitespace-nowrap ${
+              value === tab.id
+                ? "bg-primary text-white shadow-[0_10px_20px_rgba(249,115,22,0.4)] sm:-translate-y-1"
                 : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
-              }`}
+            }`}
           >
             <span className={value === tab.id ? "scale-110" : "opacity-70"}>
               {tab.icon}
@@ -124,7 +125,7 @@ function UserDashboardContent({ user }) {
       </div>
 
       {/* Dynamic Content Section */}
-      <div className="min-h-[600px] animate-in fade-in slide-in-from-bottom-6 duration-1000">
+      <div className="min-h-[400px] animate-in fade-in slide-in-from-bottom-6 duration-1000">
         {value === 0 && <ProfileSection user={user} />}
         {value === 1 && <BookingsSection />}
         {value === 2 && <ChangePasswordSection />}
@@ -146,9 +147,9 @@ export default function UserDashboard() {
   if (!user) return null;
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 pb-20 pt-6 md:pt-10 px-4">
+    <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 pb-20 pt-4 sm:pt-10 px-4">
       {/* Welcome Header */}
-      <div className="relative overflow-hidden bg-white/5 backdrop-blur-2xl p-6 sm:p-10 md:p-14 rounded-3xl sm:rounded-[3rem] md:rounded-[3.5rem] text-white shadow-2xl border border-white/10">
+      <div className="relative overflow-hidden bg-white/5 backdrop-blur-2xl p-4 sm:p-14 rounded-2xl sm:rounded-[3.5rem] text-white shadow-2xl border border-white/10">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-80 h-80 bg-primary/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-[100px]" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-[80px]" />
@@ -161,13 +162,13 @@ export default function UserDashboard() {
                 لوحة التحكم الحصرية
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-5xl font-black mb-3 md:mb-4 leading-tight tracking-tighter">
+            <h1 className="text-xl sm:text-5xl font-black mb-2 sm:mb-4 leading-tight tracking-tighter">
               مرحباً بك،{" "}
               <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
                 {user?.name}
               </span>
             </h1>
-            <p className="text-slate-400 text-base md:text-xl font-bold max-w-xl leading-relaxed">
+            <p className="text-slate-400 text-xs sm:text-xl font-bold max-w-xl leading-relaxed">
               إدارة حسابك الشخصي، تتبع حجوزاتك، وتغيير إعدادات الأمان بكل فخامة
               ومن مكان واحد.
             </p>
@@ -238,7 +239,12 @@ function ProfileSection({ user }) {
       <div className="absolute top-0 left-0 w-2 h-full bg-primary/20" />
       <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 items-start mb-6 sm:mb-8 md:mb-10 pb-6 sm:pb-8 md:pb-10 border-b border-white/5">
         <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-primary/10 rounded-xl sm:rounded-2xl md:rounded-4xl flex items-center justify-center shrink-0 shadow-2xl border border-primary/20">
-          <Person sx={{ fontSize: { xs: 36, sm: 44, md: 54 }, color: "var(--primary)" }} />
+          <Person
+            sx={{
+              fontSize: { xs: 36, sm: 44, md: 54 },
+              color: "var(--primary)",
+            }}
+          />
         </div>
         <div>
           <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1 sm:mb-2 leading-tight">
@@ -455,20 +461,21 @@ function BookingsSection() {
         {bookings.map((booking) => (
           <div
             key={booking._id}
-            className="group relative bg-white/5 backdrop-blur-3xl rounded-3xl md:rounded-[3rem] border border-white/10 overflow-hidden shadow-2xl hover:bg-white/10 transition-all duration-700 flex flex-col h-full"
+            className="group relative bg-white/5 backdrop-blur-3xl rounded-xl sm:rounded-[3rem] border border-white/10 overflow-hidden shadow-2xl hover:bg-white/10 transition-all duration-700 flex flex-col h-full"
           >
             {/* Status Glow Background */}
             <div
-              className={`absolute top-0 right-0 w-32 h-32 blur-[60px] opacity-20 -translate-y-1/2 translate-x-1/2 rounded-full ${booking.status === "approved"
+              className={`absolute top-0 right-0 w-32 h-32 blur-[60px] opacity-20 -translate-y-1/2 translate-x-1/2 rounded-full ${
+                booking.status === "approved"
                   ? "bg-green-500"
                   : booking.status === "rejected"
                     ? "bg-red-500"
                     : "bg-primary"
-                }`}
+              }`}
             />
 
             {/* Header Info & Image */}
-            <div className="relative h-40 md:h-48 overflow-hidden">
+            <div className="relative h-28 sm:h-48 overflow-hidden">
               {booking.car?.images?.[0] ? (
                 <Image
                   src={booking.car.images[0]}
@@ -480,7 +487,7 @@ function BookingsSection() {
                 <div className="flex items-center justify-center h-full bg-slate-900 border-b border-white/5">
                   <DirectionsCar
                     className="text-white/10"
-                    sx={{ fontSize: { xs: 40, md: 60 } }}
+                    sx={{ fontSize: { xs: 30, md: 60 } }}
                   />
                 </div>
               )}
@@ -489,12 +496,13 @@ function BookingsSection() {
               <div className="absolute top-3 md:top-4 left-3 md:left-4 z-20">
                 <div className="flex flex-col items-end gap-1.5 md:gap-2">
                   <span
-                    className={`px-3 md:px-4 py-1.5 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest shadow-2xl backdrop-blur-xl border border-white/10 ${booking.status === "approved"
+                    className={`px-2 sm:px-4 py-1 sm:py-1.5 rounded-full text-[7px] sm:text-[10px] font-black uppercase tracking-widest shadow-2xl backdrop-blur-xl border border-white/10 ${
+                      booking.status === "approved"
                         ? "bg-green-500/80 text-white"
                         : booking.status === "rejected"
                           ? "bg-red-500/80 text-white"
                           : "bg-primary/80 text-white"
-                      }`}
+                    }`}
                   >
                     {booking.status === "approved"
                       ? "مؤكد"
@@ -502,62 +510,58 @@ function BookingsSection() {
                         ? "مرفوض"
                         : "قيد الانتظار"}
                   </span>
-                  <span className="bg-white/10 backdrop-blur-md px-2 md:px-3 py-1 rounded-lg text-[8px] md:text-[9px] font-bold text-white/60 border border-white/5">
-                    #{booking._id.slice(-6).toUpperCase()}
+                  <span className="bg-white/10 backdrop-blur-md px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md sm:rounded-lg text-[7px] sm:text-[9px] font-bold text-white/60 border border-white/5">
+                    #{booking._id.slice(-4).toUpperCase()}
                   </span>
                 </div>
               </div>
 
-              <div className="absolute bottom-3 md:bottom-4 right-5 md:right-6 left-5 md:left-6 z-20">
-                <h3 className="text-lg md:text-xl font-black text-white tracking-tight leading-none group-hover:text-primary transition-colors truncate">
+              <div className="absolute bottom-1.5 sm:bottom-4 right-3 sm:right-6 left-3 sm:left-6 z-20">
+                <h3 className="text-sm sm:text-xl font-black text-white tracking-tight leading-none group-hover:text-primary transition-colors truncate">
                   {booking.car?.name || "سيارة غير محددة"}
                 </h3>
-                <p className="text-[9px] md:text-[10px] text-slate-400 font-bold mt-1">
-                  تم الحجز في{" "}
-                  {new Date(booking.createdAt).toLocaleDateString("ar-EG")}
-                </p>
               </div>
             </div>
 
             {/* Details Section */}
-            <div className="p-4 sm:p-5 md:p-6 flex-1 flex flex-col">
-              <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-4 sm:mb-6">
-                <div className="bg-white/5 p-2 sm:p-3 rounded-xl sm:rounded-2xl border border-white/5 group-hover:border-primary/20 transition-all">
-                  <p className="text-[8px] sm:text-[10px] text-slate-500 font-black mb-1">
-                    تاريخ الاستلام
+            <div className="p-3 sm:p-6 flex-1 flex flex-col">
+              <div className="grid grid-cols-2 gap-1.5 sm:gap-4 mb-3 sm:mb-6">
+                <div className="bg-white/5 p-1.5 sm:p-3 rounded-lg sm:rounded-2xl border border-white/5 group-hover:border-primary/20 transition-all">
+                  <p className="text-[7px] sm:text-[10px] text-slate-500 font-black mb-0.5 sm:mb-1">
+                    الاستلام
                   </p>
-                  <div className="flex items-center gap-1.5 md:gap-2">
+                  <div className="flex items-center gap-1 sm:gap-2">
                     <CalendarMonth
                       className="text-primary"
-                      sx={{ fontSize: { xs: 12, sm: 16 } }}
+                      sx={{ fontSize: { xs: 10, sm: 16 } }}
                     />
-                    <span className="text-[10px] sm:text-xs font-black text-white">
+                    <span className="text-[9px] sm:text-xs font-black text-white">
                       {new Date(booking.startDate).toLocaleDateString("ar-EG")}
                     </span>
                   </div>
                 </div>
-                <div className="bg-white/5 p-2 sm:p-3 rounded-xl sm:rounded-2xl border border-white/5 group-hover:border-primary/20 transition-all">
-                  <p className="text-[8px] sm:text-[10px] text-slate-500 font-black mb-1">
-                    تاريخ التسليم
+                <div className="bg-white/5 p-1.5 sm:p-3 rounded-lg sm:rounded-2xl border border-white/5 group-hover:border-primary/20 transition-all">
+                  <p className="text-[7px] sm:text-[10px] text-slate-500 font-black mb-0.5 sm:mb-1">
+                    التسليم
                   </p>
-                  <div className="flex items-center gap-1.5 md:gap-2">
+                  <div className="flex items-center gap-1 sm:gap-2">
                     <CalendarMonth
                       className="text-primary"
-                      sx={{ fontSize: { xs: 12, sm: 16 } }}
+                      sx={{ fontSize: { xs: 10, sm: 16 } }}
                     />
-                    <span className="text-[10px] sm:text-xs font-black text-white">
+                    <span className="text-[9px] sm:text-xs font-black text-white">
                       {new Date(booking.endDate).toLocaleDateString("ar-EG")}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-3 mb-4 sm:mb-8">
+              <div className="space-y-2 sm:space-y-3 mb-3 sm:mb-8">
                 <div className="flex justify-between items-center px-1 md:px-2">
-                  <span className="text-[9px] sm:text-xs text-slate-500 font-bold">
-                    المدة: {booking.numberOfDays} أيام
+                  <span className="text-[8px] sm:text-xs text-slate-500 font-bold">
+                    {booking.numberOfDays} أيام
                   </span>
-                  <span className="text-[9px] sm:text-xs text-slate-500 font-bold">
+                  <span className="text-[8px] sm:text-xs text-slate-500 font-bold">
                     المجموع:{" "}
                     <span className="text-primary font-black">
                       {booking.totalPrice} ريال
@@ -566,28 +570,26 @@ function BookingsSection() {
                 </div>
 
                 {/* Document Previews & Contact */}
-                <div className="pt-3 md:pt-4 border-t border-white/5 flex items-center justify-between gap-3 md:gap-4">
-                  <div className="flex gap-1.5 md:gap-2">
+                <div className="pt-2 sm:pt-4 border-t border-white/5 flex items-center justify-between gap-2 sm:gap-4">
+                  <div className="flex gap-1 sm:gap-2">
                     {booking.idCard && (
-                      <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg overflow-hidden border border-white/10 relative group/doc">
+                      <div className="w-6 h-6 sm:w-10 sm:h-10 rounded-md sm:rounded-lg overflow-hidden border border-white/10 relative group/doc">
                         <Image
                           src={booking.idCard}
                           alt="ID"
                           fill
                           className="object-cover opacity-60 group-hover/doc:opacity-100"
                         />
-                        <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/doc:opacity-100 transition-opacity" />
                       </div>
                     )}
                     {booking.license && (
-                      <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg overflow-hidden border border-white/10 relative group/doc">
+                      <div className="w-6 h-6 sm:w-10 sm:h-10 rounded-md sm:rounded-lg overflow-hidden border border-white/10 relative group/doc">
                         <Image
                           src={booking.license}
                           alt="License"
                           fill
                           className="object-cover opacity-60 group-hover/doc:opacity-100"
                         />
-                        <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/doc:opacity-100 transition-opacity" />
                       </div>
                     )}
                   </div>

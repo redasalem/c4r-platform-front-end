@@ -111,7 +111,7 @@ const Navbar = () => {
           User said "Same picture... but colors will differ". 
           We will use a Dark Blue/Gray theme for "Premium" look.
       ───────────────────────────────────────────────────────────── */}
-      <div className="bg-midnight border-b border-white/10 transition-all duration-300">
+      <div className="bg-midnight border-b border-white/10 transition-all duration-300 relative">
         <div className="container mx-auto px-6 py-3" dir="rtl">
           <div className="flex items-center justify-between">
             {/* RIGHT: City Links + Home */}
