@@ -128,11 +128,10 @@ function DashboardSidebarContent({
               <Link
                 key={link.href}
                 href={link.href}
-                className={`flex items-center gap-4 px-5 py-4 rounded-2xl font-black transition-all duration-500 group relative ${
-                  isActive
+                className={`flex items-center gap-4 px-5 py-4 rounded-2xl font-black transition-all duration-500 group relative ${isActive
                     ? "bg-primary text-white shadow-[0_15px_30px_rgba(249,115,22,0.3)]"
                     : "text-slate-500 hover:bg-white/5 hover:text-slate-200"
-                }`}
+                  }`}
               >
                 {isActive && (
                   <div className="absolute left-0 w-1.5 h-6 bg-white rounded-r-full" />
@@ -217,8 +216,8 @@ export default function DashboardLayout({ children }) {
       </Suspense>
 
       {/* Main Content */}
-      <main className="flex-1 md:mr-80 pt-20 relative z-10">
-        <div className="p-6 md:p-12 animate-in fade-in duration-1000">
+      <main className="flex-1 md:mr-80 pt-20 pb-20 md:pb-0 relative z-10">
+        <div className="p-4 sm:p-6 md:p-8 lg:p-12 animate-in fade-in duration-1000">
           {children}
         </div>
       </main>

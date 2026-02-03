@@ -50,9 +50,9 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="bg-white/5 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/10">
-      <div className="p-8 md:p-12">
-        <div className="text-center mb-10">
+    <div className="bg-white/5 backdrop-blur-2xl rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/10">
+      <div className="p-5 sm:p-6 md:p-8 lg:p-12">
+        <div className="text-center mb-6 sm:mb-8 md:mb-10">
           <Link href="/" className="inline-block mb-6 relative group">
             <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <Image
@@ -63,7 +63,7 @@ export default function RegisterPage() {
               className="h-12 w-auto mx-auto object-contain relative z-10 rounded-lg"
             />
           </Link>
-          <h1 className="text-3xl font-black text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
             إنشاء حساب جديد
           </h1>
           <p className="text-slate-400 mt-2 text-sm font-bold">
@@ -71,7 +71,7 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5" dir="rtl">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5" dir="rtl">
           <div>
             <TextField
               fullWidth
@@ -260,7 +260,7 @@ export default function RegisterPage() {
           </Button>
         </form>
 
-        <div className="mt-10 text-center space-y-6">
+        <div className="mt-6 sm:mt-8 md:mt-10 text-center space-y-4 sm:space-y-6">
           <p className="text-slate-400 text-sm font-bold">
             لديك حساب بالفعل؟{" "}
             <Link

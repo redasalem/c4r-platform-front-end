@@ -88,10 +88,10 @@ export default function CarDetailsPage() {
       <div className="absolute bottom-0 left-0 w-[50%] h-[500px] bg-accent/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2 opacity-30" />
 
       <Container maxWidth="lg" className="relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8">
           {/* Right: Images Section */}
-          <div className="md:col-span-7 order-1 md:order-1">
-            <div className="relative h-[400px] md:h-[500px] rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/10 group">
+          <div className="lg:col-span-7 order-1 lg:order-1">
+            <div className="relative h-[280px] sm:h-[350px] md:h-[400px] lg:h-[500px] rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/10 group">
               <Image
                 src={imageUrl}
                 alt={car.name || "صورة السيارة"}
@@ -128,11 +128,11 @@ export default function CarDetailsPage() {
             </div>
 
             {/* Image Gallery (Thumbnails) placeholder */}
-            <div className="grid grid-cols-4 gap-4 mt-6">
+            <div className="grid grid-cols-4 gap-2 sm:gap-3 md:gap-4 mt-3 sm:mt-4 md:mt-6">
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
-                  className="relative h-20 md:h-28 rounded-2xl overflow-hidden border-2 border-white/10 hover:border-primary transition-all duration-300 cursor-pointer opacity-70 hover:opacity-100 hover:scale-105"
+                  className="relative h-14 sm:h-18 md:h-20 lg:h-28 rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden border-2 border-white/10 hover:border-primary transition-all duration-300 cursor-pointer opacity-70 hover:opacity-100 hover:scale-105"
                 >
                   <Image
                     src={imageUrl}
@@ -146,9 +146,9 @@ export default function CarDetailsPage() {
           </div>
 
           {/* Left: Info Section */}
-          <div className="md:col-span-5 order-2 md:order-2">
+          <div className="lg:col-span-5 order-2 lg:order-2">
             <div className="flex flex-col h-full">
-              <div className="mb-6">
+              <div className="mb-4 sm:mb-6">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="flex items-center gap-1 text-yellow-500">
                     <Rating
@@ -162,7 +162,7 @@ export default function CarDetailsPage() {
                     ({car.averageRating || 5}/5) • {reviewsCount} تقييم
                   </span>
                 </div>
-                <h1 className="text-4xl md:text-5xl font-black text-white mb-3 tracking-tighter">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 sm:mb-3 tracking-tighter">
                   {car.name}
                 </h1>
                 <div className="flex items-center gap-3">
@@ -192,14 +192,14 @@ export default function CarDetailsPage() {
                 </div>
               </div>
 
-              <div className="bg-white/5 backdrop-blur-2xl rounded-[2.5rem] p-8 mb-8 border border-white/10 shadow-2xl relative overflow-hidden group">
+              <div className="bg-white/5 backdrop-blur-2xl rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 mb-4 sm:mb-6 md:mb-8 border border-white/10 shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-2 h-full bg-primary/20" />
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-slate-400 font-black text-sm uppercase tracking-widest">
                     سعر الإيجار اليومي
                   </span>
                   <div className="text-left">
-                    <span className="text-4xl font-black text-primary">
+                    <span className="text-2xl sm:text-3xl md:text-4xl font-black text-primary">
                       {car.pricePerDay}
                     </span>
                     <span className="text-slate-500 font-black mr-2 text-sm uppercase">
@@ -221,8 +221,8 @@ export default function CarDetailsPage() {
                   <h3 className="font-black text-white mb-5 uppercase tracking-widest text-sm">
                     المواصفات الأساسية:
                   </h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex items-center gap-4 p-4 bg-white/5 backdrop-blur-lg rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
+                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4 p-2 sm:p-3 md:p-4 bg-white/5 backdrop-blur-lg rounded-lg sm:rounded-xl md:rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
                       <Settings className="text-orange-500" />
                       <div>
                         <p className="text-[10px] text-slate-500 font-black uppercase tracking-tighter mb-1">
@@ -233,7 +233,7 @@ export default function CarDetailsPage() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4 p-4 bg-white/5 backdrop-blur-lg rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
+                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4 p-2 sm:p-3 md:p-4 bg-white/5 backdrop-blur-lg rounded-lg sm:rounded-xl md:rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
                       <LocalGasStation className="text-primary" />
                       <div>
                         <p className="text-[10px] text-slate-500 font-black uppercase tracking-tighter mb-1">
@@ -267,11 +267,11 @@ export default function CarDetailsPage() {
                   </div>
                 </div>
 
-                <div className="bg-white/5 backdrop-blur-xl p-6 rounded-3xl border border-white/5">
-                  <h3 className="font-black text-white mb-3 uppercase tracking-widest text-sm">
+                <div className="bg-white/5 backdrop-blur-xl p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/5">
+                  <h3 className="font-black text-white mb-2 sm:mb-3 uppercase tracking-widest text-xs sm:text-sm">
                     الوصف:
                   </h3>
-                  <p className="text-slate-400 leading-relaxed text-sm font-bold">
+                  <p className="text-slate-400 leading-relaxed text-xs sm:text-sm font-bold">
                     استمتع بتجربة قيادة استثنائية مع {car.name}، حيث تتجسد
                     الفخامة والقوة في كل تفصيل. صُممت هذه المركبة لتبهرك بأدائها
                     المتطور وتصميمها الراقي الذي يخطف الأنظار، مما يجعلها الخيار
@@ -279,11 +279,11 @@ export default function CarDetailsPage() {
                   </p>
                 </div>
 
-                <div className="bg-white/5 backdrop-blur-xl p-6 rounded-3xl border border-white/5">
-                  <h3 className="font-black text-white mb-4 uppercase tracking-widest text-sm">
+                <div className="bg-white/5 backdrop-blur-xl p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/5">
+                  <h3 className="font-black text-white mb-3 sm:mb-4 uppercase tracking-widest text-xs sm:text-sm">
                     ما يتضمنه الإيجار:
                   </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                     {[
                       "تأمين شامل فاخر",
                       "مساعدة على الطريق 24/7",
@@ -305,10 +305,10 @@ export default function CarDetailsPage() {
                 </div>
               </div>
 
-              <div className="mt-8">
+              <div className="mt-4 sm:mt-6 md:mt-8">
                 <Link
                   href={`/booking/${car._id}`}
-                  className="w-full bg-primary hover:bg-primary-hover text-white py-5 rounded-[2rem] font-black text-xl transition-all shadow-[0_20px_40px_-10px_rgba(249,115,22,0.4)] flex items-center justify-center gap-4 group hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full bg-primary hover:bg-primary-hover text-white py-3 sm:py-4 md:py-5 rounded-xl sm:rounded-2xl md:rounded-[2rem] font-black text-base sm:text-lg md:text-xl transition-all shadow-[0_20px_40px_-10px_rgba(249,115,22,0.4)] flex items-center justify-center gap-2 sm:gap-4 group hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <span className="tracking-tighter">
                     احجز هذه السيارة الآن
@@ -321,9 +321,9 @@ export default function CarDetailsPage() {
         </div>
 
         {/* REVIEWS SECTION - Premium Styling */}
-        <div className="mt-24 border-t border-white/10 pt-16">
-          <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter">
+        <div className="mt-12 sm:mt-16 md:mt-24 border-t border-white/10 pt-8 sm:pt-12 md:pt-16">
+          <div className="flex items-center gap-2 sm:gap-4 mb-6 sm:mb-8 md:mb-12">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tighter">
               تجارب العملاء
             </h2>
             <Chip
@@ -340,7 +340,7 @@ export default function CarDetailsPage() {
           </div>
 
           {reviews.length === 0 ? (
-            <div className="text-center py-20 bg-white/5 backdrop-blur-xl rounded-[3.5rem] border border-dashed border-white/10">
+            <div className="text-center py-10 sm:py-16 md:py-20 bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl md:rounded-[3.5rem] border border-dashed border-white/10">
               <Star
                 sx={{ fontSize: 80, color: "rgba(255,255,255,0.05)", mb: 4 }}
               />
@@ -352,22 +352,22 @@ export default function CarDetailsPage() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
               {reviews.map((review) => (
                 <div
                   key={review._id}
-                  className="bg-white/5 backdrop-blur-2xl p-8 rounded-[3rem] border border-white/10 hover:bg-white/10 transition-all duration-500 group relative overflow-hidden shadow-2xl"
+                  className="bg-white/5 backdrop-blur-2xl p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] border border-white/10 hover:bg-white/10 transition-all duration-500 group relative overflow-hidden shadow-2xl"
                 >
                   {/* Decorative element */}
                   <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-                  <div className="flex items-center gap-4 mb-6 relative z-10">
+                  <div className="flex items-center gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 relative z-10">
                     <Avatar
                       src={review.user?.image}
                       alt={review.user?.name}
                       sx={{
-                        width: 64,
-                        height: 64,
+                        width: { xs: 48, sm: 56, md: 64 },
+                        height: { xs: 48, sm: 56, md: 64 },
                         bgcolor: "rgba(255,255,255,0.05)",
                         color: "white",
                         fontWeight: "black",
@@ -378,10 +378,10 @@ export default function CarDetailsPage() {
                       {review.user?.name?.charAt(0)}
                     </Avatar>
                     <div>
-                      <h4 className="font-black text-white text-lg">
+                      <h4 className="font-black text-white text-base sm:text-lg">
                         {review.user?.name}
                       </h4>
-                      <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] mt-1">
+                      <p className="text-[9px] sm:text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] mt-1">
                         {new Date(review.createdAt).toLocaleDateString(
                           "ar-EG",
                           { year: "numeric", month: "long", day: "numeric" },
@@ -390,7 +390,7 @@ export default function CarDetailsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1 mb-5">
+                  <div className="flex items-center gap-1 mb-3 sm:mb-5">
                     <Rating
                       value={review.rating}
                       readOnly
@@ -405,7 +405,7 @@ export default function CarDetailsPage() {
                     />
                   </div>
 
-                  <p className="text-slate-300 text-[15px] leading-relaxed font-bold bg-white/5 p-5 rounded-3xl border border-white/5 min-h-[120px] relative">
+                  <p className="text-slate-300 text-xs sm:text-[15px] leading-relaxed font-bold bg-white/5 p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/5 min-h-[80px] sm:min-h-[100px] md:min-h-[120px] relative">
                     <span className="text-primary text-4xl absolute -top-2 right-4 opacity-50 font-serif">
                       "
                     </span>

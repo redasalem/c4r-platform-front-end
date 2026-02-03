@@ -105,7 +105,7 @@ function AdminTabsContent({ user }) {
   };
 
   return (
-    <div className="bg-white/5 backdrop-blur-xl p-5 sm:p-8 md:p-10 rounded-3xl md:rounded-[3rem] border border-white/10 shadow-2xl min-h-[600px]">
+    <div className="bg-white/5 backdrop-blur-xl p-4 sm:p-6 md:p-8 lg:p-10 rounded-2xl sm:rounded-3xl md:rounded-[3rem] border border-white/10 shadow-2xl min-h-[500px] md:min-h-[600px]">
       <Tabs
         value={value}
         onChange={handleChange}
@@ -169,9 +169,9 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white/5 backdrop-blur-2xl p-6 sm:p-10 rounded-3xl sm:rounded-[3rem] border border-white/10 relative overflow-hidden group shadow-2xl">
+      <div className="bg-white/5 backdrop-blur-2xl p-4 sm:p-6 md:p-10 rounded-2xl sm:rounded-3xl md:rounded-[3rem] border border-white/10 relative overflow-hidden group shadow-2xl">
         <div className="absolute top-0 right-0 w-40 h-40 bg-primary/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2 tracking-tighter">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 tracking-tighter">
           لوحة{" "}
           <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
             الإدارة
@@ -251,7 +251,7 @@ function ManageBookings() {
         {bookings.map((booking) => (
           <div
             key={booking._id}
-            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl sm:rounded-[2.5rem] p-6 sm:p-8 md:p-10 shadow-2xl hover:bg-white/10 transition-all duration-500 relative overflow-hidden group"
+            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 lg:p-10 shadow-2xl hover:bg-white/10 transition-all duration-500 relative overflow-hidden group"
           >
             {/* Status Strip */}
             <div
@@ -264,10 +264,10 @@ function ManageBookings() {
               }`}
             />
 
-            <div className="flex flex-col md:flex-row gap-8">
+            <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
               {/* Car Info Column */}
-              <div className="md:w-1/3 border-b md:border-b-0 md:border-l border-white/5 pb-8 md:pb-0 md:pl-8">
-                <div className="flex items-center gap-5 mb-6">
+              <div className="lg:w-1/3 border-b lg:border-b-0 lg:border-l border-white/5 pb-4 sm:pb-6 lg:pb-0 lg:pl-8">
+                <div className="flex items-center gap-3 sm:gap-5 mb-4 sm:mb-6">
                   <div className="bg-primary/10 p-4 rounded-2xl text-primary shadow-2xl border border-primary/20">
                     <DirectionsCar sx={{ fontSize: 32 }} />
                   </div>
@@ -317,7 +317,7 @@ function ManageBookings() {
               </div>
 
               {/* Client Info Column */}
-              <div className="md:w-1/3 border-b md:border-b-0 md:border-l border-white/5 pb-8 md:pb-0 md:pl-8">
+              <div className="lg:w-1/3 border-b lg:border-b-0 lg:border-l border-white/5 pb-4 sm:pb-6 lg:pb-0 lg:pl-8">
                 <h4 className="text-[10px] font-black text-slate-500 uppercase mb-6 tracking-[0.3em]">
                   بيانات العميل الحصرية
                 </h4>
@@ -369,7 +369,7 @@ function ManageBookings() {
               </div>
 
               {/* Actions Column */}
-              <div className="md:w-1/3 flex flex-col justify-between">
+              <div className="lg:w-1/3 flex flex-col justify-between">
                 <div className="flex justify-between items-start mb-auto">
                   <Chip
                     label={
@@ -593,7 +593,7 @@ function ManageCars() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col md:flex-row justify-between items-center bg-white/5 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-2xl gap-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center bg-white/5 backdrop-blur-xl p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-white/10 shadow-2xl gap-4 sm:gap-6">
         <div className="text-center md:text-right">
           <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
             مجموعة السيارات الفاخرة
@@ -642,7 +642,7 @@ function ManageCars() {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
           {cars.map((car) => (
             <div
               key={car._id}
@@ -842,7 +842,7 @@ function ManageReviews() {
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
         {reviews.map((review) => (
           <div
             key={review._id}
@@ -1200,7 +1200,7 @@ function AddCarDialog({ open, onClose }) {
               sx={inputStyle}
             />
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <FormControl fullWidth sx={inputStyle}>
                 <InputLabel>المنطقة</InputLabel>
                 <Select
@@ -1370,23 +1370,23 @@ function ProfileSection({ user }) {
   };
 
   return (
-    <div className="max-w-4xl bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 p-10 shadow-2xl relative overflow-hidden group">
+    <div className="max-w-4xl bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] border border-white/10 p-4 sm:p-6 md:p-10 shadow-2xl relative overflow-hidden group">
       <div className="absolute top-0 left-0 w-2 h-full bg-primary/20" />
-      <div className="flex flex-col md:flex-row gap-8 items-start mb-10 pb-10 border-b border-white/5">
-        <div className="w-24 h-24 bg-primary/10 rounded-[2rem] flex items-center justify-center shrink-0 shadow-2xl border border-primary/20">
-          <Person sx={{ fontSize: 54, color: "var(--primary)" }} />
+      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 items-start mb-6 sm:mb-8 md:mb-10 pb-6 sm:pb-8 md:pb-10 border-b border-white/5">
+        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-primary/10 rounded-xl sm:rounded-2xl md:rounded-[2rem] flex items-center justify-center shrink-0 shadow-2xl border border-primary/20">
+          <Person sx={{ fontSize: { xs: 36, sm: 44, md: 54 }, color: "var(--primary)" }} />
         </div>
         <div>
-          <h3 className="text-3xl font-black text-white mb-2 leading-tight">
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1 sm:mb-2 leading-tight">
             إعدادات الحساب
           </h3>
-          <p className="text-slate-400 font-bold text-lg">
+          <p className="text-slate-400 font-bold text-sm sm:text-base md:text-lg">
             تأكد من بقاء بياناتك الشخصية محدثة لضمان تجربة حجز سلسة واحترافية.
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 sm:gap-x-6 md:gap-x-10 gap-y-4 sm:gap-y-6 md:gap-y-8">
         <TextField
           label="الاسم الكامل"
           fullWidth
@@ -1446,7 +1446,7 @@ function ProfileSection({ user }) {
         />
       </div>
 
-      <div className="mt-12 flex flex-wrap justify-end gap-6">
+      <div className="mt-6 sm:mt-8 md:mt-12 flex flex-col-reverse sm:flex-row flex-wrap justify-end gap-3 sm:gap-4 md:gap-6">
         {isEditing ? (
           <>
             <Button
@@ -1559,23 +1559,23 @@ function ChangePasswordSection() {
   };
 
   return (
-    <div className="max-w-4xl bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 p-10 shadow-2xl relative overflow-hidden">
+    <div className="max-w-4xl bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] border border-white/10 p-4 sm:p-6 md:p-10 shadow-2xl relative overflow-hidden">
       <div className="absolute top-0 left-0 w-2 h-full bg-primary/20" />
-      <div className="flex flex-col md:flex-row gap-8 items-start mb-10 pb-10 border-b border-white/5">
-        <div className="w-24 h-24 bg-primary/10 rounded-[2rem] flex items-center justify-center shrink-0 shadow-2xl border border-primary/20">
-          <Lock sx={{ fontSize: 54, color: "var(--primary)" }} />
+      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 items-start mb-6 sm:mb-8 md:mb-10 pb-6 sm:pb-8 md:pb-10 border-b border-white/5">
+        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-primary/10 rounded-xl sm:rounded-2xl md:rounded-[2rem] flex items-center justify-center shrink-0 shadow-2xl border border-primary/20">
+          <Lock sx={{ fontSize: { xs: 36, sm: 44, md: 54 }, color: "var(--primary)" }} />
         </div>
         <div>
-          <h3 className="text-3xl font-black text-white mb-2 leading-tight">
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1 sm:mb-2 leading-tight">
             تغيير كلمة المرور
           </h3>
-          <p className="text-slate-400 font-bold text-lg">
+          <p className="text-slate-400 font-bold text-sm sm:text-base md:text-lg">
             ننصح باستخدام كلمة مرور قوية ومعقدة لضمان أقصى درجات الأمان لحسابك.
           </p>
         </div>
       </div>
 
-      <div className="max-w-md flex flex-col gap-12 mt-6">
+      <div className="max-w-md flex flex-col gap-6 sm:gap-8 md:gap-12 mt-4 sm:mt-6">
         <TextField
           label="كلمة المرور الحالية"
           type={showCurrentPassword ? "text" : "password"}
@@ -1649,7 +1649,7 @@ function ChangePasswordSection() {
           sx={inputStyle}
         />
 
-        <div className="mt-12">
+        <div className="mt-6 sm:mt-8 md:mt-12">
           <Button
             variant="contained"
             fullWidth

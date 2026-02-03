@@ -196,9 +196,9 @@ export default function BookingPage() {
   const diffDays =
     dates.startDate && dates.endDate
       ? Math.ceil(
-          Math.abs(new Date(dates.endDate) - new Date(dates.startDate)) /
-            (1000 * 60 * 60 * 24),
-        ) || 1
+        Math.abs(new Date(dates.endDate) - new Date(dates.startDate)) /
+        (1000 * 60 * 60 * 24),
+      ) || 1
       : 1;
 
   return (
@@ -212,30 +212,30 @@ export default function BookingPage() {
 
       <Breadcrumbs items={[{ label: "إكمال عملية الحجز الفاخرة" }]} />
       <Container maxWidth="lg" className="pt-8 relative z-10">
-        <h1 className="text-xl md:text-2xl font-black text-white mb-6 tracking-tighter leading-tight">
+        <h1 className="text-lg sm:text-xl md:text-2xl font-black text-white mb-4 sm:mb-6 tracking-tighter leading-tight">
           إكمال عملية{" "}
           <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
             طلب الحجز
           </span>
         </h1>
 
-        <div className="flex flex-col md:flex-row gap-4 items-stretch">
-          <div className="flex-1 min-w-0">
-            <div className="bg-white/5 backdrop-blur-2xl p-4 rounded-3xl shadow-2xl border border-white/10 relative overflow-hidden group h-full">
+        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 items-stretch">
+          <div className="flex-1 min-w-0 order-2 lg:order-1">
+            <div className="bg-white/5 backdrop-blur-2xl p-3 sm:p-4 md:p-6 rounded-2xl sm:rounded-3xl shadow-2xl border border-white/10 relative overflow-hidden group h-full">
               <div className="absolute top-0 left-0 w-1.5 h-full bg-primary/20" />
               <form
                 onSubmit={handleBooking}
                 className="space-y-6 relative z-10"
               >
                 <section>
-                  <div className="flex items-center gap-2 mb-5 text-white">
-                    <div className="p-2 bg-primary/20 rounded-lg border border-primary/30">
+                  <div className="flex items-center gap-2 mb-3 sm:mb-5 text-white">
+                    <div className="p-1.5 sm:p-2 bg-primary/20 rounded-lg border border-primary/30">
                       <CalendarMonth
                         className="text-primary"
-                        fontSize="small"
+                        sx={{ fontSize: { xs: 18, sm: 20 } }}
                       />
                     </div>
-                    <h3 className="text-xl font-black tracking-tight">
+                    <h3 className="text-base sm:text-lg md:text-xl font-black tracking-tight">
                       تحديد المواعيد
                     </h3>
                   </div>
@@ -314,11 +314,11 @@ export default function BookingPage() {
                 </section>
 
                 <section>
-                  <div className="flex items-center gap-2 mb-5 text-white">
-                    <div className="p-2 bg-green-500/10 rounded-lg border border-green-500/20">
-                      <WhatsApp className="text-green-500" fontSize="small" />
+                  <div className="flex items-center gap-2 mb-3 sm:mb-5 text-white">
+                    <div className="p-1.5 sm:p-2 bg-green-500/10 rounded-lg border border-green-500/20">
+                      <WhatsApp className="text-green-500" sx={{ fontSize: { xs: 18, sm: 20 } }} />
                     </div>
-                    <h3 className="text-xl font-black tracking-tight">
+                    <h3 className="text-base sm:text-lg md:text-xl font-black tracking-tight">
                       معلومات التواصل
                     </h3>
                   </div>
@@ -407,22 +407,21 @@ export default function BookingPage() {
                 </FormControl>
 
                 <section>
-                  <div className="flex items-center gap-2 mb-5 text-white">
-                    <div className="p-2 bg-primary/20 rounded-lg border border-primary/30">
-                      <UploadFile className="text-primary" fontSize="small" />
+                  <div className="flex items-center gap-2 mb-3 sm:mb-5 text-white">
+                    <div className="p-1.5 sm:p-2 bg-primary/20 rounded-lg border border-primary/30">
+                      <UploadFile className="text-primary" sx={{ fontSize: { xs: 18, sm: 20 } }} />
                     </div>
-                    <h3 className="text-xl font-black tracking-tight">
+                    <h3 className="text-base sm:text-lg md:text-xl font-black tracking-tight">
                       المستندات المطلوبة
                     </h3>
                   </div>
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
                       <div
-                        className={`border-2 border-dashed rounded-2xl p-4 text-center cursor-pointer relative transition-all duration-500 overflow-hidden group/upload ${
-                          idCardFile
+                        className={`border-2 border-dashed rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center cursor-pointer relative transition-all duration-500 overflow-hidden group/upload ${idCardFile
                             ? "border-green-500/50 bg-green-500/5 shadow-[0_0_20px_rgba(34,197,94,0.1)]"
                             : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50"
-                        }`}
+                          }`}
                       >
                         <input
                           type="file"
@@ -449,11 +448,10 @@ export default function BookingPage() {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <div
-                        className={`border-2 border-dashed rounded-2xl p-4 text-center cursor-pointer relative transition-all duration-500 overflow-hidden group/upload ${
-                          licenseFile
+                        className={`border-2 border-dashed rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center cursor-pointer relative transition-all duration-500 overflow-hidden group/upload ${licenseFile
                             ? "border-green-500/50 bg-green-500/5 shadow-[0_0_20px_rgba(34,197,94,0.1)]"
                             : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50"
-                        }`}
+                          }`}
                       >
                         <input
                           type="file"
@@ -481,16 +479,16 @@ export default function BookingPage() {
                   </Grid>
                 </section>
 
-                <div className="bg-primary/5 p-4 rounded-2xl border border-primary/20 flex items-start gap-3">
+                <div className="bg-primary/5 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-primary/20 flex items-start gap-2 sm:gap-3">
                   <CheckCircleOutline
                     className="text-primary mt-1"
                     fontSize="small"
                   />
                   <div>
-                    <p className="text-base font-black text-white">
+                    <p className="text-sm sm:text-base font-black text-white">
                       سياسة الحجز
                     </p>
-                    <p className="text-xs font-bold text-slate-500 leading-relaxed">
+                    <p className="text-[10px] sm:text-xs font-bold text-slate-500 leading-relaxed">
                       بإتمامك للحجز، أنت توافق على الشروط والأحكام. سيتم مراجعة
                       طلبك خلال 24 ساعة.
                     </p>
@@ -530,12 +528,12 @@ export default function BookingPage() {
             </div>
           </div>
 
-          <div className="flex-1 min-w-0">
-            <div className="sticky top-[120px]">
-              <div className="bg-white/5 backdrop-blur-3xl p-4 rounded-3xl shadow-2xl border border-white/10 overflow-hidden relative group">
+          <div className="flex-1 min-w-0 order-1 lg:order-2">
+            <div className="lg:sticky lg:top-[120px]">
+              <div className="bg-white/5 backdrop-blur-3xl p-3 sm:p-4 md:p-6 rounded-2xl sm:rounded-3xl shadow-2xl border border-white/10 overflow-hidden relative group">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
 
-                <div className="relative h-40 -mx-4 -mt-4 mb-4 overflow-hidden border-b border-white/10">
+                <div className="relative h-32 sm:h-40 -mx-3 sm:-mx-4 md:-mx-6 -mt-3 sm:-mt-4 md:-mt-6 mb-3 sm:mb-4 overflow-hidden border-b border-white/10">
                   <Image
                     src={imageUrl}
                     alt={car?.name || "صورة السيارة"}
@@ -545,8 +543,8 @@ export default function BookingPage() {
                   <div className="absolute inset-0 bg-linear-to-t from-midnight/80 to-transparent" />
                 </div>
 
-                <div className="mb-4 relative z-10">
-                  <h2 className="text-xl font-black text-white mb-1 tracking-tighter">
+                <div className="mb-3 sm:mb-4 relative z-10">
+                  <h2 className="text-lg sm:text-xl font-black text-white mb-1 tracking-tighter">
                     {car?.name}
                   </h2>
                   <div className="flex items-center gap-2">
@@ -563,14 +561,14 @@ export default function BookingPage() {
                   sx={{ mb: 4, borderColor: "rgba(255,255,255,0.05)" }}
                 />
 
-                <div className="space-y-3 relative z-10">
-                  <div className="flex justify-between items-center text-sm">
+                <div className="space-y-2 sm:space-y-3 relative z-10">
+                  <div className="flex justify-between items-center text-xs sm:text-sm">
                     <span className="text-slate-400 font-bold">سعر اليوم:</span>
                     <span className="font-black text-white">
                       {car?.pricePerDay} ريال
                     </span>
                   </div>
-                  <div className="flex justify-between items-center text-sm">
+                  <div className="flex justify-between items-center text-xs sm:text-sm">
                     <span className="text-slate-400 font-bold">
                       مدة الإيجار:
                     </span>
@@ -578,7 +576,7 @@ export default function BookingPage() {
                       {diffDays} يوم
                     </span>
                   </div>
-                  <div className="flex justify-between items-center text-sm font-black">
+                  <div className="flex justify-between items-center text-xs sm:text-sm font-black">
                     <span className="text-slate-400 font-bold">
                       الضريبة المضافة:
                     </span>
@@ -590,21 +588,21 @@ export default function BookingPage() {
                       <span className="text-slate-500 font-bold text-[10px] block mb-0.5">
                         المجموع النهائي:
                       </span>
-                      <span className="text-2xl font-black text-primary tracking-tighter">
+                      <span className="text-xl sm:text-2xl font-black text-primary tracking-tighter">
                         {diffDays * car?.pricePerDay}
                       </span>
                     </div>
-                    <span className="text-base font-black text-primary/60 pb-0.5">
+                    <span className="text-sm sm:text-base font-black text-primary/60 pb-0.5">
                       ريال
                     </span>
                   </div>
                 </div>
 
-                <div className="mt-6 p-4 bg-green-500/5 rounded-2xl flex items-center gap-3 border border-green-500/10">
-                  <div className="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center shadow-inner text-green-500">
-                    <Payments fontSize="small" />
+                <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-green-500/5 rounded-xl sm:rounded-2xl flex items-center gap-2 sm:gap-3 border border-green-500/10">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-500/20 rounded-lg sm:rounded-xl flex items-center justify-center shadow-inner text-green-500">
+                    <Payments sx={{ fontSize: { xs: 16, sm: 20 } }} />
                   </div>
-                  <p className="text-[10px] text-green-500 font-bold leading-relaxed">
+                  <p className="text-[9px] sm:text-[10px] text-green-500 font-bold leading-relaxed">
                     نظام الدفع المرن: يمكنك الدفع عند استلام السيارة أو عبر
                     التحويل البنكي.
                   </p>

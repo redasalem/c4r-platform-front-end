@@ -57,7 +57,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6" dir="rtl">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6" dir="rtl">
           <div>
             <TextField
               fullWidth
@@ -187,7 +187,7 @@ export default function LoginPage() {
           </Button>
         </form>
 
-        <div className="mt-10 text-center space-y-6">
+        <div className="mt-6 sm:mt-8 md:mt-10 text-center space-y-4 sm:space-y-6">
           <p className="text-slate-400 text-sm font-bold">
             ليس لديك حساب؟{" "}
             <Link
