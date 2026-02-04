@@ -9,7 +9,7 @@ const Partners = () => {
     { id: 2, img: "/images/p-2.jpeg", name: "Partner 2" },
     { id: 3, img: "/images/p-3.jpeg", name: "Partner 3" },
     { id: 4, img: "/images/p-4.jpeg", name: "Partner 4" },
-     { id: 5, img: "/images/p5.JPEG", name: "Partner 5" },
+    { id: 5, img: "/images/p5.JPEG", name: "Partner 5" },
   ];
 
   return (
@@ -38,8 +38,8 @@ const Partners = () => {
           pauseOnHover={true}
         >
           {partners.map((partner) => (
-            <div key={partner.id} className="mx-6 md:mx-12 group/item">
-              <div className="relative w-32 md:w-80 h-20 md:h-40 bg-white rounded-4xl shadow-xl border border-white/10 flex items-center justify-center p-6 transition-all duration-300 hover:scale-105">
+            <div key={partner.id} className="mx-3 md:mx-12 group/item">
+              <div className="relative w-[90vw] max-w-xs md:w-80 h-32 md:h-40 bg-white rounded-4xl shadow-xl border border-white/10 flex items-center justify-center p-6 transition-all duration-300 hover:scale-105">
                 <div className="relative w-full h-full">
                   <Image
                     src={partner.img}

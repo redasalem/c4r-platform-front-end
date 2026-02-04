@@ -60,7 +60,7 @@ export default function ReviewMarquee() {
             {reviews.map((review, index) => (
               <div
                 key={review._id || index}
-                className="px-5 py-6 sm:px-8 sm:py-8 mx-3 sm:mx-5 rounded-3xl sm:rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl hover:border-primary/30 transition-all duration-500 w-[85vw] sm:w-[380px] group flex flex-col active:scale-95"
+                className="px-5 py-6 sm:px-8 sm:py-8 mx-3 sm:mx-5 rounded-3xl sm:rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 hover:border-primary/30 transition-all duration-500 w-[85vw] sm:w-[380px] group flex flex-col active:scale-95"
               >
                 <div className="flex items-center gap-4 mb-4 sm:mb-6">
                   <Avatar
