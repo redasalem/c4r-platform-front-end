@@ -11,27 +11,28 @@ const HeroAd = () => {
       {/* Container with overflow-hidden to prevent horizontal scroll */}
       <div className="container mx-auto px-4 md:px-6">
         {/* Ad Container */}
-        <div className="relative w-full h-[500px] md:h-[650px] rounded-[3rem] overflow-hidden shadow-2xl group border border-white/5">
+        <div className="relative w-full h-[420px] md:h-[520px] rounded-[3rem] overflow-hidden shadow-2xl group border border-white/5">
           {/* Background Image - Restore Original */}
           <div className="absolute inset-0">
             <Image
-              src="/images/car-home.jpg"
+              src="/images/car1.jpg"
               alt="Luxury Car Fleet"
               fill
               className="object-cover object-center group-hover:scale-105 transition-transform duration-10000"
               priority
+              sizes="100vw"
             />
             {/* Dark Overlay for Contrast */}
-            <div className="absolute inset-0 bg-midnight/50 backdrop-blur-[1px]"></div>
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-[1px]"></div>
           </div>
 
           {/* Ad Content Overlay - Original Structure */}
           <div
-            className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 md:px-12 text-white"
+            className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 md:px-12 text-white py-8 sm:py-10 md:py-12"
             dir="rtl"
           >
             {/* Main Headlines with Glassmorphism for Clarity */}
-            <div className="bg-white/5 backdrop-blur-xl p-5 sm:p-8 md:p-10 rounded-3xl md:rounded-[2.5rem] border border-white/10 mb-6 md:mb-8 max-w-2xl shadow-2xl relative w-full">
+            <div className="bg-white/5 backdrop-blur-xl p-5 sm:p-8 md:p-10 rounded-3xl md:rounded-[2.5rem] border border-white/10 mb-4 md:mb-6 max-w-2xl shadow-2xl relative w-full">
               <div className="mb-4 inline-flex items-center gap-2 bg-primary/20 text-primary font-black text-[10px] sm:text-xs md:text-sm px-4 py-1.5 rounded-full border border-primary/30 shadow-lg animate-pulse">
                 <LocalOffer className="text-accent" sx={{ fontSize: 16 }} />
                 <span className="tracking-wide">خصم حصرى 30% لفترة محدودة</span>
@@ -51,7 +52,7 @@ const HeroAd = () => {
             </div>
 
             {/* Distinct Region Cards - Optimized for Mobile (Stack on small) */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-8 w-full max-w-5xl">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 md:gap-6 w-full max-w-5xl">
               {/* Eastern Region */}
               <Link
                 href="/Cars"

@@ -35,6 +35,7 @@ const Departments = () => {
                 alt="Car with driver"
                 fill
                 className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
               {/* Professional Gradient Overlay */}
               <div className="absolute inset-0 bg-linear-to-l from-midnight/95 via-midnight/60 to-transparent"></div>
@@ -88,6 +89,7 @@ const Departments = () => {
                 alt="Corporate Services"
                 fill
                 className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
               {/* Professional Gradient Overlay */}
               <div className="absolute inset-0 bg-linear-to-l from-midnight/95 via-midnight/60 to-transparent"></div>

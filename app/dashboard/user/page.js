@@ -110,10 +110,11 @@ function UserDashboardContent({ user }) {
           <button
             key={tab.id}
             onClick={() => handleChange(null, tab.id)}
-            className={`flex items-center gap-2 sm:gap-3 px-4 sm:px-8 py-2.5 sm:py-4 rounded-lg sm:rounded-2xl font-black transition-all duration-500 text-[11px] sm:text-base whitespace-nowrap ${value === tab.id
-              ? "bg-primary text-white shadow-[0_10px_20px_rgba(249,115,22,0.4)] sm:-translate-y-1"
-              : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
-              }`}
+            className={`flex items-center gap-2 sm:gap-3 px-4 sm:px-8 py-2.5 sm:py-4 rounded-lg sm:rounded-2xl font-black transition-all duration-500 text-[11px] sm:text-base whitespace-nowrap ${
+              value === tab.id
+                ? "bg-primary text-white shadow-[0_10px_20px_rgba(249,115,22,0.4)] sm:-translate-y-1"
+                : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
+            }`}
           >
             <span className={value === tab.id ? "scale-110" : "opacity-70"}>
               {tab.icon}
@@ -202,6 +203,10 @@ function ProfileSection({ user }) {
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
+    if (!formData.name.trim() || !formData.phoneNumber.trim()) {
+      toast.warning("يجب إدخال الاسم ورقم الهاتف لتتمكن من تعديل البيانات");
+      return;
+    }
     setLoading(true);
     try {
       // Create a payload without email, as it likely cannot be updated
@@ -468,12 +473,13 @@ function BookingsSection() {
           >
             {/* Status Glow Background */}
             <div
-              className={`absolute top-0 right-0 w-32 h-32 blur-[60px] opacity-20 -translate-y-1/2 translate-x-1/2 rounded-full ${booking.status === "approved"
-                ? "bg-green-500"
-                : booking.status === "rejected"
-                  ? "bg-red-500"
-                  : "bg-primary"
-                }`}
+              className={`absolute top-0 right-0 w-32 h-32 blur-[60px] opacity-20 -translate-y-1/2 translate-x-1/2 rounded-full ${
+                booking.status === "approved"
+                  ? "bg-green-500"
+                  : booking.status === "rejected"
+                    ? "bg-red-500"
+                    : "bg-primary"
+              }`}
             />
 
             {/* Header Info & Image */}
@@ -484,6 +490,7 @@ function BookingsSection() {
                   alt={booking.car.name}
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-1000"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               ) : (
                 <div className="flex items-center justify-center h-full bg-slate-900 border-b border-white/5">
@@ -498,12 +505,13 @@ function BookingsSection() {
               <div className="absolute top-3 md:top-4 left-3 md:left-4 z-20">
                 <div className="flex flex-col items-end gap-1.5 md:gap-2">
                   <span
-                    className={`px-2 sm:px-4 py-1 sm:py-1.5 rounded-full text-[7px] sm:text-[10px] font-black uppercase tracking-widest shadow-2xl backdrop-blur-xl border border-white/10 ${booking.status === "approved"
-                      ? "bg-green-500/80 text-white"
-                      : booking.status === "rejected"
-                        ? "bg-red-500/80 text-white"
-                        : "bg-primary/80 text-white"
-                      }`}
+                    className={`px-2 sm:px-4 py-1 sm:py-1.5 rounded-full text-[7px] sm:text-[10px] font-black uppercase tracking-widest shadow-2xl backdrop-blur-xl border border-white/10 ${
+                      booking.status === "approved"
+                        ? "bg-green-500/80 text-white"
+                        : booking.status === "rejected"
+                          ? "bg-red-500/80 text-white"
+                          : "bg-primary/80 text-white"
+                    }`}
                   >
                     {booking.status === "approved"
                       ? "مؤكد"

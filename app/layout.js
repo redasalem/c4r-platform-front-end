@@ -33,6 +33,58 @@ export default function RootLayout({ children }) {
         className={`${almarai.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "CarRental",
+              "name": "C4R Platform | سي فور آر لتأجير السيارات",
+              "logo": "https://c4rplatform.com/images/logo.jpg",
+              "url": "https://c4rplatform.com",
+              "telephone": "+966554118873",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "SA",
+                "addressRegion": "KSA",
+              },
+              "sameAs": [
+                "https://facebook.com/c4rplatform",
+                "https://instagram.com/c4rplatform",
+                "https://twitter.com/c4rplatform",
+              ],
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "ما هي شروط تأجير السيارات في السعودية؟",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "يتطلب الحجز هوية سارية، رخصة قيادة معترف بها، وبطاقة ائتمان.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  "name": "هل توفرون سيارات مع سائق؟",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "نعم، لدينا خدمة تأجير سيارات بسائق خاص في جميع مدن المملكة.",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+
         <Providers>
           <Navbar />
           <BottomNav />

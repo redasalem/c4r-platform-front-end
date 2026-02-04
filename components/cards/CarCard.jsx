@@ -39,6 +39,7 @@ const CarCard = ({ car }) => {
           alt={car.name || "صورة السيارة"}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-110"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         <div className="absolute top-4 right-4">
           <span className="bg-black/50 backdrop-blur-md text-white text-sm font-bold px-3 py-1.5 rounded-full border border-white/20">
@@ -54,7 +55,7 @@ const CarCard = ({ car }) => {
           </div>
         )}
         {/* Overlays for premium feel */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div className="absolute inset-0 bg-linear-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
       </div>
 
       {/* Content Section */}

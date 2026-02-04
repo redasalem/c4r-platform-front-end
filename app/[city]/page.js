@@ -1,85 +1,68 @@
-"use client";
+// This is the client component
+import CityPageClient from "./CityPageClient";
 
-import React from "react";
-import { useParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { carService } from "@/services/api";
-import CarCard from "@/components/cards/CarCard";
-import Breadcrumbs from "@/components/layout/Breadcrumbs";
-import { CircularProgress, Container } from "@mui/material";
-import { LocationOn } from "@mui/icons-material";
-
-const cityNames = {
-  riyadh: "مدينة الرياض",
-  jeddah: "مدينة جدة",
-  eastern: "المنطقة الشرقية",
-  cars: "السيارات",
-};
-
-export default function CityPage() {
-  const params = useParams();
-  const city = params.city;
+export async function generateMetadata({ params }) {
+  const { city } = await params;
+  const cityNames = {
+    riyadh: "مدينة الرياض",
+    jeddah: "مدينة جدة",
+    eastern: "المنطقة الشرقية",
+  };
   const cityName = cityNames[city] || city;
 
-  const {
-    data: carsData,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["cars", city],
-    queryFn: () => carService.getAll({ region: city }), // Fixed: Use region instead of city
-  });
+  return {
+    title: `تأجير سيارات في ${cityName} | C4R Platform`,
+    description: `أفضل خيارات تأجير السيارات في ${cityName}. حجز سريع، أسعار تنافسية، وأسطول متنوع من السيارات الفاخرة والاقتصادية.`,
+  };
+}
 
-  const cars = carsData?.data?.cars || [];
+export default async function CityPage({ params }) {
+  const { city } = await params;
+  const cityNames = {
+    riyadh: "مدينة الرياض",
+    jeddah: "مدينة جدة",
+    eastern: "المنطقة الشرقية",
+  };
+  const cityName = cityNames[city] || city;
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center pt-20">
-        <CircularProgress color="primary" />
-      </div>
-    );
-  }
+  const citySchemas = {
+    riyadh: {
+      "@context": "https://schema.org",
+      "@type": "AutoRental",
+      name: "تأجير سيارات الرياض - C4R",
+      url: "https://c4rplatform.com/riyadh",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Riyadh",
+        addressRegion: "Riyadh",
+        addressCountry: "SA",
+      },
+    },
+    jeddah: {
+      "@context": "https://schema.org",
+      "@type": "AutoRental",
+      name: "تأجير سيارات جدة - C4R",
+      url: "https://c4rplatform.com/jeddah",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Jeddah",
+        addressRegion: "Makkah Region",
+        addressCountry: "SA",
+      },
+    },
+  };
+
+  const schema = citySchemas[city];
 
   return (
-    <div className="min-h-screen bg-transparent pt-28 pb-20" dir="rtl">
-      <Breadcrumbs items={[{ label: cityName }]} />
-      <Container maxWidth="xl" className="pt-12 relative z-10">
-        {/* Header Section */}
-        <div className="mb-16 text-center">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-6 py-2 rounded-full mb-6 border border-primary/20 shadow-[0_0_15px_rgba(249,115,22,0.1)]">
-            <LocationOn fontSize="small" />
-            <span className="font-black text-sm uppercase tracking-widest">
-              {cityName}
-            </span>
-          </div>
-          <h1 className="text-2xl md:text-4xl font-black text-white mb-6 leading-tight tracking-tighter">
-            تصفح{" "}
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
-              أفضل السيارات
-            </span>{" "}
-            في {cityName}
-          </h1>
-          <p className="text-slate-400 max-w-2xl mx-auto font-bold text-lg leading-relaxed">
-            مجموعة واسعة من السيارات التي تناسب جميع احتياجاتك في {cityName}.
-            احجز سيارتك الآن بخطوات بسيطة واستمتع بالفخامة.
-          </p>
-        </div>
-
-        {/* Cars Grid */}
-        {cars.length === 0 ? (
-          <div className="text-center py-24 bg-white/5 backdrop-blur-xl rounded-[3rem] border border-white/10 shadow-2xl">
-            <p className="text-slate-500 font-black text-xl">
-              لا توجد سيارات متاحة حالياً في هذه المنطقة.
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {cars.map((car) => (
-              <CarCard key={car._id} car={car} />
-            ))}
-          </div>
-        )}
-      </Container>
-    </div>
+    <>
+      {schema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      )}
+      <CityPageClient city={city} cityName={cityName} />
+    </>
   );
 }

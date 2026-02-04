@@ -157,6 +157,7 @@ const Navbar = () => {
                     fill
                     className="object-contain p-1 sm:p-1.5 group-hover:scale-110 transition-transform duration-500"
                     priority
+                    sizes="(max-width: 640px) 56px, (max-width: 768px) 72px, 112px"
                   />
                 </div>
               </Link>
