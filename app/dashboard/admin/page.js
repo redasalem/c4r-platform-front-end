@@ -1600,6 +1600,15 @@ function ChangePasswordSection() {
       toast.error("يرجى ملء جميع الحقول");
       return;
     }
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    if (!passwordRegex.test(passwords.newPassword)) {
+      toast.error(
+        "يجب أن تحتوي كلمة المرور على حرف كبير، حرف صغير، رقم، ورمز خاص، وأن لا تقل عن 8 خانات",
+      );
+      return;
+    }
+
     setLoading(true);
     try {
       await authService.changePassword({
