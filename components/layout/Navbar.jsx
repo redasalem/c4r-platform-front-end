@@ -206,7 +206,7 @@ const Navbar = () => {
                 {t("navbar.riyadh")}
               </Link>
               <Link
-                href="/riyadh"
+                href="/sharqiya"
                 className="text-primary hover:text-primary-hover font-extrabold text-sm lg:text-base transition-colors"
               >
                 {t("navbar.sharqiya")}

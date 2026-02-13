@@ -56,7 +56,7 @@ const HeroAd = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 md:gap-6 w-full max-w-5xl">
               {/* Eastern Region */}
               <Link
-                href="/Cars"
+                href="/sharqiya"
                 className="group/card relative h-14 sm:h-20 md:h-24 rounded-2xl overflow-hidden shadow-2xl border border-white/10 transition-all duration-300 active:scale-95"
               >
                 <div className="absolute inset-0 bg-midnight/80 group-hover/card:bg-midnight/90 backdrop-blur-md transition-colors"></div>
@@ -70,7 +70,7 @@ const HeroAd = () => {
 
               {/* Riyadh */}
               <Link
-                href="/Cars"
+                href="/riyadh"
                 className="group/card relative h-14 sm:h-20 md:h-24 rounded-2xl overflow-hidden shadow-2xl border border-white/10 transition-all duration-300 active:scale-95"
               >
                 <div className="absolute inset-0 bg-midnight/80 group-hover/card:bg-midnight/90 backdrop-blur-md transition-colors"></div>
@@ -84,7 +84,7 @@ const HeroAd = () => {
 
               {/* Jeddah */}
               <Link
-                href="/Cars"
+                href="/jeddah"
                 className="group/card relative h-14 sm:h-20 md:h-24 rounded-2xl overflow-hidden shadow-2xl border border-white/10 transition-all duration-300 active:scale-95"
               >
                 <div className="absolute inset-0 bg-midnight/80 group-hover/card:bg-midnight/90 backdrop-blur-md transition-colors"></div>
