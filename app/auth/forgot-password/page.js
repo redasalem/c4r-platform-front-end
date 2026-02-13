@@ -13,8 +13,10 @@ import {
 } from "@mui/material";
 import { Email, ArrowForward } from "@mui/icons-material";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 export default function ForgotPasswordPage() {
+  const { t, i18n } = useTranslation("common");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -31,18 +33,12 @@ export default function ForgotPasswordPage() {
           );
           router.push(`/auth/reset-password?token=${data.data.resetToken}`);
         } else {
-          toast.success(
-            data.message ||
-              "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني",
-          );
+          toast.success(data.message || t("auth.resetLinkSent"));
         }
       }
     } catch (error) {
       console.error("Forgot password error:", error);
-      toast.error(
-        error.response?.data?.message ||
-          "فشل إرسال البريد الإلكتروني. تأكد من صحة البريد.",
-      );
+      toast.error(error.response?.data?.message || t("auth.resetLinkError"));
     } finally {
       setLoading(false);
     }
@@ -63,18 +59,18 @@ export default function ForgotPasswordPage() {
             />
           </Link>
           <h1 className="text-3xl font-black text-white tracking-tight">
-            نسيت كلمة المرور؟
+            {t("auth.forgotTitle")}
           </h1>
           <p className="text-slate-400 mt-2 text-sm font-bold">
-            أدخل بريدك الإلكتروني وسنرسل لك رابطاً لاستعادة حسابك بأمان
+            {t("auth.forgotSubtitle")}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6" dir="rtl">
+        <form onSubmit={handleSubmit} className="space-y-6" dir={i18n.dir()}>
           <div>
             <TextField
               fullWidth
-              label="البريد الإلكتروني"
+              label={t("auth.email")}
               variant="outlined"
               type="email"
               value={email}
@@ -123,7 +119,7 @@ export default function ForgotPasswordPage() {
             {loading ? (
               <CircularProgress size={26} color="inherit" />
             ) : (
-              "إرسال رابط الاستعادة"
+              t("auth.sendResetLink")
             )}
           </Button>
         </form>
@@ -133,8 +129,11 @@ export default function ForgotPasswordPage() {
             href="/auth/login"
             className="text-primary hover:text-accent font-black text-sm flex items-center justify-center gap-2 transition-colors"
           >
-            <ArrowForward fontSize="small" className="transform rotate-180" />
-            عودة لصفحة الدخول
+            <ArrowForward
+              fontSize="small"
+              className={`transform ${i18n.dir() === "rtl" ? "rotate-180" : ""}`}
+            />
+            {t("auth.returnToLogin")}
           </Link>
 
           <div className="pt-6 border-t border-white/5">
@@ -142,7 +141,7 @@ export default function ForgotPasswordPage() {
               href="/"
               className="text-slate-500 hover:text-slate-300 text-xs font-black uppercase tracking-widest transition-colors"
             >
-              العودة للصفحة الرئيسية
+              {t("auth.backToHome")}
             </Link>
           </div>
         </div>

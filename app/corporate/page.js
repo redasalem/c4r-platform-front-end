@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { carService } from "@/services/api";
 import CarCard from "@/components/cards/CarCard";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
@@ -9,6 +10,7 @@ import { CircularProgress, Container } from "@mui/material";
 import { Business } from "@mui/icons-material";
 
 export default function CorporatePage() {
+  const { t, i18n } = useTranslation("common");
   const {
     data: carsData,
     isLoading,
@@ -29,26 +31,25 @@ export default function CorporatePage() {
   }
 
   return (
-    <div className="min-h-screen bg-transparent pt-28 pb-20" dir="rtl">
-      <Breadcrumbs items={[{ label: "قسم الشركات" }]} />
+    <div className="min-h-screen bg-transparent pt-28 pb-20" dir={i18n.dir()}>
+      <Breadcrumbs items={[{ label: t("corporate.pageTitle") }]} />
       <Container maxWidth="xl" className="pt-12 relative z-10">
         {/* Header Section */}
         <div className="mb-16 text-center">
           <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-6 py-2 rounded-full mb-6 border border-primary/20 shadow-[0_0_15px_rgba(249,115,22,0.1)]">
             <Business fontSize="small" />
             <span className="font-black text-sm uppercase tracking-widest">
-              قسم الشركات
+              {t("corporate.heroBadge")}
             </span>
           </div>
           <h1 className="text-3xl md:text-5xl font-black text-white mb-6 leading-tight tracking-tighter">
-            حلول تنقل{" "}
+            {t("corporate.heroTitlePart1")}{" "}
             <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
-              للشركات والأعمال
+              {t("corporate.heroTitlePart2")}
             </span>
           </h1>
           <p className="text-slate-400 max-w-2xl mx-auto font-bold text-lg leading-relaxed">
-            مجموعة متميزة من السيارات الفاخرة والاقتصادية لخدمة قطاع الأعمال
-            والشركات بأعلى معايير الرفاهية والأمان.
+            {t("corporate.heroDesc")}
           </p>
         </div>
 
@@ -56,7 +57,7 @@ export default function CorporatePage() {
         {cars.length === 0 ? (
           <div className="text-center py-24 bg-white/5 backdrop-blur-xl rounded-[3rem] border border-white/10 shadow-2xl">
             <p className="text-slate-500 font-black text-xl">
-              لا توجد سيارات متاحة حالياً في قسم الشركات.
+              {t("corporate.empty")}
             </p>
           </div>
         ) : (

@@ -2,6 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import {
   Home,
   DirectionsCar,
@@ -17,33 +18,34 @@ import {
  * Hidden on: md (tablet) and above.
  */
 const BottomNav = () => {
+  const { t } = useTranslation("common");
   const pathname = usePathname();
 
   const navLinks = [
     {
-      label: "الرئيسية",
+      label: t("bottomNav.home"),
       href: "/",
       icon: <Home />,
     },
     {
-      label: "السيارات",
+      label: t("bottomNav.cars"),
       href: "/cars",
       icon: <DirectionsCar />,
     },
     {
-      label: "واتساب",
+      label: t("bottomNav.whatsapp"),
       href: "https://wa.me/966554118873",
       icon: <WhatsApp />,
       isExternal: true,
     },
     {
-      label: "إيميل",
+      label: t("bottomNav.email"),
       href: "mailto:Team@C4Rplatform.com",
       icon: <Email />,
       isExternal: true,
     },
     {
-      label: "حسابي",
+      label: t("bottomNav.myAccount"),
       href: "/dashboard/user",
       icon: <Person />,
     },
@@ -55,8 +57,10 @@ const BottomNav = () => {
         const isActive = pathname === link.href;
         let iconColorClass = isActive ? "text-primary" : "text-slate-400";
 
-        if (link.label === "واتساب") iconColorClass = "text-green-500";
-        if (link.label === "إيميل") iconColorClass = "text-pink-500";
+        if (link.label === t("bottomNav.whatsapp"))
+          iconColorClass = "text-green-500";
+        if (link.label === t("bottomNav.email"))
+          iconColorClass = "text-pink-500";
 
         const content = (
           <div

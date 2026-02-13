@@ -13,13 +13,10 @@ import {
   LocationOn,
 } from "@mui/icons-material";
 
-const regionNames = {
-  riyadh: "الرياض",
-  jeddah: "جدة",
-  eastern: "المنطقة الشرقية",
-};
+import { useTranslation } from "react-i18next";
 
 const CarCard = ({ car }) => {
+  const { t, i18n } = useTranslation("common");
   // Use first image or placeholder
   const imageUrl =
     car.image ||
@@ -30,27 +27,27 @@ const CarCard = ({ car }) => {
   return (
     <div
       className="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
-      dir="rtl"
+      dir={i18n.dir()}
     >
       {/* Image Section */}
       <div className="relative h-52 w-full overflow-hidden">
         <Image
           src={imageUrl}
-          alt={car.name || "صورة السيارة"}
+          alt={car.name || t("carCard.fallbackImage")}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-110"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         <div className="absolute top-4 right-4">
           <span className="bg-black/50 backdrop-blur-md text-white text-sm font-bold px-3 py-1.5 rounded-full border border-white/20">
-            موديل {car.year || "2024"}
+            {t("carCard.model")} {car.year || "2024"}
           </span>
         </div>
         {car.region && (
           <div className="absolute top-4 left-4">
             <span className="bg-orange-500/90 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-lg flex items-center gap-1 shadow-lg">
               <LocationOn style={{ fontSize: 16 }} />
-              {regionNames[car.region] || car.region}
+              {t(`regions.${car.region}`) || car.region}
             </span>
           </div>
         )}
@@ -74,7 +71,7 @@ const CarCard = ({ car }) => {
               {car.pricePerDay}
             </span>
             <span className="text-slate-400 text-[10px] md:text-sm font-bold mr-1 block">
-              ريال / يوم
+              {t("carCard.priceDay")}
             </span>
           </div>
         </div>
@@ -86,28 +83,36 @@ const CarCard = ({ car }) => {
               sx={{ fontSize: { xs: 18, md: 22 } }}
               className="text-orange-500"
             />
-            <span className="text-xs md:text-sm font-bold">أوتوماتيك</span>
+            <span className="text-xs md:text-sm font-bold">
+              {t("carCard.specs.auto")}
+            </span>
           </div>
           <div className="flex items-center gap-2 text-slate-600">
             <LocalGasStation
               sx={{ fontSize: { xs: 18, md: 22 } }}
               className="text-orange-500"
             />
-            <span className="text-xs md:text-sm font-bold">بنزين</span>
+            <span className="text-xs md:text-sm font-bold">
+              {t("carCard.specs.petrol")}
+            </span>
           </div>
           <div className="flex items-center gap-2 text-slate-600">
             <AirlineSeatReclineExtra
               sx={{ fontSize: { xs: 18, md: 22 } }}
               className="text-orange-500"
             />
-            <span className="text-xs md:text-sm font-bold">5 مقاعد</span>
+            <span className="text-xs md:text-sm font-bold">
+              {t("carCard.specs.seats")}
+            </span>
           </div>
           <div className="flex items-center gap-2 text-slate-600">
             <Speed
               sx={{ fontSize: { xs: 18, md: 22 } }}
               className="text-orange-500"
             />
-            <span className="text-xs md:text-sm font-bold">كم محدود</span>
+            <span className="text-xs md:text-sm font-bold">
+              {t("carCard.specs.limitedKm")}
+            </span>
           </div>
         </div>
 
@@ -116,13 +121,13 @@ const CarCard = ({ car }) => {
             href={`/cars/${car._id}`}
             className="flex-1 bg-slate-100 text-slate-900 text-center py-3.5 sm:py-4 rounded-2xl font-bold text-sm sm:text-base hover:bg-slate-200 transition-all active:scale-95 flex items-center justify-center gap-2"
           >
-            التفاصيل
+            {t("carCard.details")}
           </Link>
           <Link
             href={`/booking/${car._id}`}
             className="flex-[1.5] bg-orange-500 text-white text-center py-3.5 sm:py-4 rounded-2xl font-black text-sm sm:text-base hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 active:scale-95 flex items-center justify-center gap-2 group/btn"
           >
-            احجز الآن
+            {t("carCard.bookNow")}
             <ArrowBack
               fontSize="small"
               className="transition-transform group-hover/btn:-translate-x-1"

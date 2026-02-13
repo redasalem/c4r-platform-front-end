@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import api, {
   bookingService,
   carService,
@@ -67,9 +68,10 @@ function TabPanel(props) {
   );
 }
 
-function AdminTabsContent({ user }) {
+const AdminTabsContent = ({ user }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t, i18n } = useTranslation("common");
 
   // Tabs mapping: bookings=0, cars=1, reviews=2, profile=3, password=4
   const tabParam = searchParams.get("tab");
@@ -154,27 +156,27 @@ function AdminTabsContent({ user }) {
         <Tab
           icon={<EventNote sx={{ fontSize: { xs: 18, sm: 24 } }} />}
           iconPosition="start"
-          label="الحجوزات"
+          label={t("dashboard.admin.tabs.bookings")}
         />
         <Tab
           icon={<DirectionsCar sx={{ fontSize: { xs: 18, sm: 24 } }} />}
           iconPosition="start"
-          label="السيارات"
+          label={t("dashboard.admin.tabs.cars")}
         />
         <Tab
           icon={<Star sx={{ fontSize: { xs: 18, sm: 24 } }} />}
           iconPosition="start"
-          label="التعليقات"
+          label={t("dashboard.admin.tabs.reviews")}
         />
         <Tab
           icon={<Person sx={{ fontSize: { xs: 18, sm: 24 } }} />}
           iconPosition="start"
-          label="حسابي"
+          label={t("dashboard.admin.tabs.profile")}
         />
         <Tab
           icon={<Lock sx={{ fontSize: { xs: 18, sm: 24 } }} />}
           iconPosition="start"
-          label="الأمان"
+          label={t("dashboard.admin.tabs.security")}
         />
       </Tabs>
 
@@ -195,23 +197,24 @@ function AdminTabsContent({ user }) {
       </TabPanel>
     </div>
   );
-}
+};
 
 export default function AdminDashboard() {
   const { user } = useAuth();
+  const { t, i18n } = useTranslation("common");
 
   return (
-    <div className="space-y-4 md:space-y-6">
+    <div className="space-y-4 md:space-y-6" dir={i18n.dir()}>
       <div className="bg-white/5 backdrop-blur-2xl p-3 sm:p-6 md:p-10 rounded-xl sm:rounded-2xl md:rounded-[3rem] border border-white/10 relative overflow-hidden group shadow-2xl">
         <div className="absolute top-0 right-0 w-40 h-40 bg-primary/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-1 md:mb-2 tracking-tighter">
-          لوحة{" "}
+          {t("dashboard.admin.welcome.title")}{" "}
           <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
-            الإدارة
+            {t("dashboard.admin.welcome.badge")}
           </span>
         </h1>
         <p className="text-slate-400 font-bold text-xs sm:text-base lg:text-lg">
-          أهلاً {user?.name}، مرحباً بك في مركز التحكم الفاخر
+          {t("dashboard.admin.welcome.subtitle", { name: user?.name })}
         </p>
       </div>
 
@@ -223,6 +226,7 @@ export default function AdminDashboard() {
 }
 
 function ManageBookings() {
+  const { t, i18n } = useTranslation("common");
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: ["allBookings"],
@@ -234,31 +238,37 @@ function ManageBookings() {
   const approveMutation = useMutation({
     mutationFn: bookingService.approve,
     onSuccess: () => {
-      toast.success("تم قبول الحجز");
+      toast.success(t("dashboard.admin.bookings.approveSuccess"));
       queryClient.invalidateQueries(["allBookings"]);
     },
     onError: (err) =>
-      toast.error(err.response?.data?.message || "فشلت عملية القبول"),
+      toast.error(
+        err.response?.data?.message ||
+          t("dashboard.admin.bookings.approveError"),
+      ),
   });
 
   const rejectMutation = useMutation({
     mutationFn: bookingService.reject,
     onSuccess: () => {
-      toast.success("تم رفض الحجز");
+      toast.success(t("dashboard.admin.bookings.rejectSuccess"));
       queryClient.invalidateQueries(["allBookings"]);
     },
     onError: (err) =>
-      toast.error(err.response?.data?.message || "فشلت عملية الرفض"),
+      toast.error(
+        err.response?.data?.message ||
+          t("dashboard.admin.bookings.rejectError"),
+      ),
   });
 
   const deleteMutation = useMutation({
     mutationFn: bookingService.delete,
     onSuccess: () => {
-      toast.success("تم حذف الحجز بنجاح");
+      toast.success(t("dashboard.admin.bookings.deleteSuccess"));
       queryClient.invalidateQueries(["allBookings"]);
       setDeleteId(null);
     },
-    onError: () => toast.error("فشل حذف الحجز"),
+    onError: () => toast.error(t("dashboard.admin.bookings.deleteError")),
   });
 
   if (isLoading) return <CircularProgress className="m-auto block" />;
@@ -272,7 +282,7 @@ function ManageBookings() {
           <EventNote sx={{ fontSize: 48, color: "rgba(255,255,255,0.2)" }} />
         </div>
         <p className="text-xl font-black text-slate-500">
-          لا توجد حجوزات حالياً للمراجعة
+          {t("dashboard.admin.bookings.empty")}
         </p>
       </div>
     );
@@ -332,12 +342,12 @@ function ManageBookings() {
                     />
                     <div className="flex flex-row sm:flex-col gap-2 sm:gap-0 font-bold">
                       <span className="text-[8px] sm:text-[10px] text-slate-500 uppercase">
-                        بدأ:
+                        {t("dashboard.admin.bookings.start")}
                       </span>
                       <span className="text-[9px] sm:text-xs text-white">
                         {booking.startDate
                           ? new Date(booking.startDate).toLocaleDateString(
-                              "ar-EG",
+                              i18n.language,
                             )
                           : "---"}
                       </span>
@@ -350,12 +360,12 @@ function ManageBookings() {
                     />
                     <div className="flex flex-row sm:flex-col gap-2 sm:gap-0 font-bold">
                       <span className="text-[8px] sm:text-[10px] text-slate-500 uppercase">
-                        نهاية:
+                        {t("dashboard.admin.bookings.end")}
                       </span>
                       <span className="text-[9px] sm:text-xs text-white">
                         {booking.endDate
                           ? new Date(booking.endDate).toLocaleDateString(
-                              "ar-EG",
+                              i18n.language,
                             )
                           : "---"}
                       </span>
@@ -363,12 +373,12 @@ function ManageBookings() {
                   </div>
                   <div className="flex justify-between items-center text-xs sm:text-sm pt-2 sm:pt-4 border-t border-white/5">
                     <span className="text-slate-500 font-bold text-[9px] sm:text-sm">
-                      التكلفة:
+                      {t("dashboard.admin.bookings.cost")}
                     </span>
                     <span className="font-black text-primary text-base sm:text-2xl tracking-tighter">
                       {booking.totalPrice}{" "}
                       <span className="text-[8px] sm:text-xs font-bold text-slate-500">
-                        ريال
+                        {t("dashboard.user.bookings.sar")}
                       </span>
                     </span>
                   </div>
@@ -378,7 +388,7 @@ function ManageBookings() {
               {/* Client Info Column */}
               <div className="lg:w-1/3 border-b lg:border-b-0 lg:border-l border-white/5 pb-4 sm:pb-6 lg:pb-0 lg:pl-8">
                 <h4 className="text-[7px] sm:text-[10px] font-black text-slate-500 uppercase mb-2 sm:mb-6 tracking-[0.3em]">
-                  بيانات العميل
+                  {t("dashboard.admin.bookings.clientData")}
                 </h4>
                 <div className="space-y-3 sm:space-y-6">
                   <div className="flex items-center gap-2 sm:gap-4">
@@ -431,7 +441,7 @@ function ManageBookings() {
                       sx={{ fontSize: { xs: 12, sm: 20 } }}
                     />
                     <span className="text-[9px] sm:text-base">
-                      {booking.kmPerDay} كم / يوم
+                      {booking.kmPerDay} {t("carDetails.kmPerDay", "km/day")}
                     </span>
                   </div>
                 </div>
@@ -443,10 +453,10 @@ function ManageBookings() {
                   <Chip
                     label={
                       booking.status === "approved"
-                        ? "تم التأكيد"
+                        ? t("dashboard.admin.bookings.approved")
                         : booking.status === "rejected"
-                          ? "تم الرفض"
-                          : "بانتظار المراجعة"
+                          ? t("dashboard.admin.bookings.rejected")
+                          : t("dashboard.admin.bookings.pending")
                     }
                     icon={
                       booking.status === "approved" ? (
@@ -509,7 +519,7 @@ function ManageBookings() {
                       sx={{ fontSize: { xs: 10, sm: 18 } }}
                       className="text-primary/70 group-hover/btn:text-primary transition-colors"
                     />
-                    الهوية
+                    {t("dashboard.admin.bookings.id")}
                   </a>
                   <a
                     href={booking.licenseImage}
@@ -521,7 +531,7 @@ function ManageBookings() {
                       sx={{ fontSize: { xs: 10, sm: 18 } }}
                       className="text-primary/70 group-hover/btn:text-primary transition-colors"
                     />
-                    الرخصة
+                    {t("dashboard.admin.bookings.license")}
                   </a>
                 </div>
 
@@ -543,7 +553,7 @@ function ManageBookings() {
                           boxShadow: "0 15px 25px -5px rgba(22, 163, 74, 0.3)",
                         }}
                       >
-                        قبول الحجز
+                        {t("dashboard.admin.bookings.acceptButton")}
                       </Button>
                       <Button
                         variant="contained"
@@ -560,12 +570,12 @@ function ManageBookings() {
                           boxShadow: "0 15px 25px -5px rgba(220, 38, 38, 0.3)",
                         }}
                       >
-                        رفض الحجز
+                        {t("dashboard.admin.bookings.rejectButton")}
                       </Button>
                     </>
                   ) : (
                     <div className="w-full text-center py-2.5 sm:py-3.5 bg-white/5 text-slate-500 rounded-xl sm:rounded-2xl text-[10px] sm:text-sm font-black border border-white/5 italic">
-                      تم اتخاذ الإجراء النهائي
+                      {t("dashboard.admin.bookings.finalAction")}
                     </div>
                   )}
                 </div>
@@ -590,15 +600,14 @@ function ManageBookings() {
             p: 3,
           },
         }}
-        dir="rtl"
+        dir={i18n.dir()}
       >
         <DialogTitle className="font-black text-3xl text-white text-center mb-2">
-          تأكيد حذف الحجز
+          {t("dashboard.admin.bookings.deleteDialog.title")}
         </DialogTitle>
         <DialogContent>
           <p className="text-slate-400 font-bold text-center text-lg leading-relaxed">
-            هل أنت متأكد من حذف هذا الحجز نهائياً؟ لا يمكن التراجع عن هذا
-            الإجراء وقد يؤدي لحذف البيانات المرتبطة به.
+            {t("dashboard.admin.bookings.deleteDialog.message")}
           </p>
         </DialogContent>
         <DialogActions className="justify-center gap-4 pb-4">
@@ -610,7 +619,7 @@ function ManageBookings() {
               fontSize: "1.1rem",
             }}
           >
-            تراجع
+            {t("dashboard.user.profile.cancelButton")}
           </Button>
           <Button
             variant="contained"
@@ -626,7 +635,9 @@ function ManageBookings() {
               boxShadow: "0 10px 20px rgba(185, 28, 28, 0.3)",
             }}
           >
-            {deleteMutation.isPending ? "جاري الحذف..." : "نعم، احذفه الآن"}
+            {deleteMutation.isPending
+              ? t("dashboard.user.reviews.posting")
+              : t("dashboard.admin.bookings.deleteDialog.confirm")}
           </Button>
         </DialogActions>
       </Dialog>
@@ -635,6 +646,7 @@ function ManageBookings() {
 }
 
 function ManageCars() {
+  const { t, i18n } = useTranslation("common");
   const queryClient = useQueryClient();
   const { data: carsData, isLoading } = useQuery({
     queryKey: ["allCars"],
@@ -646,12 +658,12 @@ function ManageCars() {
   const deleteMutation = useMutation({
     mutationFn: carService.delete,
     onSuccess: () => {
-      toast.success("تم حذف السيارة بنجاح");
+      toast.success(t("dashboard.admin.cars.deleteSuccess"));
       queryClient.invalidateQueries(["allCars"]);
       setDeleteId(null);
     },
     onError: () => {
-      toast.error("فشل حذف السيارة");
+      toast.error(t("dashboard.admin.cars.deleteError"));
       setDeleteId(null);
     },
   });
@@ -667,10 +679,10 @@ function ManageCars() {
       <div className="flex flex-col md:flex-row justify-between items-center bg-white/5 backdrop-blur-xl p-3 sm:p-8 rounded-xl sm:rounded-3xl border border-white/10 shadow-2xl gap-3 sm:gap-6">
         <div className="text-center md:text-right">
           <h2 className="text-lg sm:text-2xl font-black text-white tracking-tight">
-            مجموعة السيارات
+            {t("dashboard.admin.cars.title")}
           </h2>
           <p className="text-[8px] sm:text-sm text-slate-400 mt-0.5 sm:mt-2 font-bold uppercase tracking-widest">
-            ({cars.length} مركبة)
+            {t("dashboard.admin.cars.count", { count: cars.length })}
           </p>
         </div>
 
@@ -691,7 +703,7 @@ function ManageCars() {
             width: { xs: "100%", md: "auto" },
           }}
         >
-          إضافة سيارة جديدة
+          {t("dashboard.admin.cars.addButton")}
         </Button>
       </div>
 
@@ -701,7 +713,7 @@ function ManageCars() {
             sx={{ fontSize: 80, color: "rgba(255,255,255,0.1)", mb: 4 }}
           />
           <p className="text-xl font-black text-slate-500">
-            لا توجد سيارات مضافة حالياً
+            {t("dashboard.admin.cars.emptyTitle")}
           </p>
           <Button
             variant="text"
@@ -709,7 +721,7 @@ function ManageCars() {
             onClick={() => setIsAddOpen(true)}
             sx={{ mt: 3, fontWeight: "900", fontSize: "1.1rem" }}
           >
-            + ابدأ بإضافة أول سيارة
+            {t("dashboard.admin.cars.emptyAction")}
           </Button>
         </div>
       ) : (
@@ -735,7 +747,9 @@ function ManageCars() {
                 )}
                 <div className="absolute top-1.5 sm:top-4 left-1.5 sm:left-4 z-20 flex flex-col gap-1">
                   <Chip
-                    label={car.pricePerDay + " ريال / يوم"}
+                    label={
+                      car.pricePerDay + " " + t("dashboard.admin.cars.priceDay")
+                    }
                     size="small"
                     sx={{
                       bgcolor: "rgba(0,0,0,0.6)",
@@ -796,7 +810,9 @@ function ManageCars() {
                       transition: "all 0.3s ease",
                     }}
                   >
-                    <span className="ml-1">حذف السيارة</span>
+                    <span className="ml-1">
+                      {t("dashboard.admin.cars.deleteButton")}
+                    </span>
                   </Button>
                 </div>
               </div>
@@ -822,15 +838,14 @@ function ManageCars() {
             p: 3,
           },
         }}
-        dir="rtl"
+        dir={i18n.dir()}
       >
         <DialogTitle className="font-black text-3xl text-white text-center mb-2">
-          تأكيد الحذف
+          {t("dashboard.admin.cars.deleteDialog.title")}
         </DialogTitle>
         <DialogContent>
           <p className="text-slate-400 font-bold text-center text-lg leading-relaxed">
-            سيتم حذف السيارة وجميع بياناتها وحجوزات السجل المرتبطة بها نهائياً
-            من قاعدة البيانات. لا يمكن استعادة هذه البيانات لاحقاً.
+            {t("dashboard.admin.cars.deleteDialog.message")}
           </p>
         </DialogContent>
         <DialogActions className="justify-center gap-4 pb-4">
@@ -842,7 +857,7 @@ function ManageCars() {
               fontSize: "1.1rem",
             }}
           >
-            تراجع عن الإجراء
+            {t("dashboard.admin.cars.deleteDialog.cancel")}
           </Button>
           <Button
             variant="contained"
@@ -858,7 +873,7 @@ function ManageCars() {
               boxShadow: "0 10px 20px rgba(185, 28, 28, 0.3)",
             }}
           >
-            تأكيد الحذف النهائي
+            {t("dashboard.admin.cars.deleteDialog.confirm")}
           </Button>
         </DialogActions>
       </Dialog>
@@ -867,6 +882,7 @@ function ManageCars() {
 }
 
 function ManageReviews() {
+  const { t, i18n } = useTranslation("common");
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: ["allReviewsAdmin"],
@@ -878,13 +894,13 @@ function ManageReviews() {
   const deleteMutation = useMutation({
     mutationFn: reviewService.delete,
     onSuccess: () => {
-      toast.success("تم حذف التعليق بنجاح");
+      toast.success(t("dashboard.admin.reviews.deleteSuccess"));
       queryClient.invalidateQueries(["allReviewsAdmin"]);
       queryClient.invalidateQueries(["recentReviews"]); // Sync home page
       setDeleteId(null);
     },
     onError: () => {
-      toast.error("فشل حذف التعليق");
+      toast.error(t("dashboard.admin.reviews.deleteError"));
       setDeleteId(null);
     },
   });
@@ -900,7 +916,7 @@ function ManageReviews() {
           <Star sx={{ fontSize: 48, color: "rgba(255,255,255,0.1)" }} />
         </div>
         <p className="text-xl font-bold text-slate-400">
-          لا توجد تعليقات حقيقية في قاعدة البيانات حالياً
+          {t("dashboard.admin.reviews.empty")}
         </p>
       </div>
     );
@@ -970,17 +986,17 @@ function ManageReviews() {
             </div>
 
             <p className="text-slate-400 leading-relaxed font-bold text-base md:text-lg italic relative z-10 border-r-2 border-primary/30 pr-4 line-clamp-4 md:line-clamp-none">
-              "{review.comment || "بدون تعليق نصي"}"
+              "{review.comment || t("dashboard.admin.reviews.noComment")}"
             </p>
 
             <div className="mt-8 pt-8 border-t border-white/5 flex justify-between items-center relative z-10">
               <span className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]">
-                {new Date(review.createdAt).toLocaleDateString("ar-EG")}
+                {new Date(review.createdAt).toLocaleDateString(i18n.language)}
               </span>
               <div className="flex items-center gap-2 bg-green-500/10 px-3 py-1 rounded-full border border-green-500/20">
                 <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                 <span className="text-[10px] text-green-500 font-black uppercase tracking-wider">
-                  Verified Review
+                  {t("dashboard.admin.reviews.verified")}
                 </span>
               </div>
             </div>
@@ -1004,15 +1020,14 @@ function ManageReviews() {
             margin: { xs: 2, md: 4 },
           },
         }}
-        dir="rtl"
+        dir={i18n.dir()}
       >
         <DialogTitle className="font-black text-2xl md:text-3xl text-white text-center mb-1 md:mb-2">
-          تأكيد حذف التعليق
+          {t("dashboard.admin.reviews.deleteDialog.title")}
         </DialogTitle>
         <DialogContent>
           <p className="text-slate-400 font-bold text-center text-base md:text-lg leading-relaxed">
-            هل أنت متأكد من حذف هذا التعليق نهائياً؟ سيؤثر هذا على إجمالي تقييم
-            السيارة بشكل مباشر. لا يمكن استعادة التعليق بعد الحذف.
+            {t("dashboard.admin.reviews.deleteDialog.message")}
           </p>
         </DialogContent>
         <DialogActions className="justify-center gap-4 pb-4">
@@ -1024,7 +1039,7 @@ function ManageReviews() {
               fontSize: "1.1rem",
             }}
           >
-            تراجع
+            {t("dashboard.user.profile.cancelButton")}
           </Button>
           <Button
             variant="contained"
@@ -1040,7 +1055,9 @@ function ManageReviews() {
               boxShadow: "0 10px 20px rgba(185, 28, 28, 0.3)",
             }}
           >
-            {deleteMutation.isPending ? "جاري الحذف..." : "تأكيد الحذف النهائي"}
+            {deleteMutation.isPending
+              ? t("dashboard.user.reviews.posting")
+              : t("dashboard.admin.reviews.deleteDialog.confirm")}
           </Button>
         </DialogActions>
       </Dialog>
@@ -1049,6 +1066,7 @@ function ManageReviews() {
 }
 
 function AddCarDialog({ open, onClose }) {
+  const { t, i18n } = useTranslation("common");
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     name: "",
@@ -1107,7 +1125,7 @@ function AddCarDialog({ open, onClose }) {
   const createMutation = useMutation({
     mutationFn: carService.create,
     onSuccess: () => {
-      toast.success("تم إضافة السيارة بنجاح");
+      toast.success(t("dashboard.admin.addCar.success"));
       queryClient.invalidateQueries(["allCars"]);
       onClose();
       setFormData({
@@ -1122,7 +1140,9 @@ function AddCarDialog({ open, onClose }) {
       setFile(null);
     },
     onError: (err) => {
-      toast.error(err.response?.data?.message || "فشل إضافة السيارة");
+      toast.error(
+        err.response?.data?.message || t("dashboard.admin.addCar.error"),
+      );
     },
   });
 
@@ -1133,7 +1153,7 @@ function AddCarDialog({ open, onClose }) {
       !formData.description ||
       !file
     ) {
-      toast.warning("يرجى ملء جميع الحقول المطلوبة وإرفاق صورة");
+      toast.warning(t("dashboard.admin.addCar.warningFill"));
       return;
     }
 
@@ -1156,7 +1176,7 @@ function AddCarDialog({ open, onClose }) {
       });
     } catch (error) {
       console.error(error);
-      toast.error(error.message || "حدث خطأ أثناء الرفع");
+      toast.error(error.message || t("dashboard.admin.addCar.error"));
     } finally {
       setUploading(false);
     }
@@ -1168,7 +1188,7 @@ function AddCarDialog({ open, onClose }) {
       onClose={onClose}
       fullWidth
       maxWidth="sm"
-      dir="rtl"
+      dir={i18n.dir()}
       PaperProps={{
         sx: {
           borderRadius: "2.5rem",
@@ -1188,10 +1208,10 @@ function AddCarDialog({ open, onClose }) {
             <div className="bg-primary/20 p-3 rounded-2xl text-primary shadow-2xl border border-primary/20">
               <DirectionsCar sx={{ fontSize: 24 }} />
             </div>
-            إضافة سيارة جديدة
+            {t("dashboard.admin.addCar.title")}
           </h2>
           <p className="text-sm text-slate-400 mr-14 mt-2 font-bold uppercase tracking-widest">
-            قم بإضافة سيارات فاخرة جديدة إلى مجموعتك
+            {t("dashboard.admin.addCar.subtitle")}
           </p>
         </div>
         <IconButton
@@ -1230,7 +1250,7 @@ function AddCarDialog({ open, onClose }) {
                 />
                 <div className="absolute inset-0 bg-midnight/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm">
                   <div className="bg-primary px-6 py-2.5 rounded-full text-white font-black flex items-center gap-2 shadow-2xl">
-                    <UploadFile /> تغيير الصورة الحالية
+                    <UploadFile /> {t("dashboard.admin.addCar.changeImage")}
                   </div>
                 </div>
               </div>
@@ -1241,10 +1261,10 @@ function AddCarDialog({ open, onClose }) {
                 </div>
                 <div className="text-center">
                   <span className="block font-black text-2xl text-white mb-2 tracking-tight">
-                    اضغط لرفع صورة السيارة
+                    {t("dashboard.admin.addCar.uploadImage")}
                   </span>
                   <span className="text-xs text-slate-500 font-bold uppercase tracking-widest">
-                    PNG, JPG, WEBP • Max 5MB
+                    {t("dashboard.admin.addCar.uploadHint")}
                   </span>
                 </div>
               </div>
@@ -1254,8 +1274,8 @@ function AddCarDialog({ open, onClose }) {
           {/* Form Inputs */}
           <div className="grid grid-cols-1 gap-6">
             <TextField
-              label="اسم السيارة والموديل"
-              placeholder="مثال: تويوتا كامري 2024"
+              label={t("dashboard.admin.addCar.nameLabel")}
+              placeholder={t("dashboard.admin.addCar.namePlaceholder")}
               fullWidth
               variant="outlined"
               value={formData.name}
@@ -1267,23 +1287,31 @@ function AddCarDialog({ open, onClose }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <FormControl fullWidth sx={inputStyle}>
-                <InputLabel>المنطقة</InputLabel>
+                <InputLabel>
+                  {t("dashboard.admin.addCar.regionLabel")}
+                </InputLabel>
                 <Select
-                  label="المنطقة"
+                  label={t("dashboard.admin.addCar.regionLabel")}
                   value={formData.region}
                   onChange={(e) =>
                     setFormData({ ...formData, region: e.target.value })
                   }
                   MenuProps={menuProps}
                 >
-                  <MenuItem value="riyadh">الرياض</MenuItem>
-                  <MenuItem value="jeddah">جدة</MenuItem>
-                  <MenuItem value="eastern">المنطقة الشرقية</MenuItem>
+                  <MenuItem value="riyadh">
+                    {t("dashboard.admin.addCar.regions.riyadh")}
+                  </MenuItem>
+                  <MenuItem value="jeddah">
+                    {t("dashboard.admin.addCar.regions.jeddah")}
+                  </MenuItem>
+                  <MenuItem value="eastern">
+                    {t("dashboard.admin.addCar.regions.eastern")}
+                  </MenuItem>
                 </Select>
               </FormControl>
 
               <TextField
-                label="سنة الصنع"
+                label={t("dashboard.admin.addCar.yearLabel")}
                 fullWidth
                 type="number"
                 variant="outlined"
@@ -1296,23 +1324,31 @@ function AddCarDialog({ open, onClose }) {
             </div>
 
             <FormControl fullWidth sx={inputStyle}>
-              <InputLabel>القسم</InputLabel>
+              <InputLabel>
+                {t("dashboard.admin.addCar.categoryLabel")}
+              </InputLabel>
               <Select
-                label="القسم"
+                label={t("dashboard.admin.addCar.categoryLabel")}
                 value={formData.category}
                 onChange={(e) =>
                   setFormData({ ...formData, category: e.target.value })
                 }
                 MenuProps={menuProps}
               >
-                <MenuItem value="regular">سيارات للإيجار</MenuItem>
-                <MenuItem value="with_driver">سيارات بسائق</MenuItem>
-                <MenuItem value="corporate">قسم الشركات</MenuItem>
+                <MenuItem value="regular">
+                  {t("dashboard.admin.addCar.categories.regular")}
+                </MenuItem>
+                <MenuItem value="with_driver">
+                  {t("dashboard.admin.addCar.categories.with_driver")}
+                </MenuItem>
+                <MenuItem value="corporate">
+                  {t("dashboard.admin.addCar.categories.corporate")}
+                </MenuItem>
               </Select>
             </FormControl>
 
             <TextField
-              label="سعر اليوم (ريال)"
+              label={t("dashboard.admin.addCar.priceLabel")}
               placeholder="0.00"
               fullWidth
               type="number"
@@ -1332,8 +1368,8 @@ function AddCarDialog({ open, onClose }) {
             />
 
             <TextField
-              label="وصف السيارة"
-              placeholder="اكتب وصفاً جذاباً للسيارة ومميزاتها..."
+              label={t("dashboard.admin.addCar.descLabel")}
+              placeholder={t("dashboard.admin.addCar.descPlaceholder")}
               fullWidth
               multiline
               rows={3}
@@ -1362,7 +1398,7 @@ function AddCarDialog({ open, onClose }) {
             fontSize: "1rem",
           }}
         >
-          تراجع
+          {t("dashboard.admin.addCar.cancel")}
         </Button>
         <Button
           onClick={handleSubmit}
@@ -1381,12 +1417,13 @@ function AddCarDialog({ open, onClose }) {
         >
           {uploading ? (
             <div className="flex items-center gap-3">
-              <CircularProgress size={20} color="inherit" /> جاري رفع الصورة...
+              <CircularProgress size={20} color="inherit" />{" "}
+              {t("dashboard.admin.addCar.uploading")}
             </div>
           ) : createMutation.isPending ? (
-            "جاري الحفظ..."
+            t("dashboard.admin.addCar.saving")
           ) : (
-            "إضافة السيارة الآن"
+            t("dashboard.admin.addCar.submit")
           )}
         </Button>
       </DialogActions>
@@ -1394,6 +1431,7 @@ function AddCarDialog({ open, onClose }) {
   );
 }
 function ProfileSection({ user }) {
+  const { t } = useTranslation("common");
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || "",
@@ -1404,7 +1442,7 @@ function ProfileSection({ user }) {
 
   const handleSave = async () => {
     if (!formData.name.trim() || !formData.phoneNumber.trim()) {
-      toast.warning("يجب إدخال الاسم ورقم الهاتف لتتمكن من تعديل البيانات");
+      toast.warning(t("dashboard.user.profile.validationError"));
       return;
     }
     setLoading(true);
@@ -1412,12 +1450,15 @@ function ProfileSection({ user }) {
       // Create a payload without email
       const { email, ...updatePayload } = formData;
       await userService.updateProfile(updatePayload);
-      toast.success("تم تحديث البيانات بنجاح");
+      toast.success(t("dashboard.user.profile.updateSuccess"));
       setIsEditing(false);
       window.location.reload();
     } catch (error) {
       console.error("Profile update error:", error);
-      toast.error(error.response?.data?.message || "فشل تحديث البيانات");
+      toast.error(
+        error.response?.data?.message ||
+          t("dashboard.user.profile.updateError"),
+      );
     } finally {
       setLoading(false);
     }
@@ -1455,17 +1496,17 @@ function ProfileSection({ user }) {
         </div>
         <div>
           <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1 sm:mb-2 leading-tight">
-            إعدادات الحساب
+            {t("dashboard.user.profile.title")}
           </h3>
           <p className="text-slate-400 font-bold text-sm sm:text-base md:text-lg">
-            تأكد من بقاء بياناتك الشخصية محدثة لضمان تجربة حجز سلسة واحترافية.
+            {t("dashboard.user.profile.subtitle")}
           </p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 sm:gap-x-6 md:gap-x-10 gap-y-4 sm:gap-y-6 md:gap-y-8">
         <TextField
-          label="الاسم الكامل"
+          label={t("dashboard.user.profile.name")}
           fullWidth
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -1481,12 +1522,12 @@ function ProfileSection({ user }) {
           sx={inputStyle}
         />
         <TextField
-          label="البريد الإلكتروني"
+          label={t("dashboard.user.profile.email")}
           fullWidth
           value={formData.email}
           disabled={true}
           variant="outlined"
-          helperText="لا يمكن تغيير البريد الإلكتروني لدواعي الأمان"
+          helperText={t("dashboard.user.profile.emailHelper")}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -1504,7 +1545,7 @@ function ProfileSection({ user }) {
           }}
         />
         <TextField
-          label="رقم الهاتف"
+          label={t("dashboard.user.profile.phone")}
           fullWidth
           value={formData.phoneNumber}
           onChange={(e) =>
@@ -1543,7 +1584,7 @@ function ProfileSection({ user }) {
               {loading ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (
-                "حفظ التغييرات الجديدة"
+                t("dashboard.user.profile.saveButton")
               )}
             </Button>
             <Button
@@ -1557,7 +1598,7 @@ function ProfileSection({ user }) {
                 px: 6,
               }}
             >
-              تراجع
+              {t("dashboard.user.profile.cancelButton")}
             </Button>
           </>
         ) : (
@@ -1578,7 +1619,7 @@ function ProfileSection({ user }) {
               boxShadow: "0 20px 40px -10px rgba(0,0,0,0.4)",
             }}
           >
-            تعديل البيانات الشخصية
+            {t("dashboard.user.profile.editButton")}
           </Button>
         )}
       </div>
@@ -1587,6 +1628,7 @@ function ProfileSection({ user }) {
 }
 
 function ChangePasswordSection() {
+  const { t } = useTranslation("common");
   const [passwords, setPasswords] = useState({
     currentPassword: "",
     newPassword: "",
@@ -1597,15 +1639,13 @@ function ChangePasswordSection() {
 
   const handleSubmit = async () => {
     if (!passwords.currentPassword || !passwords.newPassword) {
-      toast.error("يرجى ملء جميع الحقول");
+      toast.error(t("dashboard.user.security.errorFillAll"));
       return;
     }
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     if (!passwordRegex.test(passwords.newPassword)) {
-      toast.error(
-        "يجب أن تحتوي كلمة المرور على حرف كبير، حرف صغير، رقم، ورمز خاص، وأن لا تقل عن 8 خانات",
-      );
+      toast.error(t("dashboard.user.security.errorWeakPassword"));
       return;
     }
 
@@ -1615,13 +1655,15 @@ function ChangePasswordSection() {
         currentPassword: passwords.currentPassword,
         newPassword: passwords.newPassword,
       });
-      toast.success("تم تغيير كلمة المرور بنجاح");
+      toast.success(t("auth.passwordChanged"));
       setPasswords({
         currentPassword: "",
         newPassword: "",
       });
     } catch (error) {
-      toast.error(error.response?.data?.message || "فشل تغيير كلمة المرور");
+      toast.error(
+        error.response?.data?.message || t("auth.passwordChangeError"),
+      );
     } finally {
       setLoading(false);
     }
@@ -1658,17 +1700,17 @@ function ChangePasswordSection() {
         </div>
         <div>
           <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1 sm:mb-2 leading-tight">
-            تغيير كلمة المرور
+            {t("dashboard.user.security.title")}
           </h3>
           <p className="text-slate-400 font-bold text-sm sm:text-base md:text-lg">
-            ننصح باستخدام كلمة مرور قوية ومعقدة لضمان أقصى درجات الأمان لحسابك.
+            {t("dashboard.user.security.subtitle")}
           </p>
         </div>
       </div>
 
       <div className="max-w-md flex flex-col gap-6 sm:gap-8 md:gap-12 mt-4 sm:mt-6">
         <TextField
-          label="كلمة المرور الحالية"
+          label={t("dashboard.user.security.currentPassword")}
           type={showCurrentPassword ? "text" : "password"}
           fullWidth
           variant="outlined"
@@ -1704,7 +1746,7 @@ function ChangePasswordSection() {
           sx={inputStyle}
         />
         <TextField
-          label="كلمة المرور الجديدة"
+          label={t("dashboard.user.security.newPassword")}
           type={showNewPassword ? "text" : "password"}
           fullWidth
           variant="outlined"
@@ -1760,7 +1802,7 @@ function ChangePasswordSection() {
             {loading ? (
               <CircularProgress size={28} color="inherit" />
             ) : (
-              "تحديث كلمة المرور الآن"
+              t("dashboard.user.security.updateButton")
             )}
           </Button>
         </div>

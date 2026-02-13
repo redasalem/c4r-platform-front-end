@@ -18,6 +18,7 @@ import {
 } from "@mui/icons-material";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { Suspense } from "react";
+import { useTranslation } from "react-i18next";
 
 // Sub-component to handle searchParams safely
 function DashboardSidebarContent({
@@ -29,12 +30,21 @@ function DashboardSidebarContent({
 }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { t } = useTranslation("common");
 
   const userLinks = [
-    { name: "ملفي الشخصي", href: `${prefix}?tab=profile`, icon: <Person /> },
-    { name: "حجوزاتي", href: `${prefix}?tab=bookings`, icon: <EventNote /> },
     {
-      name: "تغيير كلمة المرور",
+      name: t("dashboard.profile"),
+      href: `${prefix}?tab=profile`,
+      icon: <Person />,
+    },
+    {
+      name: t("dashboard.bookings"),
+      href: `${prefix}?tab=bookings`,
+      icon: <EventNote />,
+    },
+    {
+      name: t("dashboard.changePassword"),
       href: `${prefix}?tab=password`,
       icon: <Settings />,
     },
@@ -42,18 +52,30 @@ function DashboardSidebarContent({
 
   const adminLinks = [
     {
-      name: "إدارة الحجوزات",
+      name: t("dashboard.adminBookings"),
       href: `${prefix}?tab=bookings`,
       icon: <EventNote />,
     },
     {
-      name: "إدارة السيارات",
+      name: t("dashboard.adminCars"),
       href: `${prefix}?tab=cars`,
       icon: <DirectionsCar />,
     },
-    { name: "إدارة التعليقات", href: `${prefix}?tab=reviews`, icon: <Star /> },
-    { name: "ملفي الشخصي", href: `${prefix}?tab=profile`, icon: <Person /> },
-    { name: "كلمة المرور", href: `${prefix}?tab=password`, icon: <Lock /> },
+    {
+      name: t("dashboard.adminReviews"),
+      href: `${prefix}?tab=reviews`,
+      icon: <Star />,
+    },
+    {
+      name: t("dashboard.profile"),
+      href: `${prefix}?tab=profile`,
+      icon: <Person />,
+    },
+    {
+      name: t("dashboard.adminPassword"),
+      href: `${prefix}?tab=password`,
+      icon: <Lock />,
+    },
   ];
 
   const links = isAdmin ? adminLinks : userLinks;
@@ -93,7 +115,9 @@ function DashboardSidebarContent({
               <div className="inline-flex items-center gap-1.5 bg-primary/10 text-primary px-2.5 py-0.5 rounded-full border border-primary/20">
                 <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
                 <span className="text-[10px] font-black uppercase tracking-wider">
-                  {isAdmin ? "مدير النظام" : "عميل مسجل"}
+                  {isAdmin
+                    ? t("dashboard.roleAdmin")
+                    : t("dashboard.roleClient")}
                 </span>
               </div>
             </div>
@@ -107,14 +131,14 @@ function DashboardSidebarContent({
             className="flex items-center gap-4 px-5 py-4 rounded-2xl font-black text-slate-400 hover:bg-white/5 hover:text-white transition-all duration-500 border border-white/5 group"
           >
             <Home className="text-slate-500 group-hover:text-primary group-hover:scale-110 transition-all" />
-            <span className="text-sm">العودة للرئيسية</span>
+            <span className="text-sm">{t("dashboard.backToHome")}</span>
           </Link>
         </div>
 
         {/* Navigation Title */}
         <div className="px-8 pt-8 pb-3">
           <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
-            القائمة الرئيسية
+            {t("dashboard.mainMenu")}
           </p>
         </div>
 
@@ -128,10 +152,11 @@ function DashboardSidebarContent({
               <Link
                 key={link.href}
                 href={link.href}
-                className={`flex items-center gap-4 px-5 py-4 rounded-2xl font-black transition-all duration-500 group relative ${isActive
+                className={`flex items-center gap-4 px-5 py-4 rounded-2xl font-black transition-all duration-500 group relative ${
+                  isActive
                     ? "bg-primary text-white shadow-[0_15px_30px_rgba(249,115,22,0.3)]"
                     : "text-slate-500 hover:bg-white/5 hover:text-slate-200"
-                  }`}
+                }`}
               >
                 {isActive && (
                   <div className="absolute left-0 w-1.5 h-6 bg-white rounded-r-full" />
@@ -154,7 +179,7 @@ function DashboardSidebarContent({
             className="w-full flex items-center justify-center gap-3 px-5 py-4 rounded-2xl font-black text-white bg-linear-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 transition-all duration-500 shadow-xl shadow-red-900/40 border border-red-500/20 group"
           >
             <Logout className="group-hover:-translate-x-1 transition-transform" />
-            <span className="text-sm">تسجيل الخروج الآمن</span>
+            <span className="text-sm">{t("dashboard.secureLogout")}</span>
           </button>
         </div>
       </aside>
@@ -164,10 +189,11 @@ function DashboardSidebarContent({
 
 export default function DashboardLayout({ children }) {
   const { user, logout, loading } = useAuth();
+  const { t, i18n } = useTranslation("common");
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-midnight flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <CircularProgress color="primary" />
       </div>
     );
@@ -175,13 +201,15 @@ export default function DashboardLayout({ children }) {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-midnight flex flex-col items-center justify-center text-white p-10">
-        <h2 className="text-2xl font-black mb-4">يجب تسجيل الدخول أولاً</h2>
+      <div className="min-h-screen flex flex-col items-center justify-center text-white p-10">
+        <h2 className="text-2xl font-black mb-4">
+          {t("dashboard.loginRequired")}
+        </h2>
         <Link
           href="/auth/login"
           className="bg-primary px-8 py-3 rounded-xl font-black"
         >
-          تسجيل الدخول
+          {t("dashboard.loginButton")}
         </Link>
       </div>
     );
@@ -200,10 +228,10 @@ export default function DashboardLayout({ children }) {
   };
 
   return (
-    <div className="min-h-screen bg-transparent flex" dir="rtl">
+    <div className="min-h-screen bg-transparent flex" dir={i18n.dir()}>
       <Suspense
         fallback={
-          <div className="w-80 hidden md:block bg-midnight animate-pulse" />
+          <div className="w-80 hidden md:block bg-white/5 animate-pulse" />
         }
       >
         <DashboardSidebarContent

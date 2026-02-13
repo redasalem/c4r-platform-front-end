@@ -13,11 +13,14 @@ import {
 } from "@mui/icons-material";
 import { SiTiktok } from "react-icons/si";
 
+import { useTranslation } from "react-i18next";
+
 const Footer = () => {
+  const { t, i18n } = useTranslation("common");
   return (
     <footer
-      className="bg-slate-900 text-gray-300 font-sans border-t border-gray-800"
-      dir="rtl"
+      className="bg-midnight text-gray-300 font-sans border-t border-white/10"
+      dir={i18n.dir()}
     >
       {/* 
         Hero Footer Section - CTA 
@@ -29,18 +32,17 @@ const Footer = () => {
         <div className="container mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-right">
           <div className="space-y-2">
             <h3 className="text-xl md:text-3xl font-black text-white leading-tight">
-              جاهز لانطلاقتك القادمة؟
+              {t("footer.ctaTitle")}
             </h3>
             <p className="text-orange-100 text-sm md:text-base font-bold opacity-90">
-              احجز سيارتك الآن واستمتع بأفضل الأسعار والخدمات المميزة في
-              المملكة.
+              {t("footer.ctaSubtitle")}
             </p>
           </div>
           <Link
             href="/cars"
             className="group w-full md:w-auto bg-white text-orange-600 px-10 py-4 rounded-2xl md:rounded-full font-black shadow-lg hover:shadow-xl hover:bg-gray-50 transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-3"
           >
-            <span>عرض السيارات</span>
+            <span>{t("footer.viewCars")}</span>
             <DirectionsCar className="transform group-hover:translate-x-[-4px] transition-transform" />
           </Link>
         </div>
@@ -70,8 +72,7 @@ const Footer = () => {
               </div>
             </Link>
             <p className="text-sm md:text-lg leading-relaxed text-gray-400 font-bold italic max-w-sm mx-auto md:mx-0">
-              منصة C4R هي وجهتك الأولى لتأجير السيارات الفاخرة والاقتصادية في
-              المملكة. نقدم تجربة حجز سلسة، آمنة، وخدمة عملاء على مدار الساعة.
+              {t("footer.brandDesc")}
             </p>
 
             {/* Social Links */}
@@ -104,14 +105,14 @@ const Footer = () => {
           {/* Column 2: Quick Links */}
           <div className="space-y-6 md:space-y-10">
             <h4 className="text-white text-lg md:text-xl font-black border-r-4 border-orange-500 pr-4 inline-block md:block">
-              روابط سريعة
+              {t("footer.quickLinks")}
             </h4>
             <ul className="space-y-3 md:space-y-4 text-sm md:text-lg font-bold">
               {[
-                { label: "من نحن", href: "/about" },
-                { label: "الأسئلة الشائعة", href: "/faq" },
-                { label: "سيارات بسائق", href: "/with-driver" },
-                { label: "الشركات", href: "/corporate" },
+                { label: t("footer.aboutUs"), href: "/about" },
+                { label: t("footer.faqShort"), href: "/faq" },
+                { label: t("footer.withDriver"), href: "/with-driver" },
+                { label: t("footer.companies"), href: "/corporate" },
               ].map((link, index) => (
                 <li key={index}>
                   <Link
@@ -131,14 +132,14 @@ const Footer = () => {
           {/* Column 3: Booking Locations */}
           <div className="space-y-6 md:space-y-10">
             <h4 className="text-white text-lg md:text-xl font-black border-r-4 border-orange-500 pr-4 inline-block md:block">
-              أماكن الحجز
+              {t("footer.bookingLocations")}
             </h4>
             <ul className="space-y-3 md:space-y-4 text-sm md:text-lg font-bold">
               {[
-                { label: "حجز مدينة جدة", href: "/jeddah" },
-                { label: "حجز مدينة جدة", href: "/jeddah" },
-                { label: "حجز مدينة الرياض", href: "/riyadh" },
-                { label: "السيارات", href: "/cars" },
+                { label: t("footer.jeddah"), href: "/jeddah" },
+                { label: t("footer.jeddah"), href: "/jeddah" },
+                { label: t("footer.riyadh"), href: "/riyadh" },
+                { label: t("footer.allCars"), href: "/cars" },
               ].map((link, index) => (
                 <li key={index}>
                   <Link
@@ -158,7 +159,7 @@ const Footer = () => {
           {/* Column 4: Contact & Legal */}
           <div className="space-y-6 md:space-y-10">
             <h4 className="text-white text-lg md:text-xl font-black border-r-4 border-orange-500 pr-4 inline-block md:block">
-              معلومات الاتصال
+              {t("footer.contactInfo")}
             </h4>
             <ul className="space-y-6 md:space-y-8 text-base font-bold">
               <li className="flex flex-col md:flex-row items-center md:items-start gap-3 md:gap-4 group">
@@ -167,7 +168,7 @@ const Footer = () => {
                 </div>
                 <div className="text-center md:text-right">
                   <span className="block text-[10px] text-gray-500 mb-1 font-black uppercase tracking-widest">
-                    واتساب
+                    {t("footer.whatsapp")}
                   </span>
                   <a
                     href="https://wa.me/966554118873"
@@ -184,7 +185,7 @@ const Footer = () => {
                 </div>
                 <div className="text-center md:text-right">
                   <span className="block text-[10px] text-gray-500 mb-1 font-black uppercase tracking-widest">
-                    البريد الإلكتروني
+                    {t("footer.email")}
                   </span>
                   <a
                     href="mailto:Team@C4Rplatform.com"
@@ -203,24 +204,24 @@ const Footer = () => {
       <div className="border-t border-white/5 bg-midnight/40 backdrop-blur-md pb-24 md:pb-8">
         <div className="container mx-auto px-6 py-8 flex flex-col lg:flex-row items-center justify-between gap-6 text-xs md:text-base text-gray-400 font-bold">
           <p className="text-center lg:text-right uppercase tracking-wider order-2 lg:order-1">
-            &copy; {new Date().getFullYear()} منصة C4R. جميع الحقوق محفوظة.
+            {t("footer.copyright")}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 order-1 lg:order-2">
             <Link
               href="/privacy"
               className="hover:text-white transition-colors active:scale-95"
             >
-              سياسة الخصوصية
+              {t("footer.privacy")}
             </Link>
             <Link
               href="/terms"
               className="hover:text-white transition-colors active:scale-95"
             >
-              الشروط والأحكام
+              {t("footer.terms")}
             </Link>
             <span className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] w-full sm:w-auto justify-center mt-2 sm:mt-0">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-              بواسطة شركة C4R للتقنية
+              {t("footer.poweredBy")}
             </span>
           </div>
         </div>

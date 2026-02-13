@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { Select, MenuItem } from "@mui/material";
 import {
   AdminPanelSettings,
@@ -27,9 +28,9 @@ import Tooltip from "@/components/ui/Tooltip";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const { t, i18n } = useTranslation("common");
   const [showTopBar, setShowTopBar] = useState(true);
   const [mounted, setMounted] = useState(false);
-  const [language, setLanguage] = useState("ar");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -47,6 +48,16 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (mounted) {
+      document.dir = i18n.dir();
+      document.documentElement.lang = i18n.language;
+    }
+  }, [i18n.language, mounted]);
+
+  // Prevent hydration mismatch: don't render on server
+  if (!mounted) return null;
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 shadow-lg transition-all duration-300 font-sans">
       {/* ─────────────────────────────────────────────────────────────
@@ -55,7 +66,7 @@ const Navbar = () => {
           Background: Dark Gray (Reference style)
       ───────────────────────────────────────────────────────────── */}
       <div
-        className={`bg-gray-800 text-orange-400 text-sm font-medium tracking-wide transition-all duration-500 ease-in-out overflow-hidden ${
+        className={`bg-slate-dark text-orange-400 text-sm font-medium tracking-wide transition-all duration-500 ease-in-out overflow-hidden ${
           showTopBar ? "h-11 opacity-100" : "h-0 opacity-0"
         }`}
       >
@@ -70,29 +81,34 @@ const Navbar = () => {
               href="/corporate"
               className="hover:text-orange-200 transition-all duration-300 border-l border-orange-700/30 pl-3 sm:pl-6 h-full flex items-center active:scale-95"
             >
-              <Tooltip text="قسم الشركات" position="bottom">
+              <Tooltip text={t("navbar.corporate")} position="bottom">
                 <Business className="md:hidden ml-2" style={{ fontSize: 20 }} />
-                <span className="hidden md:inline">قسم الشركات</span>
+                <span className="hidden md:inline">
+                  {t("navbar.corporate")}
+                </span>
               </Tooltip>
             </Link>
             <Link
               href="/with-driver"
               className="hover:text-orange-200 transition-all duration-300 border-l border-orange-700/30 pl-3 sm:pl-6 h-full flex items-center active:scale-95"
             >
-              <Tooltip text="سيارات بسائق" position="bottom">
+              <Tooltip text={t("navbar.withDriver")} position="bottom">
                 <Person className="md:hidden ml-2" style={{ fontSize: 20 }} />
-                <span className="hidden md:inline">سيارات بسائق</span>
+                <span className="hidden md:inline">
+                  {t("navbar.withDriver")}
+                </span>
               </Tooltip>
             </Link>
             <Link
               href="/policy"
               className="hover:text-orange-200 transition-all duration-300 border-l border-orange-700/30 pl-3 sm:pl-6 h-full flex items-center active:scale-95"
             >
-              <Tooltip text="سياسة الاسترجاع" position="bottom">
-                <EventNote className="md:hidden ml-2" style={{ fontSize: 20 }} />
-                <span className="hidden md:inline">
-                  سياسة الاسترجاع والتبديل
-                </span>
+              <Tooltip text={t("navbar.policy")} position="bottom">
+                <EventNote
+                  className="md:hidden ml-2"
+                  style={{ fontSize: 20 }}
+                />
+                <span className="hidden md:inline">{t("navbar.policy")}</span>
               </Tooltip>
             </Link>
           </div>
@@ -100,8 +116,8 @@ const Navbar = () => {
           {/* Left Side: Language (Hidden on mobile to save space) */}
           <div className="hidden sm:flex items-center gap-4">
             <Select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
+              value={i18n.language}
+              onChange={(e) => i18n.changeLanguage(e.target.value)}
               variant="standard"
               disableUnderline
               sx={{
@@ -168,32 +184,32 @@ const Navbar = () => {
                 className="text-primary hover:text-primary-hover font-extrabold text-sm lg:text-base transition-colors flex items-center gap-1"
               >
                 <Home fontSize="small" />
-                الرئيسية
+                {t("navbar.home")}
               </Link>
               <Link
                 href="/cars"
                 className="text-primary hover:text-primary-hover font-extrabold text-sm lg:text-base transition-colors flex items-center gap-1 border-l border-white/10 pl-6"
               >
                 <DirectionsCar fontSize="small" />
-                السيارات
+                {t("navbar.cars")}
               </Link>
               <Link
                 href="/jeddah"
                 className="text-primary hover:text-primary-hover font-extrabold text-sm lg:text-base transition-colors"
               >
-                حجز مدينة جدة
+                {t("navbar.jeddah")}
               </Link>
               <Link
                 href="/riyadh"
                 className="text-primary hover:text-primary-hover font-extrabold text-sm lg:text-base transition-colors"
               >
-                حجز في مدينة الرياض
+                {t("navbar.riyadh")}
               </Link>
               <Link
                 href="/riyadh"
                 className="text-primary hover:text-primary-hover font-extrabold text-sm lg:text-base transition-colors"
               >
-                حجز المنطقة الشرقية
+                {t("navbar.sharqiya")}
               </Link>
             </nav>
 
@@ -230,7 +246,11 @@ const Navbar = () => {
                             : "/dashboard/user"
                         }
                         className="flex items-center justify-center gap-2 text-primary hover:text-primary-hover transition-colors active:scale-95 min-h-[44px] min-w-[44px]"
-                        title={user.role === "admin" ? "لوحة الإدارة" : "حسابي"}
+                        title={
+                          user.role === "admin"
+                            ? t("navbar.adminPanel")
+                            : t("navbar.myAccount")
+                        }
                       >
                         {user.role === "admin" ? (
                           <AdminPanelSettings className="text-orange-500" />
@@ -238,17 +258,19 @@ const Navbar = () => {
                           <Person />
                         )}
                         <span className="hidden lg:inline text-sm font-extrabold">
-                          {user.role === "admin" ? "لوحة الإدارة" : "حسابي"}
+                          {user.role === "admin"
+                            ? t("navbar.adminPanel")
+                            : t("navbar.myAccount")}
                         </span>
                       </Link>
                       <button
                         onClick={logout}
                         className="flex items-center justify-center text-red-500 hover:text-red-400 transition-colors active:scale-95 min-h-[44px] min-w-[44px]"
-                        title="تسجيل الخروج"
+                        title={t("navbar.logout")}
                       >
                         <Logout fontSize="small" />
                         <span className="hidden lg:inline text-sm font-extrabold mr-1">
-                          خروج
+                          {t("navbar.logout")}
                         </span>
                       </button>
                     </div>
@@ -256,11 +278,11 @@ const Navbar = () => {
                     <Link
                       href="/auth/login"
                       className="flex items-center justify-center gap-2 text-primary hover:text-primary-hover transition-colors border-r border-white/10 pr-2 sm:pr-4 active:scale-95 min-h-[44px] min-w-[44px]"
-                      title="تسجيل الدخول"
+                      title={t("navbar.login")}
                     >
                       <Person />
                       <span className="hidden lg:inline text-sm font-extrabold">
-                        تسجيل الدخول
+                        {t("navbar.login")}
                       </span>
                     </Link>
                   )}
@@ -290,7 +312,9 @@ const Navbar = () => {
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-white/10">
           <div className="flex items-center gap-2">
-            <span className="text-xl font-black text-white">القائمة</span>
+            <span className="text-xl font-black text-white">
+              {t("navbar.menu")}
+            </span>
           </div>
           <button
             onClick={() => setMobileMenuOpen(false)}
@@ -309,7 +333,7 @@ const Navbar = () => {
               className="text-lg font-bold text-white hover:text-primary transition-colors flex items-center gap-3 p-2 rounded-xl hover:bg-white/5"
             >
               <Home className="text-primary" />
-              الرئيسية
+              {t("navbar.home")}
             </Link>
             <Link
               href="/cars"
@@ -317,7 +341,7 @@ const Navbar = () => {
               className="text-lg font-bold text-white hover:text-primary transition-colors flex items-center gap-3 p-2 rounded-xl hover:bg-white/5"
             >
               <DirectionsCar className="text-primary" />
-              السيارات
+              {t("navbar.cars")}
             </Link>
             <Link
               href="/jeddah"
@@ -325,7 +349,7 @@ const Navbar = () => {
               className="text-lg font-bold text-white hover:text-primary transition-colors flex items-center gap-3 p-2 rounded-xl hover:bg-white/5"
             >
               <LocationOn className="text-primary" />
-              حجز مدينة جدة
+              {t("navbar.jeddah")}
             </Link>
             <Link
               href="/riyadh"
@@ -333,7 +357,7 @@ const Navbar = () => {
               className="text-lg font-bold text-white hover:text-primary transition-colors flex items-center gap-3 p-2 rounded-xl hover:bg-white/5"
             >
               <LocationOn className="text-primary" />
-              حجز في مدينة الرياض
+              {t("navbar.riyadh")}
             </Link>
             <Link
               href="/riyadh"
@@ -341,7 +365,7 @@ const Navbar = () => {
               className="text-lg font-bold text-white hover:text-primary transition-colors flex items-center gap-3 p-2 rounded-xl hover:bg-white/5"
             >
               <LocationOn className="text-primary" />
-              حجز المنطقة الشرقية
+              {t("navbar.sharqiya")}
             </Link>
           </nav>
 
@@ -350,11 +374,11 @@ const Navbar = () => {
           {/* Mobile Language Selector */}
           <div className="flex flex-col gap-3">
             <span className="text-sm font-bold text-gray-400">
-              اللغة / Language
+              {t("navbar.language")}
             </span>
             <Select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
+              value={i18n.language}
+              onChange={(e) => i18n.changeLanguage(e.target.value)}
               variant="outlined" // Outlined is better for mobile touch targets
               fullWidth
               sx={{

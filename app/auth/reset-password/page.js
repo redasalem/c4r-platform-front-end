@@ -14,8 +14,10 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff, Lock } from "@mui/icons-material";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 function ResetPasswordForm() {
+  const { t, i18n } = useTranslation("common");
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const router = useRouter();
@@ -28,11 +30,11 @@ function ResetPasswordForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error("كلمتا المرور غير متطابقتين");
+      toast.error(t("auth.passwordMismatch"));
       return;
     }
     if (!token) {
-      toast.error("رابط غير صالح");
+      toast.error(t("auth.tokenMissing")); // Or simplified generic error
       return;
     }
 
@@ -40,12 +42,14 @@ function ResetPasswordForm() {
     try {
       const data = await authService.resetPassword(token, password);
       if (data.success) {
-        toast.success("تم تغيير كلمة المرور بنجاح");
+        toast.success(t("auth.passwordChanged"));
         router.push("/auth/login");
       }
     } catch (error) {
       console.error("Reset password error:", error);
-      toast.error(error.response?.data?.message || "فشل تغيير كلمة المرور");
+      toast.error(
+        error.response?.data?.message || t("auth.passwordChangeError"),
+      );
     } finally {
       setLoading(false);
     }
@@ -54,18 +58,18 @@ function ResetPasswordForm() {
   if (!token) {
     return (
       <div className="text-center p-4">
-        <p className="text-red-500 font-bold mb-4">رمز التحقق مفقود!</p>
-        <Link href="/auth/login">عودة لصفحة الدخول</Link>
+        <p className="text-red-500 font-bold mb-4">{t("auth.tokenMissing")}</p>
+        <Link href="/auth/login">{t("auth.returnToLogin")}</Link>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6" dir="rtl">
+    <form onSubmit={handleSubmit} className="space-y-6" dir={i18n.dir()}>
       <div>
         <TextField
           fullWidth
-          label="كلمة المرور الجديدة"
+          label={t("auth.newPassword")}
           variant="outlined"
           type={showPassword ? "text" : "password"}
           value={password}
@@ -114,7 +118,7 @@ function ResetPasswordForm() {
       <div>
         <TextField
           fullWidth
-          label="تأكيد كلمة المرور الجديدة"
+          label={t("auth.confirmNewPassword")}
           variant="outlined"
           type={showPassword ? "text" : "password"}
           value={confirmPassword}
@@ -163,7 +167,7 @@ function ResetPasswordForm() {
         {loading ? (
           <CircularProgress size={26} color="inherit" />
         ) : (
-          "حفظ التغييرات"
+          t("auth.saveChanges")
         )}
       </Button>
     </form>
@@ -171,6 +175,7 @@ function ResetPasswordForm() {
 }
 
 export default function ResetPasswordPage() {
+  const { t } = useTranslation("common");
   return (
     <div className="bg-white/5 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/10">
       <div className="p-8 md:p-12">
@@ -186,10 +191,10 @@ export default function ResetPasswordPage() {
             />
           </Link>
           <h1 className="text-3xl font-black text-white tracking-tight">
-            تعيين كلمة مرور جديدة
+            {t("auth.resetTitle")}
           </h1>
           <p className="text-slate-400 mt-2 text-sm font-bold">
-            أدخل كلمة المرور الجديدة لحسابك لتأمين دخولك بفخامة
+            {t("auth.resetSubtitle")}
           </p>
         </div>
         <Suspense
@@ -207,7 +212,7 @@ export default function ResetPasswordPage() {
             href="/auth/login"
             className="text-slate-500 hover:text-slate-300 text-xs font-black uppercase tracking-widest transition-colors"
           >
-            العودة لصفحة الدخول
+            {t("auth.returnToLogin")}
           </Link>
         </div>
       </div>

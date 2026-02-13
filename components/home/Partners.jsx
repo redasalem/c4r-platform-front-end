@@ -2,8 +2,10 @@
 import React from "react";
 import Image from "next/image";
 import Marquee from "react-fast-marquee";
+import { useTranslation } from "react-i18next";
 
 const Partners = () => {
+  const { t, i18n } = useTranslation("common");
   const partners = [
     { id: 1, img: "/images/p-1.jpeg", name: "Partner 1" },
     { id: 2, img: "/images/p-2.jpeg", name: "Partner 2" },
@@ -15,12 +17,13 @@ const Partners = () => {
   return (
     <section
       className="py-24 bg-transparent relative overflow-hidden"
-      dir="ltr"
+      dir={i18n.dir()}
     >
-      <div className="container mx-auto px-6 mb-16" dir="rtl">
+      <div className="container mx-auto px-6 mb-16" dir={i18n.dir()}>
         <div className="text-center">
           <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tighter">
-            شركاء <span className="text-primary">النجاح</span>
+            {t("partners.titlePart1")}{" "}
+            <span className="text-primary">{t("partners.titlePart2")}</span>
           </h2>
           <div className="w-24 h-2 bg-linear-to-r from-primary to-transparent mx-auto rounded-full"></div>
         </div>
@@ -28,8 +31,7 @@ const Partners = () => {
 
       <div className="relative group overflow-hidden">
         {/* Edge Gradients - Unified with Midnight */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 md:w-64 z-10 bg-linear-to-r from-midnight via-midnight/80 to-transparent pointer-events-none"></div>
-        <div className="absolute right-0 top-0 bottom-0 w-32 md:w-64 z-10 bg-linear-to-l from-midnight via-midnight/80 to-transparent pointer-events-none"></div>
+
 
         <Marquee
           gradient={false}

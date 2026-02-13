@@ -29,12 +29,14 @@ const regionNames = {
   jeddah: "جدة",
   eastern: "المنطقة الشرقية",
 };
-import Image from "next/image";
 import Link from "next/link";
-import { Avatar, Rating } from "@mui/material"; // Added Avatar, Rating
-import { reviewService } from "@/services/api"; // Added reviewService
+import Image from "next/image";
+import { Avatar, Rating } from "@mui/material";
+import { reviewService } from "@/services/api";
+import { useTranslation } from "react-i18next";
 
 export default function CarDetailsPage() {
+  const { t, i18n } = useTranslation("common");
   const params = useParams();
   const id = params.id;
 
@@ -63,9 +65,9 @@ export default function CarDetailsPage() {
   if (!car) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center">
-        <h2 className="text-2xl font-bold mb-4">السيارة غير موجودة</h2>
+        <h2 className="text-2xl font-bold mb-4">{t("carDetails.notFound")}</h2>
         <Link href="/" className="text-orange-500">
-          العودة للرئيسية
+          {t("carDetails.backHome")}
         </Link>
       </div>
     );
@@ -81,7 +83,7 @@ export default function CarDetailsPage() {
   return (
     <div
       className="min-h-screen bg-[#020617] relative overflow-hidden pt-24 pb-20"
-      dir="rtl"
+      dir={i18n.dir()}
     >
       {/* Background Decorative elements */}
       <div className="absolute top-0 right-0 w-[50%] h-[500px] bg-primary/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 opacity-50" />
@@ -94,14 +96,14 @@ export default function CarDetailsPage() {
             <div className="relative h-[280px] sm:h-[350px] md:h-[400px] lg:h-[500px] rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/10 group">
               <Image
                 src={imageUrl}
-                alt={car.name || "صورة السيارة"}
+                alt={car.name || t("carCard.fallbackImage")}
                 fill
                 className="object-cover"
                 priority
               />
               <div className="absolute top-6 right-6">
                 <Chip
-                  label={`موديل ${car.year || "2024"}`}
+                  label={`${t("carDetails.model")} ${car.year || "2024"}`}
                   sx={{
                     bgcolor: "rgba(0,0,0,0.6)",
                     color: "white",
@@ -114,8 +116,10 @@ export default function CarDetailsPage() {
               {car.region && (
                 <div className="absolute top-6 left-6">
                   <Chip
-                    icon={<LocationOn style={{ color: "white", fontSize: 18 }} />}
-                    label={regionNames[car.region] || car.region}
+                    icon={
+                      <LocationOn style={{ color: "white", fontSize: 18 }} />
+                    }
+                    label={t(`regions.${car.region}`) || car.region}
                     sx={{
                       bgcolor: "#f97316",
                       color: "white",
@@ -169,7 +173,8 @@ export default function CarDetailsPage() {
                     />
                   </div>
                   <span className="text-slate-400 text-xs font-bold font-mono tracking-widest uppercase">
-                    ({car.averageRating || 5}/5) • {reviewsCount} تقييم
+                    ({car.averageRating || 5}/5) • {reviewsCount}{" "}
+                    {t("carDetails.reviewsCount")}
                   </span>
                 </div>
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 sm:mb-3 tracking-tighter">
@@ -184,8 +189,8 @@ export default function CarDetailsPage() {
                     <Chip
                       label={
                         car.category === "with_driver"
-                          ? "سيارة بسائق"
-                          : "قسم الشركات"
+                          ? t("departments.driverTitle")
+                          : t("departments.corporateTitle")
                       }
                       size="small"
                       sx={{
@@ -206,14 +211,14 @@ export default function CarDetailsPage() {
                 <div className="absolute top-0 right-0 w-2 h-full bg-primary/20" />
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-slate-400 font-black text-sm uppercase tracking-widest">
-                    سعر الإيجار اليومي
+                    {t("carDetails.pricePerDay")}
                   </span>
                   <div className="text-left">
                     <span className="text-2xl sm:text-3xl md:text-4xl font-black text-primary">
                       {car.pricePerDay}
                     </span>
                     <span className="text-slate-500 font-black mr-2 text-sm uppercase">
-                      ريال
+                      {t("carDetails.currency")}
                     </span>
                   </div>
                 </div>
@@ -222,24 +227,24 @@ export default function CarDetailsPage() {
                 />
                 <div className="flex items-center gap-2 text-green-600 font-bold text-sm">
                   <EventAvailable fontSize="small" />
-                  <span>متاح للحجز الفوري</span>
+                  <span>{t("carDetails.available")}</span>
                 </div>
               </div>
 
               <div className="space-y-6 flex-grow">
                 <div>
                   <h3 className="font-black text-white mb-5 uppercase tracking-widest text-sm">
-                    المواصفات الأساسية:
+                    {t("carDetails.specsTitle")}
                   </h3>
                   <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
                     <div className="flex items-center gap-2 sm:gap-3 md:gap-4 p-2 sm:p-3 md:p-4 bg-white/5 backdrop-blur-lg rounded-lg sm:rounded-xl md:rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
                       <Settings className="text-orange-500" />
                       <div>
                         <p className="text-[10px] text-slate-500 font-black uppercase tracking-tighter mb-1">
-                          ناقل الحركة
+                          {t("carDetails.transmission")}
                         </p>
                         <p className="text-xs font-black text-white">
-                          أوتوماتيك
+                          {t("carDetails.transmissionValue")}
                         </p>
                       </div>
                     </div>
@@ -247,10 +252,10 @@ export default function CarDetailsPage() {
                       <LocalGasStation className="text-primary" />
                       <div>
                         <p className="text-[10px] text-slate-500 font-black uppercase tracking-tighter mb-1">
-                          نوع الوقود
+                          {t("carDetails.fuel")}
                         </p>
                         <p className="text-xs font-black text-white">
-                          بنزين 95
+                          {t("carDetails.fuelValue")}
                         </p>
                       </div>
                     </div>
@@ -258,19 +263,21 @@ export default function CarDetailsPage() {
                       <AirlineSeatReclineExtra className="text-primary" />
                       <div>
                         <p className="text-[10px] text-slate-500 font-black uppercase tracking-tighter mb-1">
-                          الركاب
+                          {t("carDetails.passengers")}
                         </p>
-                        <p className="text-xs font-black text-white">5 أشخاص</p>
+                        <p className="text-xs font-black text-white">
+                          5 {t("carDetails.passengersValue")}
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4 p-4 bg-white/5 backdrop-blur-lg rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
                       <DirectionsCar className="text-primary" />
                       <div>
                         <p className="text-[10px] text-slate-500 font-black uppercase tracking-tighter mb-1">
-                          اللون
+                          {t("carDetails.color")}
                         </p>
                         <p className="text-xs font-black text-white">
-                          أسود ملكي
+                          {t("carDetails.colorValue")}
                         </p>
                       </div>
                     </div>
@@ -279,26 +286,23 @@ export default function CarDetailsPage() {
 
                 <div className="bg-white/5 backdrop-blur-xl p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/5">
                   <h3 className="font-black text-white mb-2 sm:mb-3 uppercase tracking-widest text-xs sm:text-sm">
-                    الوصف:
+                    {t("carDetails.descTitle")}
                   </h3>
                   <p className="text-slate-400 leading-relaxed text-xs sm:text-sm font-bold">
-                    استمتع بتجربة قيادة استثنائية مع {car.name}، حيث تتجسد
-                    الفخامة والقوة في كل تفصيل. صُممت هذه المركبة لتبهرك بأدائها
-                    المتطور وتصميمها الراقي الذي يخطف الأنظار، مما يجعلها الخيار
-                    الأمثل لمن يبحث عن التميز والرفاهية في كل رحلة.
+                    {t("hero.description")}
                   </p>
                 </div>
 
                 <div className="bg-white/5 backdrop-blur-xl p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/5">
                   <h3 className="font-black text-white mb-3 sm:mb-4 uppercase tracking-widest text-xs sm:text-sm">
-                    ما يتضمنه الإيجار:
+                    {t("carDetails.includesTitle")}
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                     {[
-                      "تأمين شامل فاخر",
-                      "مساعدة على الطريق 24/7",
-                      "صيانة دورية دورية",
-                      "توصيل مجاني (اختياري)",
+                      t("carDetails.includes.insurance"),
+                      t("carDetails.includes.support"),
+                      t("carDetails.includes.maintenance"),
+                      t("carDetails.includes.delivery"),
                     ].map((item, idx) => (
                       <div
                         key={idx}
@@ -321,9 +325,11 @@ export default function CarDetailsPage() {
                   className="w-full bg-primary hover:bg-primary-hover text-white py-3 sm:py-4 md:py-5 rounded-xl sm:rounded-2xl md:rounded-[2rem] font-black text-base sm:text-lg md:text-xl transition-all shadow-[0_20px_40px_-10px_rgba(249,115,22,0.4)] flex items-center justify-center gap-2 sm:gap-4 group hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <span className="tracking-tighter">
-                    احجز هذه السيارة الآن
+                    {t("carDetails.bookButton")}
                   </span>
-                  <ArrowBack className="transition-transform group-hover:-translate-x-2" />
+                  <ArrowBack
+                    className={`transition-transform ${i18n.dir() === "rtl" ? "group-hover:-translate-x-2" : "group-hover:translate-x-2 rotate-180"}`}
+                  />
                 </Link>
               </div>
             </div>
@@ -334,7 +340,7 @@ export default function CarDetailsPage() {
         <div className="mt-12 sm:mt-16 md:mt-24 border-t border-white/10 pt-8 sm:pt-12 md:pt-16">
           <div className="flex items-center gap-2 sm:gap-4 mb-6 sm:mb-8 md:mb-12">
             <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tighter">
-              تجارب العملاء
+              {t("carDetails.reviewsTitle")}
             </h2>
             <Chip
               label={reviewsCount}
@@ -355,10 +361,10 @@ export default function CarDetailsPage() {
                 sx={{ fontSize: 80, color: "rgba(255,255,255,0.05)", mb: 4 }}
               />
               <p className="text-2xl font-black text-slate-500 mb-2">
-                لا توجد تقييمات لهذه السيارة بعد.
+                {t("carDetails.noReviews")}
               </p>
               <p className="text-lg text-slate-600 font-bold">
-                كن أول من يحجز ويقيم هذه السيارة الراقية!
+                {t("carDetails.beFirst")}
               </p>
             </div>
           ) : (
@@ -368,7 +374,6 @@ export default function CarDetailsPage() {
                   key={review._id}
                   className="bg-white/5 backdrop-blur-2xl p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] border border-white/10 hover:bg-white/10 transition-all duration-500 group relative overflow-hidden shadow-2xl"
                 >
-                  {/* Decorative element */}
                   <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
                   <div className="flex items-center gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 relative z-10">
@@ -393,7 +398,7 @@ export default function CarDetailsPage() {
                       </h4>
                       <p className="text-[9px] sm:text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] mt-1">
                         {new Date(review.createdAt).toLocaleDateString(
-                          "ar-EG",
+                          i18n.language === "en" ? "en-US" : "ar-EG",
                           { year: "numeric", month: "long", day: "numeric" },
                         )}
                       </p>
@@ -419,8 +424,7 @@ export default function CarDetailsPage() {
                     <span className="text-primary text-4xl absolute -top-2 right-4 opacity-50 font-serif">
                       "
                     </span>
-                    {review.comment ||
-                      "تجربة سفر فاخرة بكل المقاييس، تعامل محترف جداً وسرعة في الإجراءات."}
+                    {review.comment}
                     <span className="text-primary text-4xl absolute -bottom-6 left-4 opacity-50 font-serif">
                       "
                     </span>

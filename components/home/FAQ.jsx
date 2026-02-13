@@ -7,8 +7,10 @@ import {
   Typography,
 } from "@mui/material";
 import { ExpandMore, HelpOutline } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
 const FAQ = () => {
+  const { t, i18n } = useTranslation("common");
   const [expanded, setExpanded] = useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -18,56 +20,48 @@ const FAQ = () => {
   const faqs = [
     {
       id: "panel1",
-      question: "كم العمر المسموح لاستئجار سيارة؟",
-      answer:
-        "الحد الأدنى للعمر هو 21 عاماً. قد تنطبق رسوم إضافية للسائقين الشباب (أقل من 25 عاماً) حسب نوع السيارة.",
+      question: t("faq.q1.question"),
+      answer: t("faq.q1.answer"),
     },
     {
       id: "panel2",
-      question: "هل يوجد خدمة توصيل للمطار؟",
-      answer:
-        "نعم، نوفر خدمة تسليم واستلام السيارة في جميع المطارات الرئيسية بالمملكة (الرياض، جدة، الدمام) على مدار 24 ساعة.",
+      question: t("faq.q2.question"),
+      answer: t("faq.q2.answer"),
     },
     {
       id: "panel3",
-      question: "ما هو نوع التأمين المتوفر؟",
-      answer:
-        "جميع سياراتنا مؤمنة تأميناً شاملاً أساسياً. يمكنك ترقية التأمين ليشمل التغطية الذهبية (إعفاء كامل من التحمل) برسوم إضافية.",
+      question: t("faq.q3.question"),
+      answer: t("faq.q3.answer"),
     },
     {
       id: "panel4",
-      question: "أين تقع فروع C4R؟",
-      answer:
-        "نتواجد في المناطق الرئيسية: الرياض، جدة، والمنطقة الشرقية. يمكنك الاطلاع على الخريطة في صفحة اتصل بنا لمعرفة أقرب فرع.",
+      question: t("faq.q4.question"),
+      answer: t("faq.q4.answer"),
     },
     {
       id: "panel5",
-      question: "هل مبلغ التأمين مسترد؟",
-      answer:
-        "نعم، يتم استرداد مبلغ التأمين (الوديعة) بالكامل خلال 14 يوم عمل بعد تسليم السيارة والتأكد من خلوها من المخالفات والأضرار.",
+      question: t("faq.q5.question"),
+      answer: t("faq.q5.answer"),
     },
     {
       id: "panel6",
-      question: "ما هي الوثائق المطلوبة للاستئجار؟",
-      answer:
-        "الهوية الوطنية/الإقامة سارية المفعول، ورخصة قيادة سارية. للزوار: جواز السفر ورخصة قيادة دولية معتمدة.",
+      question: t("faq.q6.question"),
+      answer: t("faq.q6.answer"),
     },
     {
       id: "panel7",
-      question: "هل يمكنني توثيق حالة السيارة قبل الاستلام؟",
-      answer:
-        "بالتأكيد! ننصح دائماً بتصوير السيارة فيديو شامل عند الاستلام وتدوين أي ملاحظات في العقد الإلكتروني لضمان حقك.",
+      question: t("faq.q7.question"),
+      answer: t("faq.q7.answer"),
     },
     {
       id: "panel8",
-      question: "ما هي طرق الدفع المقبولة؟",
-      answer:
-        "نقبل الدفع عبر مدى، البطاقات الائتمانية (فيزا/ماستر كارد)، أبل باي، بالإضافة إلى خدمات التقسيط مثل تابي وتمارا.",
+      question: t("faq.q8.question"),
+      answer: t("faq.q8.answer"),
     },
   ];
 
   return (
-    <section className="py-24 bg-transparent relative" dir="rtl">
+    <section className="py-24 bg-transparent relative" dir={i18n.dir()}>
       {/* Background Decorative Asset */}
       <div className="absolute top-0 right-1/4 w-[300px] h-[300px] bg-primary/5 rounded-full blur-[80px] pointer-events-none" />
 
@@ -79,11 +73,12 @@ const FAQ = () => {
               <HelpOutline className="text-primary" sx={{ fontSize: 32 }} />
             </div>
             <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tighter">
-              الأسئلة <span className="text-primary">الشائعة</span>
+              {t("faq.titlePart1")}{" "}
+              <span className="text-primary">{t("faq.titlePart2")}</span>
             </h2>
           </div>
           <p className="text-slate-400 font-bold max-w-xl mx-auto">
-            كل ما تحتاج لمعرفته حول خدمات C4R Platform في مكان واحد.
+            {t("faq.description")}
           </p>
         </div>
 

@@ -3,20 +3,22 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Business, DirectionsCar, ArrowBack, Star } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
 const Departments = () => {
+  const { t, i18n } = useTranslation("common");
   return (
     <section
       className="py-24 bg-transparent relative overflow-hidden"
-      dir="rtl"
+      dir={i18n.dir()}
     >
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         {/* Section Title */}
         <div className="text-center mb-12 md:mb-20">
           <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-4 md:mb-6 tracking-tighter">
-            ارتقِ{" "}
+            {t("departments.titlePart1")}{" "}
             <span className="text-transparent bg-clip-text bg-linear-to-r from-accent to-primary">
-              بتجربتك
+              {t("departments.titlePart2")}
             </span>
           </h2>
           <div className="w-16 md:w-24 h-1.5 md:h-2 bg-linear-to-r from-primary to-transparent mx-auto rounded-full"></div>
@@ -58,16 +60,15 @@ const Departments = () => {
 
               <div>
                 <h3 className="text-2xl sm:text-3xl md:text-5xl font-black mb-2 text-transparent bg-clip-text bg-linear-to-r from-accent to-primary transition-all duration-500">
-                  سيارة مع سائق
+                  {t("departments.driverTitle")}
                 </h3>
                 <p className="text-slate-200 text-sm sm:text-lg md:text-xl mb-4 max-w-sm leading-relaxed font-bold opacity-90 line-clamp-2 md:line-clamp-none">
-                  استمتع براحة تامة مع طاقم من السائقين المحترفين المدربين على
-                  أعلى المستويات.
+                  {t("departments.driverDesc")}
                 </p>
 
                 <div className="flex items-center gap-3 text-white font-black group-hover:gap-5 transition-all duration-300">
                   <span className="text-sm sm:text-xl group-hover:text-primary">
-                    اكتشف الخدمة
+                    {t("departments.driverAction")}
                   </span>
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-primary transition-colors">
                     <ArrowBack className="transform scale-75 sm:scale-100" />
@@ -105,22 +106,21 @@ const Departments = () => {
                   />
                 </div>
                 <div className="px-3 md:px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-[9px] md:text-xs font-black text-white uppercase tracking-widest">
-                  قطاع الأعمال
+                  {t("departments.corporateBadge")}
                 </div>
               </div>
 
               <div>
                 <h3 className="text-2xl sm:text-3xl md:text-5xl font-black mb-2 text-transparent bg-clip-text bg-linear-to-r from-accent to-primary transition-all duration-500">
-                  قسم الشركات
+                  {t("departments.corporateTitle")}
                 </h3>
                 <p className="text-slate-300 text-sm sm:text-lg md:text-xl mb-4 max-w-sm leading-relaxed font-bold opacity-90 line-clamp-2 md:line-clamp-none">
-                  حلول سيارات متكاملة وعقود مرنة مصممة خصيصاً لتناسب حجم وتطلعات
-                  أعمالك.
+                  {t("departments.corporateDesc")}
                 </p>
 
                 <div className="flex items-center gap-3 text-white font-black group-hover:gap-5 transition-all duration-300">
                   <span className="text-sm sm:text-xl group-hover:text-primary">
-                    شراكة الأعمال
+                    {t("departments.corporateAction")}
                   </span>
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-primary transition-colors">
                     <ArrowBack className="transform scale-75 sm:scale-100" />

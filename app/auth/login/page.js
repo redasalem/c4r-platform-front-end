@@ -14,8 +14,10 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
 export default function LoginPage() {
+  const { t, i18n } = useTranslation("common");
   const { login, user } = useAuth();
   const router = useRouter();
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -50,18 +52,22 @@ export default function LoginPage() {
             />
           </Link>
           <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-            مرحباً بك مجدداً
+            {t("auth.welcomeTitle")}
           </h1>
           <p className="text-slate-400 mt-2 text-[13px] md:text-sm font-bold">
-            سجل دخولك لإدارة حجوزاتك بفخامة
+            {t("auth.welcomeSubtitle")}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6" dir="rtl">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4 sm:space-y-6"
+          dir={i18n.dir()}
+        >
           <div>
             <TextField
               fullWidth
-              label="البريد الإلكتروني"
+              label={t("auth.email")}
               variant="outlined"
               type="email"
               value={formData.email}
@@ -103,7 +109,7 @@ export default function LoginPage() {
           <div>
             <TextField
               fullWidth
-              label="كلمة المرور"
+              label={t("auth.password")}
               variant="outlined"
               type={showPassword ? "text" : "password"}
               value={formData.password}
@@ -158,7 +164,7 @@ export default function LoginPage() {
               href="/auth/forgot-password"
               className="text-primary hover:text-accent font-bold transition-colors"
             >
-              نسيت كلمة المرور؟
+              {t("auth.forgotPassword")}
             </Link>
           </div>
 
@@ -182,19 +188,19 @@ export default function LoginPage() {
             {loading ? (
               <CircularProgress size={26} sx={{ color: "#3b82f6" }} />
             ) : (
-              "تسجيل الدخول"
+              t("auth.loginButton")
             )}
           </Button>
         </form>
 
         <div className="mt-6 sm:mt-8 md:mt-10 text-center space-y-4 sm:space-y-6">
           <p className="text-slate-400 text-sm font-bold">
-            ليس لديك حساب؟{" "}
+            {t("auth.noAccount")}{" "}
             <Link
               href="/auth/register"
               className="text-primary hover:text-accent font-black transition-colors"
             >
-              أنشئ حساب جديد
+              {t("auth.createAccount")}
             </Link>
           </p>
 
@@ -203,7 +209,7 @@ export default function LoginPage() {
               href="/"
               className="text-slate-500 hover:text-slate-300 text-xs font-black uppercase tracking-widest transition-colors"
             >
-              العودة للصفحة الرئيسية
+              {t("auth.backToHome")}
             </Link>
           </div>
         </div>

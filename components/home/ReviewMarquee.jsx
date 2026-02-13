@@ -6,8 +6,10 @@ import { Avatar, Rating, Skeleton } from "@mui/material";
 import Marquee from "react-fast-marquee";
 import { Star, DirectionsCar } from "@mui/icons-material";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 export default function ReviewMarquee() {
+  const { t, i18n } = useTranslation("common");
   const { data, isLoading } = useQuery({
     queryKey: ["recentReviews"],
     queryFn: () => reviewService.getRecent(),
@@ -17,7 +19,7 @@ export default function ReviewMarquee() {
 
   if (isLoading) {
     return (
-      <div className="py-8 bg-midnight overflow-hidden">
+      <div className="py-8 overflow-hidden">
         <div className="flex gap-6 overflow-hidden justify-center px-4">
           {[1, 2, 3, 4].map((i) => (
             <Skeleton
@@ -38,24 +40,20 @@ export default function ReviewMarquee() {
   return (
     <section
       className="py-24 bg-transparent relative overflow-hidden w-full max-w-full"
-      dir="rtl"
+      dir={i18n.dir()}
     >
       <div className="container mx-auto px-4 md:px-6 relative z-10 overflow-hidden">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-4 md:mb-6 leading-tight tracking-tighter">
-            تجارب{" "}
+            {t("reviews.titlePart1")}{" "}
             <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
-              عملاؤنا
+              {t("reviews.titlePart2")}
             </span>
           </h2>
           <div className="w-16 md:w-24 h-1.5 md:h-2 bg-linear-to-r from-primary to-transparent mx-auto rounded-full"></div>
         </div>
 
         <div className="relative w-full overflow-hidden no-scrollbar">
-          {/* Edge Gradients - Unified with Midnight */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 md:w-64 z-20 bg-linear-to-r from-midnight via-midnight/80 to-transparent pointer-events-none"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-32 md:w-64 z-20 bg-linear-to-l from-midnight via-midnight/80 to-transparent pointer-events-none"></div>
-
           <Marquee gradient={false} speed={35} pauseOnHover className="py-10">
             {reviews.map((review, index) => (
               <div
@@ -82,7 +80,7 @@ export default function ReviewMarquee() {
                       {review.user?.name}
                     </h4>
                     <p className="text-[9px] sm:text-[10px] text-slate-400 font-black uppercase tracking-widest">
-                      عميل متميز
+                      {t("reviews.badge")}
                     </p>
                   </div>
                 </div>
@@ -109,7 +107,7 @@ export default function ReviewMarquee() {
                   <div className="flex items-center gap-2 text-slate-500">
                     <DirectionsCar sx={{ fontSize: 16 }} />
                     <span className="text-[10px] font-black uppercase tracking-widest">
-                      {review.car?.name || "سيارة مميزة"}
+                      {review.car?.name || t("reviews.carFallback")}
                     </span>
                   </div>
                 </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import {
   AssignmentReturn,
@@ -12,45 +13,37 @@ import {
 } from "@mui/icons-material";
 
 const PolicyPage = () => {
-  const breadcrumbItems = [{ label: "سياسة الاسترجاع والتبديل" }];
+  const { t, i18n } = useTranslation("common");
+  const breadcrumbItems = [{ label: t("policy.pageTitle") }];
 
   const categories = [
     {
-      title: "سياسة الإلغاء قبل الاستلام",
+      title: t("policy.cancelTitle"),
       icon: <AssignmentReturn />,
-      items: [
-        "يمكنك إلغاء الحجز قبل موعد الاستلام بـ 24 ساعة دون رسوم.",
-        "في حال الإلغاء قبل أقل من 24 ساعة من موعد الاستلام، قد تُطبق رسوم إلغاء تعادل قيمة يوم واحد (حسب سياسة شركة التأجير).",
-      ],
+      items: [t("policy.cancelItem1"), t("policy.cancelItem2")],
     },
     {
-      title: "سياسة التبديل",
+      title: t("policy.exchangeTitle"),
       icon: <CheckCircle />,
-      items: [
-        "يمكن تبديل السيارة المحجوزة في حال وجود خلل فني أو عدم مطابقتها للمواصفات المطلوبة.",
-        "التبديل يعتمد على توفر السيارات المماثلة في مخزون شركة التأجير وقت الطلب.",
-      ],
+      items: [t("policy.exchangeItem1"), t("policy.exchangeItem2")],
     },
     {
-      title: "استرجاع المبالغ المالية",
+      title: t("policy.refundTitle"),
       icon: <PriceCheck />,
-      items: [
-        "يتم استرجاع المبالغ المالية عبر نفس طريقة الدفع الأصلية.",
-        "تستغرق عملية الاسترجاع البنكي من 7 إلى 14 يوم عمل حسب إجراءات المصرف.",
-      ],
+      items: [t("policy.refundItem1"), t("policy.refundItem2")],
     },
     {
-      title: "الحالات التي لا يشملها الاسترجاع",
+      title: t("policy.exceptionsTitle"),
       icon: <Warning />,
-      items: [
-        "لا يمكن استرجاع قيمة الأيام المتبقية في حال تسليم السيارة قبل الموعد المحدد في العقد (إلا بموافقة استثنائية من مكتب التأجير).",
-        "المخالفات المرورية المسجلة أثناء فترة التأجير غير قابلة للاسترجاع وتخصم من مبلغ الإيداع إن وُجد.",
-      ],
+      items: [t("policy.exceptionsItem1"), t("policy.exceptionsItem2")],
     },
   ];
 
   return (
-    <div className="min-h-screen bg-transparent pt-32 pb-20 px-6 overflow-hidden">
+    <div
+      className="min-h-screen bg-transparent pt-32 pb-20 px-6 overflow-hidden"
+      dir={i18n.dir()}
+    >
       <div className="max-w-5xl mx-auto mb-12">
         <Breadcrumbs items={breadcrumbItems} />
       </div>
@@ -60,8 +53,10 @@ const PolicyPage = () => {
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2" />
 
           <h1 className="text-2xl md:text-4xl font-black text-white mb-12 tracking-tighter relative z-10 leading-tight">
-            سياسة{" "}
-            <span className="text-primary italic">الاسترجاع والتبديل</span>
+            {t("policy.titlePart1")}{" "}
+            <span className="text-primary italic">
+              {t("policy.titlePart2")}
+            </span>
           </h1>
 
           <div className="space-y-16 relative z-10">
@@ -92,8 +87,7 @@ const PolicyPage = () => {
 
           <div className="mt-20 pt-12 border-t border-white/10 text-center relative z-10">
             <p className="text-slate-500 font-bold italic">
-              * جميع العمليات تخضع في المقام الأول لعقد التأجير الموقع بين
-              العميل وشركة التأجير المنفذة للخدمة.
+              {t("policy.disclaimer")}
             </p>
           </div>
         </div>

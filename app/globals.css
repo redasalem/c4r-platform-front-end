@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #020617; /* Deep Midnight Default */
+  --background: rgb(4, 12, 32); /* Deep Navy - Matches User's New Navbar */
   --foreground: #f1f5f9;
-  --primary: #f97316; /* Chrome Orange */
+  --primary: #f97316;
   --primary-hover: #ea580c;
-  --secondary: #1e1b4b; /* Deep Navy */
-  --accent: #fbbf24; /* Amber/Gold */
-  --midnight: #020617;
-  --slate-dark: #0f172a;
+  --secondary: #1e1b4b;
+  --accent: #fbbf24;
+  --midnight: #041233; /* Deep Navy - Matching Background */
+  --slate-dark: #061e42; /* Dark Blue - Top Bar Override */
 }
 
 @theme inline {
@@ -23,12 +23,14 @@
   --font-sans: var(--font-almarai), "Almarai", sans-serif;
 }
 
+html {
+  background-color: var(--background) !important;
+}
+
 body {
-  background-color: var(--background);
+  background-color: var(--background) !important;
   color: var(--foreground);
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(30, 27, 75, 0.2) 0px, transparent 50%);
+  /* Removed gradients to make body match navbar exactly */
   background-attachment: fixed;
   font-family: var(--font-almarai), "Almarai", sans-serif;
   transition: background-color 0.5s ease;
@@ -58,7 +60,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus, 
 input:-webkit-autofill:active {
   -webkit-text-fill-color: white !important;
-  -webkit-box-shadow: 0 0 0px 1000px #0f172a inset !important; /* slate-dark */
+  -webkit-box-shadow: 0 0 0px 1000px #07163a inset !important; /* slate-dark */
   transition: background-color 5000s ease-in-out 0s;
 }
 

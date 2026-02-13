@@ -20,8 +20,10 @@ import {
   Person,
 } from "@mui/icons-material";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 export default function RegisterPage() {
+  const { t, i18n } = useTranslation("common");
   const { register, user } = useAuth();
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -40,7 +42,7 @@ export default function RegisterPage() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      toast.error("كلمتا المرور غير متطابقتين");
+      toast.error(t("auth.passwordMismatch"));
       return;
     }
 
@@ -64,18 +66,22 @@ export default function RegisterPage() {
             />
           </Link>
           <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-            إنشاء حساب جديد
+            {t("auth.registerTitle")}
           </h1>
           <p className="text-slate-400 mt-2 text-sm font-bold">
-            انضم إلينا واستمتع بتجربة تأجير مميزة وفخمة
+            {t("auth.registerSubtitle")}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5" dir="rtl">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4 sm:space-y-5"
+          dir={i18n.dir()}
+        >
           <div>
             <TextField
               fullWidth
-              label="الاسم الكامل"
+              label={t("auth.name")}
               variant="outlined"
               value={formData.name}
               onChange={(e) =>
@@ -110,7 +116,7 @@ export default function RegisterPage() {
           <div>
             <TextField
               fullWidth
-              label="البريد الإلكتروني"
+              label={t("auth.email")}
               variant="outlined"
               type="email"
               value={formData.email}
@@ -146,7 +152,7 @@ export default function RegisterPage() {
           <div>
             <TextField
               fullWidth
-              label="كلمة المرور"
+              label={t("auth.password")}
               variant="outlined"
               type={showPassword ? "text" : "password"}
               value={formData.password}
@@ -193,7 +199,7 @@ export default function RegisterPage() {
           <div>
             <TextField
               fullWidth
-              label="تأكيد كلمة المرور"
+              label={t("auth.confirmPassword")}
               variant="outlined"
               type={showPassword ? "text" : "password"}
               value={formData.confirmPassword}
@@ -255,19 +261,19 @@ export default function RegisterPage() {
             {loading ? (
               <CircularProgress size={26} sx={{ color: "#3b82f6" }} />
             ) : (
-              "إنشاء الحساب"
+              t("auth.registerButton")
             )}
           </Button>
         </form>
 
         <div className="mt-6 sm:mt-8 md:mt-10 text-center space-y-4 sm:space-y-6">
           <p className="text-slate-400 text-sm font-bold">
-            لديك حساب بالفعل؟{" "}
+            {t("auth.hasAccount")}{" "}
             <Link
               href="/auth/login"
               className="text-primary hover:text-accent font-black transition-colors"
             >
-              سجل دخولك
+              {t("auth.loginLink")}
             </Link>
           </p>
 
@@ -276,7 +282,7 @@ export default function RegisterPage() {
               href="/"
               className="text-slate-500 hover:text-slate-300 text-xs font-black uppercase tracking-widest transition-colors"
             >
-              العودة للصفحة الرئيسية
+              {t("auth.backToHome")}
             </Link>
           </div>
         </div>

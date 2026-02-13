@@ -33,8 +33,10 @@ import {
 import Image from "next/image";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 export default function BookingPage() {
+  const { t, i18n } = useTranslation("common");
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const params = useParams();
@@ -61,10 +63,10 @@ export default function BookingPage() {
   // Redirect to login if NOT authenticated
   useEffect(() => {
     if (!authLoading && !user) {
-      toast.info("يرجى تسجيل الدخول أولاً لإمام الحجز");
+      toast.info(t("booking.loginRequired"));
       router.push(`/auth/login?returnUrl=/booking/${carId}`);
     }
-  }, [user, authLoading, router, carId]);
+  }, [user, authLoading, router, carId, t]);
 
   const { data: carResponse, isLoading: carLoading } = useQuery({
     queryKey: ["car", carId],
@@ -79,7 +81,7 @@ export default function BookingPage() {
       setShowSuccessDialog(true);
     },
     onError: (err) => {
-      toast.error(err.response?.data?.message || "فشل إرسال طلب الحجز");
+      toast.error(err.response?.data?.message || t("booking.submitError"));
     },
   });
 
@@ -93,7 +95,7 @@ export default function BookingPage() {
     });
 
     const result = await res.json();
-    if (!res.ok) throw new Error(result.error || "فشل رفع الملف");
+    if (!res.ok) throw new Error(result.error || t("booking.uploadError"));
     return result.url;
   };
 
@@ -102,7 +104,7 @@ export default function BookingPage() {
 
     // 1. Precise Validation
     if (!dates.startDate || !dates.endDate) {
-      toast.error("يرجى اختيار تاريخ البداية والنهاية");
+      toast.error(t("booking.validation.dates"));
       return;
     }
 
@@ -110,12 +112,12 @@ export default function BookingPage() {
     const end = new Date(dates.endDate);
     const todayStr = new Date().toISOString().split("T")[0];
     if (dates.startDate < todayStr) {
-      toast.error("لا يمكن اختيار تاريخ في الماضي");
+      toast.error(t("booking.validation.pastDate"));
       return;
     }
 
     if (end <= start) {
-      toast.error("تاريخ النهاية يجب أن يكون بعد تاريخ البداية");
+      toast.error(t("booking.validation.endDate"));
       return;
     }
 
@@ -123,17 +125,17 @@ export default function BookingPage() {
     // Supports: 05xxxxxxxx, 9665xxxxxxxx, +9665xxxxxxxx, or any international format (min 8 digits)
     const phoneRegex = /^[+]?[\d]{8,15}$/;
     if (!phoneNumber) {
-      toast.error("يرجى إدخال رقم الواتساب");
+      toast.error(t("booking.validation.whatsapp"));
       return;
     }
 
     if (!phoneRegex.test(phoneNumber.replace(/\s/g, ""))) {
-      toast.error("يرجى إدخال رقم واتساب صحيح (أرقام فقط مع مفتاح الدولة)");
+      toast.error(t("booking.validation.invalidPhone"));
       return;
     }
 
     if (!idCardFile || !licenseFile) {
-      toast.error("يرجى تحميل جميع المستندات المطلوبة (الهوية والرخصة)");
+      toast.error(t("booking.validation.documents"));
       return;
     }
 
@@ -164,7 +166,7 @@ export default function BookingPage() {
       createBookingMutation.mutate(bookingData);
     } catch (error) {
       console.error(error);
-      toast.error("حدث خطأ أثناء رفع المستندات. يرجى المحاولة مرة أخرى.");
+      toast.error(t("booking.uploadGeneralError"));
     } finally {
       setUploading(false);
     }
@@ -194,26 +196,26 @@ export default function BookingPage() {
   const diffDays =
     dates.startDate && dates.endDate
       ? Math.ceil(
-        Math.abs(new Date(dates.endDate) - new Date(dates.startDate)) /
-        (1000 * 60 * 60 * 24),
-      ) || 1
+          Math.abs(new Date(dates.endDate) - new Date(dates.startDate)) /
+            (1000 * 60 * 60 * 24),
+        ) || 1
       : 1;
 
   return (
     <div
       className="min-h-screen bg-[#020617] relative overflow-hidden pt-28 pb-24"
-      dir="rtl"
+      dir={i18n.dir()}
     >
       {/* Background Decorative elements */}
       <div className="absolute top-0 right-0 w-[50%] h-[500px] bg-primary/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 opacity-50" />
       <div className="absolute bottom-0 left-0 w-[50%] h-[500px] bg-accent/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2 opacity-30" />
 
-      <Breadcrumbs items={[{ label: "إكمال عملية الحجز الفاخرة" }]} />
+      <Breadcrumbs items={[{ label: t("booking.breadcrumb") }]} />
       <Container maxWidth="lg" className="pt-8 relative z-10">
         <h1 className="text-lg sm:text-xl md:text-2xl font-black text-white mb-4 sm:mb-6 tracking-tighter leading-tight">
-          إكمال عملية{" "}
+          {t("booking.pageTitlePart1")}{" "}
           <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
-            طلب الحجز
+            {t("booking.pageTitlePart2")}
           </span>
         </h1>
 
@@ -234,13 +236,13 @@ export default function BookingPage() {
                       />
                     </div>
                     <h3 className="text-base sm:text-lg md:text-xl font-black tracking-tight">
-                      تحديد المواعيد
+                      {t("booking.datesTitle")}
                     </h3>
                   </div>
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
                       <TextField
-                        label="تاريخ الاستلام"
+                        label={t("booking.pickupDate")}
                         type="date"
                         fullWidth
                         size="small"
@@ -275,7 +277,7 @@ export default function BookingPage() {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <TextField
-                        label="تاريخ التسليم"
+                        label={t("booking.dropoffDate")}
                         type="date"
                         fullWidth
                         size="small"
@@ -314,20 +316,23 @@ export default function BookingPage() {
                 <section>
                   <div className="flex items-center gap-2 mb-3 sm:mb-5 text-white">
                     <div className="p-1.5 sm:p-2 bg-green-500/10 rounded-lg border border-green-500/20">
-                      <WhatsApp className="text-green-500" sx={{ fontSize: { xs: 18, sm: 20 } }} />
+                      <WhatsApp
+                        className="text-green-500"
+                        sx={{ fontSize: { xs: 18, sm: 20 } }}
+                      />
                     </div>
                     <h3 className="text-base sm:text-lg md:text-xl font-black tracking-tight">
-                      معلومات التواصل
+                      {t("booking.contactTitle")}
                     </h3>
                   </div>
                   <TextField
-                    label="رقم الواتساب"
+                    label={t("booking.whatsappLabel")}
                     fullWidth
                     size="small"
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
-                    placeholder="مثال: 9665xxxxxxxx+"
-                    helperText="اكتب الرقم مع مفتاح الدولة"
+                    placeholder={t("booking.whatsappPlaceholder")}
+                    helperText={t("booking.whatsappHelper")}
                     required
                     sx={{
                       "& .MuiOutlinedInput-root": {
@@ -362,12 +367,12 @@ export default function BookingPage() {
                       fontSize: "0.85rem",
                     }}
                   >
-                    الكيلومترات اليومية
+                    {t("booking.kmPerDay")}
                   </InputLabel>
                   <Select
                     value={kmPerDay}
                     onChange={(e) => setKmPerDay(e.target.value)}
-                    label="الكيلومترات اليومية"
+                    label={t("booking.kmPerDay")}
                     sx={{
                       borderRadius: 3,
                       bgcolor: "rgba(255,255,255,0.03)",
@@ -397,29 +402,41 @@ export default function BookingPage() {
                       },
                     }}
                   >
-                    <MenuItem value={100}>100 كم / يوم</MenuItem>
-                    <MenuItem value={200}>200 كم / يوم</MenuItem>
-                    <MenuItem value={300}>300 كم / يوم</MenuItem>
-                    <MenuItem value={500}>500 كم / يوم</MenuItem>
+                    <MenuItem value={100}>
+                      {t("booking.kmOption", { km: 100 })}
+                    </MenuItem>
+                    <MenuItem value={200}>
+                      {t("booking.kmOption", { km: 200 })}
+                    </MenuItem>
+                    <MenuItem value={300}>
+                      {t("booking.kmOption", { km: 300 })}
+                    </MenuItem>
+                    <MenuItem value={500}>
+                      {t("booking.kmOption", { km: 500 })}
+                    </MenuItem>
                   </Select>
                 </FormControl>
 
                 <section>
                   <div className="flex items-center gap-2 mb-3 sm:mb-5 text-white">
                     <div className="p-1.5 sm:p-2 bg-primary/20 rounded-lg border border-primary/30">
-                      <UploadFile className="text-primary" sx={{ fontSize: { xs: 18, sm: 20 } }} />
+                      <UploadFile
+                        className="text-primary"
+                        sx={{ fontSize: { xs: 18, sm: 20 } }}
+                      />
                     </div>
                     <h3 className="text-base sm:text-lg md:text-xl font-black tracking-tight">
-                      المستندات المطلوبة
+                      {t("booking.documentsTitle")}
                     </h3>
                   </div>
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
                       <div
-                        className={`border-2 border-dashed rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center cursor-pointer relative transition-all duration-500 overflow-hidden group/upload ${idCardFile
-                          ? "border-green-500/50 bg-green-500/5 shadow-[0_0_20px_rgba(34,197,94,0.1)]"
-                          : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50"
-                          }`}
+                        className={`border-2 border-dashed rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center cursor-pointer relative transition-all duration-500 overflow-hidden group/upload ${
+                          idCardFile
+                            ? "border-green-500/50 bg-green-500/5 shadow-[0_0_20px_rgba(34,197,94,0.1)]"
+                            : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50"
+                        }`}
                       >
                         <input
                           type="file"
@@ -434,22 +451,25 @@ export default function BookingPage() {
                             <UploadFile className="mb-2 text-primary text-3xl block mx-auto group-hover/upload:scale-110 transition-transform duration-500" />
                           )}
                           <p className="font-black text-white text-sm">
-                            صورة الهوية / الإقامة
+                            {t("booking.idCardLabel")}
                           </p>
                           <p
                             className={`text-[10px] mt-1 font-bold truncate px-2 ${idCardFile ? "text-green-400" : "text-slate-500"}`}
                           >
-                            {idCardFile ? idCardFile.name : "اضغط للمرفق"}
+                            {idCardFile
+                              ? idCardFile.name
+                              : t("booking.uploadHint")}
                           </p>
                         </div>
                       </div>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <div
-                        className={`border-2 border-dashed rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center cursor-pointer relative transition-all duration-500 overflow-hidden group/upload ${licenseFile
-                          ? "border-green-500/50 bg-green-500/5 shadow-[0_0_20px_rgba(34,197,94,0.1)]"
-                          : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50"
-                          }`}
+                        className={`border-2 border-dashed rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center cursor-pointer relative transition-all duration-500 overflow-hidden group/upload ${
+                          licenseFile
+                            ? "border-green-500/50 bg-green-500/5 shadow-[0_0_20px_rgba(34,197,94,0.1)]"
+                            : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50"
+                        }`}
                       >
                         <input
                           type="file"
@@ -464,12 +484,14 @@ export default function BookingPage() {
                             <UploadFile className="mb-2 text-primary text-3xl block mx-auto group-hover/upload:scale-110 transition-transform duration-500" />
                           )}
                           <p className="font-black text-white text-sm">
-                            صورة رخصة القيادة
+                            {t("booking.licenseLabel")}
                           </p>
                           <p
                             className={`text-[10px] mt-1 font-bold truncate px-2 ${licenseFile ? "text-green-400" : "text-slate-500"}`}
                           >
-                            {licenseFile ? licenseFile.name : "اضغط للمرفق"}
+                            {licenseFile
+                              ? licenseFile.name
+                              : t("booking.uploadHint")}
                           </p>
                         </div>
                       </div>
@@ -484,11 +506,10 @@ export default function BookingPage() {
                   />
                   <div>
                     <p className="text-sm sm:text-base font-black text-white">
-                      سياسة الحجز
+                      {t("booking.policyTitle")}
                     </p>
                     <p className="text-[10px] sm:text-xs font-bold text-slate-500 leading-relaxed">
-                      بإتمامك للحجز، أنت توافق على الشروط والأحكام. سيتم مراجعة
-                      طلبك خلال 24 ساعة.
+                      {t("booking.policyText")}
                     </p>
                   </div>
                 </div>
@@ -510,16 +531,16 @@ export default function BookingPage() {
                 >
                   {uploading ? (
                     <div className="flex items-center gap-3">
-                      <CircularProgress size={24} color="inherit" /> جاري الرفع
-                      الآمن...
+                      <CircularProgress size={24} color="inherit" />{" "}
+                      {t("booking.uploading")}
                     </div>
                   ) : createBookingMutation.isPending ? (
                     <div className="flex items-center gap-3">
-                      <CircularProgress size={24} color="inherit" /> جاري تأكيد
-                      طلبك...
+                      <CircularProgress size={24} color="inherit" />{" "}
+                      {t("booking.processing")}
                     </div>
                   ) : (
-                    "تأكيد الحجز وإرسال المستندات"
+                    t("booking.submitButton")
                   )}
                 </Button>
               </form>
@@ -534,7 +555,7 @@ export default function BookingPage() {
                 <div className="relative h-32 sm:h-40 -mx-3 sm:-mx-4 md:-mx-6 -mt-3 sm:-mt-4 md:-mt-6 mb-3 sm:mb-4 overflow-hidden border-b border-white/10">
                   <Image
                     src={imageUrl}
-                    alt={car?.name || "صورة السيارة"}
+                    alt={car?.name || t("booking.carImageAlt")}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-1000"
                   />
@@ -547,10 +568,10 @@ export default function BookingPage() {
                   </h2>
                   <div className="flex items-center gap-2">
                     <span className="bg-primary px-2 py-0.5 rounded-full text-[9px] font-black text-white shadow-lg">
-                      إصدار {car?.year}
+                      {t("booking.yearLabel", { year: car?.year })}
                     </span>
                     <span className="text-slate-500 font-bold text-[10px]">
-                      موديل فئة A
+                      {t("booking.modelLabel")}
                     </span>
                   </div>
                 </div>
@@ -561,37 +582,41 @@ export default function BookingPage() {
 
                 <div className="space-y-2 sm:space-y-3 relative z-10">
                   <div className="flex justify-between items-center text-xs sm:text-sm">
-                    <span className="text-slate-400 font-bold">سعر اليوم:</span>
+                    <span className="text-slate-400 font-bold">
+                      {t("booking.dailyPrice")}:
+                    </span>
                     <span className="font-black text-white">
-                      {car?.pricePerDay} ريال
+                      {car?.pricePerDay} {t("common.currency")}
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-xs sm:text-sm">
                     <span className="text-slate-400 font-bold">
-                      مدة الإيجار:
+                      {t("booking.duration")}:
                     </span>
                     <span className="font-black text-white">
-                      {diffDays} يوم
+                      {diffDays} {t("booking.days")}
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-xs sm:text-sm font-black">
                     <span className="text-slate-400 font-bold">
-                      الضريبة المضافة:
+                      {t("booking.vat")}:
                     </span>
-                    <span className="text-green-400">شاملة</span>
+                    <span className="text-green-400">
+                      {t("booking.vatIncluded")}
+                    </span>
                   </div>
 
                   <div className="pt-4 mt-1 border-t border-white/10 flex justify-between items-end">
                     <div>
                       <span className="text-slate-500 font-bold text-[10px] block mb-0.5">
-                        المجموع النهائي:
+                        {t("booking.total")}:
                       </span>
                       <span className="text-xl sm:text-2xl font-black text-primary tracking-tighter">
                         {diffDays * car?.pricePerDay}
                       </span>
                     </div>
                     <span className="text-sm sm:text-base font-black text-primary/60 pb-0.5">
-                      ريال
+                      {t("common.currency")}
                     </span>
                   </div>
                 </div>
@@ -601,8 +626,7 @@ export default function BookingPage() {
                     <Payments sx={{ fontSize: { xs: 16, sm: 20 } }} />
                   </div>
                   <p className="text-[9px] sm:text-[10px] text-green-500 font-bold leading-relaxed">
-                    نظام الدفع المرن: يمكنك الدفع عند استلام السيارة أو عبر
-                    التحويل البنكي.
+                    {t("booking.paymentHint")}
                   </p>
                 </div>
               </div>
@@ -632,13 +656,14 @@ export default function BookingPage() {
             <CheckCircle className="text-green-500" sx={{ fontSize: 48 }} />
           </div>
           <h2 className="text-3xl font-black text-white mb-3">
-            تم الحجز بنجاح!
+            {t("booking.successTitle")}
           </h2>
           <p className="text-slate-400 text-center leading-relaxed font-bold">
-            طلبك الآن{" "}
-            <span className="text-primary font-black">قيد المراجعة</span>. سيقوم
-            فريقنا بمنحك الأولوية والتواصل معك قريباً لتأكيد الحجز وموعد
-            الاستلام.
+            {t("booking.successMessagePart1")}{" "}
+            <span className="text-primary font-black">
+              {t("booking.successMessagePart2")}
+            </span>
+            . {t("booking.successMessagePart3")}
           </p>
         </DialogContent>
         <DialogActions className="justify-center pb-8 pt-4">
@@ -656,7 +681,7 @@ export default function BookingPage() {
               boxShadow: "0 10px 20px rgba(249, 115, 22, 0.3)",
             }}
           >
-            نعم، فهمت
+            {t("booking.successButton")}
           </Button>
         </DialogActions>
       </Dialog>

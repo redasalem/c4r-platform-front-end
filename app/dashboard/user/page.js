@@ -50,10 +50,18 @@ import {
 } from "@mui/material"; // Added Dialog components
 
 // Tab Panel Component
+import { useTranslation } from "react-i18next";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
   return (
-    <div role="tabpanel" hidden={value !== index} {...other} className="py-6">
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      {...other}
+      className="py-6"
+      dir={props.dir}
+    >
       {value === index && <Box>{children}</Box>}
     </div>
   );
@@ -62,6 +70,7 @@ function TabPanel(props) {
 function UserDashboardContent({ user }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useTranslation("common");
 
   // Tabs mapping: profile=0, bookings=1, password=2
   const tabParam = searchParams.get("tab");
@@ -93,17 +102,17 @@ function UserDashboardContent({ user }) {
         {[
           {
             id: 0,
-            label: "الحساب الشخصي",
+            label: t("dashboard.user.tabs.profile"),
             icon: <Person sx={{ fontSize: { xs: 16, sm: 20 } }} />,
           },
           {
             id: 1,
-            label: "سجل الحجوزات",
+            label: t("dashboard.user.tabs.bookings"),
             icon: <EventNote sx={{ fontSize: { xs: 16, sm: 20 } }} />,
           },
           {
             id: 2,
-            label: "إعدادات الأمان",
+            label: t("dashboard.user.tabs.security"),
             icon: <Lock sx={{ fontSize: { xs: 16, sm: 20 } }} />,
           },
         ].map((tab) => (
@@ -137,6 +146,7 @@ function UserDashboardContent({ user }) {
 export default function UserDashboard() {
   const { user } = useAuth();
   const router = useRouter();
+  const { t, i18n } = useTranslation("common");
 
   useEffect(() => {
     if (!user) {
@@ -159,18 +169,17 @@ export default function UserDashboard() {
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 md:px-5 py-2 rounded-full mb-4 md:mb-6 border border-primary/20 shadow-[0_0_15px_rgba(249,115,22,0.1)]">
               <Person fontSize="small" sx={{ fontSize: { xs: 16, md: 20 } }} />
               <span className="font-black text-[10px] md:text-xs uppercase tracking-[0.2em]">
-                لوحة التحكم الحصرية
+                {t("dashboard.user.welcome.badge")}
               </span>
             </div>
             <h1 className="text-xl sm:text-5xl font-black mb-2 sm:mb-4 leading-tight tracking-tighter">
-              مرحباً بك،{" "}
+              {t("dashboard.user.welcome.title")}{" "}
               <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">
                 {user?.name}
               </span>
             </h1>
             <p className="text-slate-400 text-xs sm:text-xl font-bold max-w-xl leading-relaxed">
-              إدارة حسابك الشخصي، تتبع حجوزاتك، وتغيير إعدادات الأمان بكل فخامة
-              ومن مكان واحد.
+              {t("dashboard.user.welcome.subtitle")}
             </p>
           </div>
           <div className="hidden md:block">
@@ -194,6 +203,7 @@ export default function UserDashboard() {
 }
 
 function ProfileSection({ user }) {
+  const { t } = useTranslation("common");
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || "",
@@ -204,7 +214,7 @@ function ProfileSection({ user }) {
 
   const handleSave = async () => {
     if (!formData.name.trim() || !formData.phoneNumber.trim()) {
-      toast.warning("يجب إدخال الاسم ورقم الهاتف لتتمكن من تعديل البيانات");
+      toast.warning(t("dashboard.user.profile.validationError"));
       return;
     }
     setLoading(true);
@@ -212,13 +222,16 @@ function ProfileSection({ user }) {
       // Create a payload without email, as it likely cannot be updated
       const { email, ...updatePayload } = formData;
       await userService.updateProfile(updatePayload);
-      toast.success("تم تحديث البيانات بنجاح");
+      toast.success(t("dashboard.user.profile.updateSuccess"));
       setIsEditing(false);
       // Optional: Update local user context if needed, or reload
       window.location.reload();
     } catch (error) {
       console.error("Profile update error:", error);
-      toast.error(error.response?.data?.message || "فشل تحديث البيانات");
+      toast.error(
+        error.response?.data?.message ||
+          t("dashboard.user.profile.updateError"),
+      );
     } finally {
       setLoading(false);
     }
@@ -256,17 +269,17 @@ function ProfileSection({ user }) {
         </div>
         <div>
           <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1 sm:mb-2 leading-tight">
-            إعدادات الحساب
+            {t("dashboard.user.profile.title")}
           </h3>
           <p className="text-slate-400 font-bold text-sm sm:text-base md:text-lg">
-            تأكد من بقاء بياناتك الشخصية محدثة لضمان تجربة حجز سلسة واحترافية.
+            {t("dashboard.user.profile.subtitle")}
           </p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 sm:gap-x-6 md:gap-x-10 gap-y-4 sm:gap-y-6 md:gap-y-8">
         <TextField
-          label="الاسم الكامل"
+          label={t("dashboard.user.profile.name")}
           fullWidth
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -282,12 +295,12 @@ function ProfileSection({ user }) {
           sx={inputStyle}
         />
         <TextField
-          label="البريد الإلكتروني"
+          label={t("dashboard.user.profile.email")}
           fullWidth
           value={formData.email}
           disabled={true}
           variant="outlined"
-          helperText="لا يمكن تغيير البريد الإلكتروني لدواعي الأمان"
+          helperText={t("dashboard.user.profile.emailHelper")}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -305,7 +318,7 @@ function ProfileSection({ user }) {
           }}
         />
         <TextField
-          label="رقم الهاتف"
+          label={t("dashboard.user.profile.phone")}
           fullWidth
           value={formData.phoneNumber}
           onChange={(e) =>
@@ -344,7 +357,7 @@ function ProfileSection({ user }) {
               {loading ? (
                 <CircularProgress size={24} sx={{ color: "#3b82f6" }} />
               ) : (
-                "حفظ التغييرات الجديدة"
+                t("dashboard.user.profile.saveButton")
               )}
             </Button>
             <Button
@@ -358,7 +371,7 @@ function ProfileSection({ user }) {
                 px: 6,
               }}
             >
-              تراجع
+              {t("dashboard.user.profile.cancelButton")}
             </Button>
           </>
         ) : (
@@ -379,7 +392,7 @@ function ProfileSection({ user }) {
               boxShadow: "0 20px 40px -10px rgba(0,0,0,0.4)",
             }}
           >
-            تعديل البيانات الشخصية
+            {t("dashboard.user.profile.editButton")}
           </Button>
         )}
       </div>
@@ -388,6 +401,7 @@ function ProfileSection({ user }) {
 }
 
 function BookingsSection() {
+  const { t, i18n } = useTranslation("common");
   const { data, isLoading } = useQuery({
     queryKey: ["myBookings"],
     queryFn: () => bookingService.getAll(), // Assuming this returns user's bookings if not admin
@@ -402,7 +416,7 @@ function BookingsSection() {
   const createReviewMutation = useMutation({
     mutationFn: reviewService.create,
     onSuccess: () => {
-      toast.success("شكراً لك! تم إضافة تقييمك بنجاح");
+      toast.success(t("dashboard.user.reviews.success"));
       setReviewOpen(false);
       setComment("");
       setRating(5);
@@ -411,7 +425,9 @@ function BookingsSection() {
       queryClient.invalidateQueries(["recentReviews"]); // Sync home page
     },
     onError: (err) => {
-      toast.error(err.response?.data?.message || "فشل إضافة التقييم");
+      toast.error(
+        err.response?.data?.message || t("dashboard.user.reviews.error"),
+      );
     },
   });
 
@@ -442,7 +458,7 @@ function BookingsSection() {
           sx={{ fontSize: 100, color: "rgba(255,255,255,0.05)", mb: 4 }}
         />
         <p className="text-slate-400 font-black text-2xl">
-          لا توجد حجوزات في سجلك حالياً
+          {t("dashboard.user.bookings.emptyTitle")}
         </p>
         <Button
           variant="contained"
@@ -457,7 +473,7 @@ function BookingsSection() {
             "&:hover": { bgcolor: "var(--primary-hover)" },
           }}
         >
-          تصفح مجموعة السيارات
+          {t("dashboard.user.bookings.browseCars")}
         </Button>
       </div>
     );
@@ -493,7 +509,7 @@ function BookingsSection() {
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               ) : (
-                <div className="flex items-center justify-center h-full bg-slate-900 border-b border-white/5">
+                <div className="flex items-center justify-center h-full bg-white/5 border-b border-white/5">
                   <DirectionsCar
                     className="text-white/10"
                     sx={{ fontSize: { xs: 30, md: 60 } }}
@@ -514,10 +530,10 @@ function BookingsSection() {
                     }`}
                   >
                     {booking.status === "approved"
-                      ? "مؤكد"
+                      ? t("dashboard.user.bookings.status.approved")
                       : booking.status === "rejected"
-                        ? "مرفوض"
-                        : "قيد الانتظار"}
+                        ? t("dashboard.user.bookings.status.rejected")
+                        : t("dashboard.user.bookings.status.pending")}
                   </span>
                   <span className="bg-white/10 backdrop-blur-md px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md sm:rounded-lg text-[7px] sm:text-[9px] font-bold text-white/60 border border-white/5">
                     #{booking._id.slice(-4).toUpperCase()}
@@ -527,7 +543,8 @@ function BookingsSection() {
 
               <div className="absolute bottom-1.5 sm:bottom-4 right-3 sm:right-6 left-3 sm:left-6 z-20">
                 <h3 className="text-sm sm:text-xl font-black text-white tracking-tight leading-none group-hover:text-primary transition-colors truncate">
-                  {booking.car?.name || "سيارة غير محددة"}
+                  {booking.car?.name ||
+                    t("dashboard.user.bookings.carUndefined")}
                 </h3>
               </div>
             </div>
@@ -537,7 +554,7 @@ function BookingsSection() {
               <div className="grid grid-cols-2 gap-1.5 sm:gap-4 mb-3 sm:mb-6">
                 <div className="bg-white/5 p-1.5 sm:p-3 rounded-lg sm:rounded-2xl border border-white/5 group-hover:border-primary/20 transition-all">
                   <p className="text-[7px] sm:text-[10px] text-slate-500 font-black mb-0.5 sm:mb-1">
-                    الاستلام
+                    {t("dashboard.user.bookings.pickup")}
                   </p>
                   <div className="flex items-center gap-1 sm:gap-2">
                     <CalendarMonth
@@ -545,13 +562,15 @@ function BookingsSection() {
                       sx={{ fontSize: { xs: 10, sm: 16 } }}
                     />
                     <span className="text-[9px] sm:text-xs font-black text-white">
-                      {new Date(booking.startDate).toLocaleDateString("ar-EG")}
+                      {new Date(booking.startDate).toLocaleDateString(
+                        i18n.language === "en" ? "en-US" : "ar-EG",
+                      )}
                     </span>
                   </div>
                 </div>
                 <div className="bg-white/5 p-1.5 sm:p-3 rounded-lg sm:rounded-2xl border border-white/5 group-hover:border-primary/20 transition-all">
                   <p className="text-[7px] sm:text-[10px] text-slate-500 font-black mb-0.5 sm:mb-1">
-                    التسليم
+                    {t("dashboard.user.bookings.dropoff")}
                   </p>
                   <div className="flex items-center gap-1 sm:gap-2">
                     <CalendarMonth
@@ -559,7 +578,9 @@ function BookingsSection() {
                       sx={{ fontSize: { xs: 10, sm: 16 } }}
                     />
                     <span className="text-[9px] sm:text-xs font-black text-white">
-                      {new Date(booking.endDate).toLocaleDateString("ar-EG")}
+                      {new Date(booking.endDate).toLocaleDateString(
+                        i18n.language === "en" ? "en-US" : "ar-EG",
+                      )}
                     </span>
                   </div>
                 </div>
@@ -568,12 +589,12 @@ function BookingsSection() {
               <div className="space-y-2 sm:space-y-3 mb-3 sm:mb-8">
                 <div className="flex justify-between items-center px-1 md:px-2">
                   <span className="text-[8px] sm:text-xs text-slate-500 font-bold">
-                    {booking.numberOfDays} أيام
+                    {booking.numberOfDays} {t("dashboard.user.bookings.days")}
                   </span>
                   <span className="text-[8px] sm:text-xs text-slate-500 font-bold">
-                    المجموع:{" "}
+                    {t("dashboard.user.bookings.total")}{" "}
                     <span className="text-primary font-black">
-                      {booking.totalPrice} ريال
+                      {booking.totalPrice} {t("dashboard.user.bookings.sar")}
                     </span>
                   </span>
                 </div>
@@ -633,7 +654,7 @@ function BookingsSection() {
                         },
                       }}
                     >
-                      واتساب
+                      {t("dashboard.user.bookings.whatsapp")}
                     </Button>
                   )}
                 </div>
@@ -654,7 +675,7 @@ function BookingsSection() {
                       boxShadow: "0 10px 20px -5px rgba(249, 115, 22, 0.3)",
                     }}
                   >
-                    قيم التجربة
+                    {t("dashboard.user.bookings.rateButton")}
                   </Button>
                 ) : (
                   <Button
@@ -669,7 +690,7 @@ function BookingsSection() {
                       color: "rgba(255,255,255,0.15)",
                     }}
                   >
-                    لا يمكن التقييم
+                    {t("dashboard.user.bookings.cannotRate")}
                   </Button>
                 )}
                 <Button
@@ -688,7 +709,7 @@ function BookingsSection() {
                     },
                   }}
                 >
-                  التفاصيل
+                  {t("dashboard.user.bookings.detailsButton")}
                 </Button>
               </div>
             </div>
@@ -716,14 +737,15 @@ function BookingsSection() {
         }}
       >
         <DialogTitle className="font-black text-2xl md:text-3xl text-center mb-1 md:mb-2">
-          كيف كانت تجربتك؟ ✨
+          {t("dashboard.user.reviews.dialogTitle")}
         </DialogTitle>
         <DialogContent className="flex flex-col items-center space-y-4 md:space-y-6 pt-4 md:pt-6">
           <Typography
             variant="body2"
             className="text-slate-400 font-bold text-center mb-2"
           >
-            قيم تجربتك الفاخرة مع {selectedBooking?.car?.name}
+            {t("dashboard.user.reviews.dialogSubtitle")}{" "}
+            {selectedBooking?.car?.name}
           </Typography>
 
           <Rating
@@ -743,7 +765,7 @@ function BookingsSection() {
           />
 
           <TextField
-            placeholder="اكتب تعليقك هنا بكل صراحة..."
+            placeholder={t("dashboard.user.reviews.placeholder")}
             multiline
             rows={4}
             fullWidth
@@ -768,7 +790,7 @@ function BookingsSection() {
             className="text-slate-500 font-black px-8"
             sx={{ width: { xs: "100%", sm: "auto" } }}
           >
-            إلغاء
+            {t("dashboard.user.reviews.cancel")}
           </Button>
           <Button
             variant="contained"
@@ -786,8 +808,8 @@ function BookingsSection() {
             }}
           >
             {createReviewMutation.isPending
-              ? "جاري النشر..."
-              : "نشر التقييم الفاخر"}
+              ? t("dashboard.user.reviews.posting")
+              : t("dashboard.user.reviews.postButton")}
           </Button>
         </DialogActions>
       </Dialog>
@@ -796,6 +818,7 @@ function BookingsSection() {
 }
 
 function ChangePasswordSection() {
+  const { t } = useTranslation("common");
   const [passwords, setPasswords] = useState({
     currentPassword: "",
     newPassword: "",
@@ -806,15 +829,13 @@ function ChangePasswordSection() {
 
   const handleSubmit = async () => {
     if (!passwords.currentPassword || !passwords.newPassword) {
-      toast.error("يرجى ملء جميع الحقول");
+      toast.error(t("dashboard.user.security.errorFillAll"));
       return;
     }
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     if (!passwordRegex.test(passwords.newPassword)) {
-      toast.error(
-        "يجب أن تحتوي كلمة المرور على حرف كبير، حرف صغير، رقم، ورمز خاص، وأن لا تقل عن 8 خانات",
-      );
+      toast.error(t("dashboard.user.security.errorWeakPassword"));
       return;
     }
 
@@ -824,13 +845,15 @@ function ChangePasswordSection() {
         currentPassword: passwords.currentPassword,
         newPassword: passwords.newPassword,
       });
-      toast.success("تم تغيير كلمة المرور بنجاح");
+      toast.success(t("auth.passwordChanged"));
       setPasswords({
         currentPassword: "",
         newPassword: "",
       });
     } catch (error) {
-      toast.error(error.response?.data?.message || "فشل تغيير كلمة المرور");
+      toast.error(
+        error.response?.data?.message || t("auth.passwordChangeError"),
+      );
     } finally {
       setLoading(false);
     }
@@ -862,17 +885,17 @@ function ChangePasswordSection() {
         </div>
         <div>
           <h3 className="text-3xl font-black text-white mb-2 leading-tight">
-            تغيير كلمة المرور
+            {t("dashboard.user.security.title")}
           </h3>
           <p className="text-slate-400 font-bold text-lg">
-            ننصح باستخدام كلمة مرور قوية ومعقدة لضمان أقصى درجات الأمان لحسابك.
+            {t("dashboard.user.security.subtitle")}
           </p>
         </div>
       </div>
 
       <div className="max-w-md flex flex-col gap-12 mt-6">
         <TextField
-          label="كلمة المرور الحالية"
+          label={t("dashboard.user.security.currentPassword")}
           type={showCurrentPassword ? "text" : "password"}
           fullWidth
           variant="outlined"
@@ -908,7 +931,7 @@ function ChangePasswordSection() {
           sx={inputStyle}
         />
         <TextField
-          label="كلمة المرور الجديدة"
+          label={t("dashboard.user.security.newPassword")}
           type={showNewPassword ? "text" : "password"}
           fullWidth
           variant="outlined"
@@ -964,7 +987,7 @@ function ChangePasswordSection() {
             {loading ? (
               <CircularProgress size={26} color="inherit" />
             ) : (
-              "تحديث إعدادات الأمان السرية"
+              t("dashboard.user.security.updateButton")
             )}
           </Button>
         </div>

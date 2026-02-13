@@ -1,38 +1,67 @@
 "use client";
-
+import "../i18n";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-
-// Create RTL Theme
-const theme = createTheme({
-  direction: "rtl",
-  typography: {
-    fontFamily: "var(--font-almarai)",
-  },
-  palette: {
-    mode: "dark", // Since app uses dark styling
-    primary: {
-      main: "#f97316", // Orange
-    },
-  },
-});
+import { useTranslation } from "react-i18next";
+import { CacheProvider } from "@emotion/react";
+import createCache from "@emotion/cache";
+import rtlPlugin from "stylis-plugin-rtl";
+import { prefixer } from "stylis";
 
 export default function Providers({ children }) {
   const [queryClient] = useState(() => new QueryClient());
+  const { i18n } = useTranslation();
+  const dir = i18n.dir();
+
+  useEffect(() => {
+    document.dir = dir;
+    document.documentElement.lang = i18n.language;
+  }, [dir, i18n.language]);
+
+  // Create RTL/LTR Cache for MUI
+  const cacheRtl = useMemo(() => {
+    return createCache({
+      key: dir === "rtl" ? "muirtl" : "muiltr",
+      stylisPlugins: dir === "rtl" ? [prefixer, rtlPlugin] : [prefixer],
+    });
+  }, [dir]);
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        direction: dir,
+        typography: {
+          fontFamily: "var(--font-almarai)",
+        },
+        palette: {
+          mode: "dark",
+          primary: {
+            main: "#f97316",
+          },
+        },
+      }),
+    [dir],
+  );
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <AuthProvider>
-          {children}
-          <ToastContainer position="bottom-right" rtl />
-        </AuthProvider>
-      </ThemeProvider>
+      <CacheProvider value={cacheRtl}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <AuthProvider>
+            {children}
+            <ToastContainer
+              position={dir === "rtl" ? "bottom-right" : "bottom-left"}
+              rtl={dir === "rtl"}
+            />
+          </AuthProvider>
+        </ThemeProvider>
+      </CacheProvider>
     </QueryClientProvider>
   );
 }

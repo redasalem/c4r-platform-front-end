@@ -1,10 +1,12 @@
 "use client";
+import { useTranslation } from "react-i18next";
 
 import React from "react";
 import { usePathname } from "next/navigation";
 import { WhatsApp, Email } from "@mui/icons-material";
 
 const FloatingContact = () => {
+  const { t } = useTranslation("common");
   const pathname = usePathname();
 
   // Hide on auth and dashboard pages
@@ -21,7 +23,7 @@ const FloatingContact = () => {
         target="_blank"
         rel="noopener noreferrer"
         className="hidden md:flex fixed bottom-8 right-8 z-[9999] bg-[#22c55e] text-white w-16 h-16 rounded-full items-center justify-center shadow-[0_10px_30px_rgba(34,197,94,0.4)] hover:scale-110 hover:shadow-[0_15px_40px_rgba(34,197,94,0.6)] transition-all duration-300 group"
-        aria-label="Contact on WhatsApp"
+        aria-label={t("floatingContact.whatsapp")}
       >
         <WhatsApp
           sx={{ fontSize: 32 }}
@@ -37,7 +39,7 @@ const FloatingContact = () => {
       <a
         href="mailto:Team@C4Rplatform.com"
         className="hidden md:flex fixed bottom-8 left-8 z-[9999] bg-white/10 backdrop-blur-xl border border-white/20 text-white w-14 h-14 rounded-2xl items-center justify-center shadow-2xl hover:bg-white/20 hover:scale-110 transition-all duration-300 group"
-        aria-label="Send an Email"
+        aria-label={t("floatingContact.email")}
       >
         <Email
           sx={{ fontSize: 28 }}
